@@ -224,6 +224,101 @@
   border-radius: 14px 14px 0 0;
 }
 
+/* Trader: dark terminal with a grid, amber accents and green/red candles */
+:root[data-theme="trader"] {
+  --font: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --bg: #0b0e13;
+  --bg-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    radial-gradient(ellipse at 50% -10%, rgba(245, 166, 35, 0.12), transparent 55%),
+    linear-gradient(180deg, #0d1118 0%, #07090d 100%);
+  --bg-size: 28px 28px, 28px 28px, auto, auto;
+  --text: #dbe2ee;
+  --muted: #7d889b;
+  --title: #f5a623;
+  --title-shadow: none;
+  --title-transform: uppercase;
+  --panel: #121823;
+  --panel-border: 1px solid #263044;
+  --panel-radius: 8px;
+  --panel-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
+  --row-hover: #18202e;
+  --total-bg: linear-gradient(180deg, #111724 0%, #0a0e15 100%);
+  --total-text: #f1f5fb;
+  --total-label: #f5a623;
+  --btn-bg: #161d2a;
+  --btn-border: 1px solid #2d384c;
+  --btn-radius: 8px;
+  --btn-active-bg: #f5a623;
+  --btn-active-text: #1a1203;
+  --btn-shadow: none;
+  --status-ok: #2ee59d;
+  --status-warn: #f5a623;
+  --badge-bg: #1b2331;
+  --gain: #2ee59d;
+  --loss: #ff5c6c;
+  --flat: #8b95a7;
+  --gain-bg: rgba(46, 229, 157, 0.14);
+  --loss-bg: rgba(255, 92, 108, 0.14);
+  --flat-bg: rgba(255, 255, 255, 0.08);
+  --title-size: 1.25rem;
+  --value-size: 1.05rem;
+  --total-size: 1.7rem;
+  --base-size: 0.92rem;
+  --letter: 0.01em;
+}
+
+:root[data-theme="trader"] .title {
+  letter-spacing: 0.14em;
+}
+
+:root[data-theme="trader"] .owner,
+:root[data-theme="trader"] .themes-label {
+  color: #8b95a7;
+  text-shadow: none;
+}
+
+:root[data-theme="trader"] .list li + li {
+  border-top: 1px solid #1f2837;
+}
+
+:root[data-theme="trader"] .total {
+  border-top: 1px solid #f5a623;
+  border-radius: 0;
+  box-shadow: 0 -12px 28px rgba(0, 0, 0, 0.55);
+}
+
+:root[data-theme="trader"] .total-label {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.8rem;
+}
+
+:root[data-theme="trader"] .perf-icon {
+  color: #04120b;
+}
+
+:root[data-theme="trader"] .perf-pro {
+  border-top-color: #263044;
+}
+
+:root[data-theme="trader"] .alloc-bar {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+:root[data-theme="trader"] .mascot {
+  filter: none;
+}
+
+:root[data-theme="trader"] .logo {
+  border-radius: 8px;
+}
+
+:root[data-theme="trader"] .scene {
+  opacity: 0.95;
+}
+
 :root[data-theme="minecraft"] {
   --font: "Press Start 2P", "Courier New", monospace;
   --bg: #7a5230;
@@ -351,10 +446,10 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  flex-wrap: wrap;
 }
 
 .themes-label {
+  flex: none;
   margin-right: 4px;
   font-size: calc(var(--base-size) * 0.9);
   font-weight: 600;
@@ -367,8 +462,10 @@ body {
   appearance: none;
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 44px;
+  aspect-ratio: 1 / 1;
   padding: 0;
   color: var(--text);
   background: var(--btn-bg);
@@ -381,8 +478,8 @@ body {
 }
 
 .theme-btn svg {
-  width: 28px;
-  height: 28px;
+  width: 64%;
+  height: 64%;
 }
 
 .theme-btn:active {
@@ -476,16 +573,6 @@ body {
 
 :root[data-theme="minecraft"] .themes {
   gap: 5px;
-}
-
-:root[data-theme="minecraft"] .theme-btn {
-  width: 40px;
-  height: 40px;
-}
-
-:root[data-theme="minecraft"] .theme-btn svg {
-  width: 24px;
-  height: 24px;
 }
 
 :root[data-theme="minecraft"] .logo {
@@ -1052,10 +1139,6 @@ body {
   .logo {
     width: 44px;
     height: 44px;
-  }
-  .theme-btn {
-    width: 40px;
-    height: 40px;
   }
 }
 

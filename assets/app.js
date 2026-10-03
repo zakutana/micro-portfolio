@@ -16,6 +16,7 @@
     { id: "pokemon", label: "Pokémon", color: "#2a75bb" },
     { id: "makeup", label: "Make-up", color: "#e0508f" },
     { id: "football", label: "Fotbal", color: "#2e8b3a" },
+    { id: "trader", label: "Trader", color: "#0b0e13" },
   ];
 
   const COINGECKO = "https://api.coingecko.com/api/v3";
