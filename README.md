@@ -96,28 +96,33 @@ Všechny motivy mají stejnou stavbu: hlavička (název, přepínač Pro, tlač�
 
 Motivy jsou sady CSS proměnných na začátku `assets/style.css` (barvy, rámečky, stíny, písmo, velikost a poloha postavičky, paleta proužku `--a1` až `--a8`), pár drobných úprav je na konci bloku motivu. Postavičky a ikony jsou v `assets/icons.js` (`MICRO_PEEK`, `MICRO_TOTAL`, `MICRO_MARKS`; `MICRO_ICONS` používají i kartičky). Písma (Fredoka, Press Start 2P, Nunito, Lilita One) jsou uložená v `assets/fonts/`, stránka nestahuje nic zvenčí kromě cen.
 
-## Ochrana heslem
+## Heslo jako hádanka
 
-Každá stránka má **pětimístné heslo** (malá písmena a číslice, bez zaměnitelných znaků jako 0/o a 1/l/i). Je vytištěné na kartičce pod QR kódem. QR kód otevře jen stránku, ta se zeptá na heslo a **po prvním správném zadání si ho telefon zapamatuje** (v `localStorage`), takže další otevření je rovnou bez ptaní. Velká písmena a mezery při psaní nevadí.
-Stránka (v `config.json` jako `passHash`) obsahuje jen pomalý hash hesla (PBKDF2-SHA256, 200 000 kol, sůl `micro-portfolio:<id>`); heslo samo je jen v `private/passwords.json` a na kartičce. Telefon si pamatuje právě tenhle hash, takže po změně hesla (`--rotate`) se zeptá znovu.
-Je to „zámek na dveřích“, ne trezor: web je statický, takže kdo si otevře zdrojový kód, uvidí i počty kusů, a krátké heslo se při dost úsilí dá zkoušet offline. Pro tenhle účel stačí.
-**iPhone:** Safari smaže data stránky, když ji člověk 7 dní v Safari neotevře. Heslo se pak musí napsat znovu (je na kartičce). Pomůže „Přidat na plochu“, takové stránky se to netýká.
+Heslo je zašifrované v **čísle na kartičce** a klíčem je **jméno** dítěte. Stránka si ho při prvním otevření řekne, ukáže návod „Jak to rozluštit?“ a pak si ho telefon pamatuje. Je to hra, ne bezpečnost: jméno je na kartičce i v QR odkazu a `config.json` je veřejný, takže kdo si otevře zdrojový kód, uvidí počty kusů. Pro tenhle účel (dětské portfolio) to stačí.
+
+Šifra: každé písmeno hesla je číslo (a = 1 … z = 26), přičte se číslo písmene ze jména (dokola) a když vyjde víc než 26, odečte se 26. Každý výsledek jsou dvě číslice. Tyto dvojice jsou na začátku šestnáctimístného čísla karty, zbytek je datum `101026`.
+
+```sh
+node tools/password.mjs set p2 kirby     # nastaví heslo (3-7 písmen a-z): private/passwords.json + hash a délka v p2/config.json
+node tools/password.mjs card             # vypíše čísla karet a ověří, že se dají rozluštit
+node tools/password.mjs remove p2        # zruší heslo, stránka se otevře rovnou (bez `passHash` v config.json se zámek nezobrazí)
+```
+
+Po změně hesla commitni a pushni `config.json` a vygeneruj znovu tiskové PDF (`npm run print`), jinak by číslo na kartě neodpovídalo. Stránka (v `config.json` jako `passHash`) obsahuje jen pomalý hash hesla (PBKDF2-SHA256, 200 000 kol, sůl `micro-portfolio:<id>`). **iPhone:** Safari smaže data stránky, když ji člověk 7 dní v Safari neotevře; heslo se pak píše znovu (dá se zase rozluštit z karty). Pomůže „Přidat na plochu“.
 
 ## Kartičky
 
 ```sh
 npm install                           # jednou (pro Chromium: npx playwright install chromium)
 # jednou: vytvoř private/names.json, např. {"p1": "Jméno1", "p2": "Jméno2"}
-npm run cards                         # vytvoří hesla, zapíše hashe do config.json a vyrenderuje karty
-npm run cards -- --rotate p2          # nové heslo pro p2 (staré přestane fungovat, je potřeba vytisknout novou kartičku)
+npm run cards                         # vyrenderuje karty pro domácí tisk (výroba v tiskárně: `npm run print`)
 npm run cards -- --base https://jina-adresa.cz/micro-portfolio   # jiná adresa v QR (jinak `baseUrl` z tools/people.json)
 ```
 
 `tools/people.json` určuje, které stránky se mají vyrobit, jejich barvu a maskota. Výstup je v `private/cards/` (necommituje se): `<id>-front.png`, `<id>-back.png`, `<id>-card.pdf` (85,6 × 54 mm, 2 strany) a `karticky-A4.pdf` pro domácí tisk.
-Po změně hesla je potřeba commitnout a pushnout aktualizovaný `config.json`.
 
 ### Tiskové PDF pro výrobu plastových karet
 
 `npm run print` (potřebuje Ghostscript `gs`, poppler-utils, Python 3 s `pikepdf` a `opencv-python-headless`) vyrobí `private/cards/karticky-tisk-CMYK.pdf`: 4 stránky 91,5 × 60 mm se spadávkou 3 mm (hotová karta 85,5 × 54 mm, rohy bez zaoblení), pořadí karta 1 přední, zadní, karta 2 přední, zadní. Barvy jsou v CMYK, vše je vektor (žádný rastr, text převedený do křivek), QR kód je vektorový černý (K 100 %) na bílém s 3 mm okolo a nejméně 5 mm od ořezu, v PDF jsou nastavené TrimBox a BleedBox. Na konci nástroj QR kódy z hotového PDF naskenuje zpět a ověří, že vedou na správné stránky. Vedle PDF vzniknou náhledy `tisk-nahled-*.png`. Design karet je v `tools/make-print.mjs`. Konverzi do CMYK dělá Ghostscript se svým výchozím profilem; pokud tiskárna vyžaduje konkrétní profil (např. ISO Coated v2), řekni a přidám ho.
 
-**QR kódy se nemění** (vedou jen na stránku, nejsou v nich žádné tajné údaje). Heslo se mění jen když sám použiješ `--rotate`. Úpravy seznamu, cen i motivů je neovlivní. Nepřejmenovávej složky `p1/` a `p2/` (jsou v QR adrese). Nástroj odmítne vytvořit nové heslo pro stránku, která už jedno má, a vypíše, jak ho obnovit (heslo je napsané na kartičce).
+**QR kódy se nemění** (vedou jen na stránku, nejsou v nich žádné tajné údaje). Heslo se mění jen když ho sám přepíšeš (`tools/password.mjs set`). Úpravy seznamu, cen i motivů je neovlivní. Nepřejmenovávej složky `p1/` a `p2/` (jsou v QR adrese). Nástroj odmítne vytvořit nové heslo pro stránku, která už jedno má, a vypíše, jak ho obnovit (heslo je napsané na kartičce).

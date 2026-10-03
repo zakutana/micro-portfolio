@@ -140,7 +140,18 @@
     const icon = el("div", "lock-icon", "\u{1F512}");
     icon.setAttribute("aria-hidden", "true");
     const title = el("h2", "", name ? `Ahoj ${name}!` : "Tahle stránka je jen pro tebe");
-    const hint = el("p", "", "Napiš heslo z kartičky. Stačí jednou, příště se stránka otevře sama.");
+    const hint = el("p", "", "Heslo je ukryté v čísle na tvé kartičce. Rozluštíš ho a napíšeš sem. Stačí jednou, příště se stránka otevře sama.");
+    const help = el("details", "lock-help");
+    const digits = Number.isInteger(cfg.passLen) ? cfg.passLen * 2 : 10;
+    const pairs = digits / 2;
+    const steps = el("ol");
+    for (const text of [
+      `Vezmi prvních ${digits} číslic z čísla na kartě a rozděl je na ${pairs} dvojic.`,
+      `Klíčem je tvoje jméno${name ? ` (${name})` : ""}: každému písmenu přiřaď číslo, A = 1, B = 2, C = 3 … Z = 26. Písmena jména opakuj dokola, dokud je potřebuješ.`,
+      "Od každé dvojice odečti číslo písmene ze jména. Když vyjde nula nebo míň, přičti 26.",
+      "Z výsledných čísel udělej písmena (1 = A, 2 = B …). To je heslo.",
+    ]) steps.append(el("li", "", text));
+    help.append(el("summary", "", "Jak to rozluštit?"), steps);
 
     const form = el("form", "pw-form");
     const input = el("input", "pw-input");
@@ -158,7 +169,7 @@
     const message = el("p", "pw-message");
     message.setAttribute("aria-live", "polite");
     form.append(input, button, message);
-    lock.append(icon, title, hint, form);
+    lock.append(icon, title, hint, help, form);
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();

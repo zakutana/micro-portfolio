@@ -1621,6 +1621,30 @@ body {
   line-height: 1.5;
 }
 
+.lock-help {
+  margin: 14px auto 0;
+  max-width: 24em;
+  text-align: left;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.lock-help summary {
+  cursor: pointer;
+  font-weight: 700;
+  text-align: center;
+  color: var(--text);
+}
+
+.lock-help ol {
+  margin: 10px 0 0;
+  padding-left: 1.3em;
+}
+
+.lock-help li + li {
+  margin-top: 6px;
+}
+
 /* password form on the lock screen */
 .pw-form {
   margin-top: 16px;
