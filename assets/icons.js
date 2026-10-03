@@ -70,4 +70,31 @@ window.MICRO_ICONS = {
     '<ellipse cx="13.8" cy="23.4" rx="2.1" ry="1.35" fill="#f6a98a" opacity=".8"/>' +
     '<ellipse cx="26.2" cy="23.4" rx="2.1" ry="1.35" fill="#f6a98a" opacity=".8"/>' +
     "</svg>",
+
+  makeup:
+    '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<g transform="rotate(28 16 17)">' +
+    '<rect x="12.2" y="2.4" width="7.6" height="8.6" rx="2" fill="#f1b94c" stroke="#b9822a" stroke-width=".8"/>' +
+    '<rect x="12.2" y="5.4" width="7.6" height="1.2" fill="#fff3c9" opacity=".7"/>' +
+    '<rect x="11" y="10.6" width="10" height="17.6" rx="3.2" fill="#ff4f98" stroke="#c42a70" stroke-width=".9"/>' +
+    '<rect x="13" y="12.8" width="2" height="12" rx="1" fill="#fff" opacity=".55"/>' +
+    '<rect x="11" y="18.2" width="10" height="2.2" fill="#ffd0e6" opacity=".8"/>' +
+    '</g>' +
+    '<path d="M26.5 3.2 L27.6 6.2 L30.6 7.3 L27.6 8.4 L26.5 11.4 L25.4 8.4 L22.4 7.3 L25.4 6.2 Z" fill="#ffe27a" stroke="#e5b53a" stroke-width=".6" stroke-linejoin="round"/>' +
+    '<path d="M6 22.6 L6.7 24.4 L8.5 25.1 L6.7 25.8 L6 27.6 L5.3 25.8 L3.5 25.1 L5.3 24.4 Z" fill="#fff" opacity=".9"/>' +
+    "</svg>",
+
+  football:
+    '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<circle cx="16" cy="16" r="13.2" fill="#fff"/>' +
+    '<polygon points="16,10.4 21.3,14.3 19.3,20.5 12.7,20.5 10.7,14.3" fill="#222"/>' +
+    '<g stroke="#222" stroke-width="1.1" stroke-linecap="round" fill="#222">' +
+    '<g><line x1="16" y1="10.4" x2="16" y2="6.4"/><polygon points="13.6,3.8 18.4,3.8 19.2,6.6 16,8 12.8,6.6" stroke="none"/></g>' +
+    '<g transform="rotate(72 16 16)"><line x1="16" y1="10.4" x2="16" y2="6.4"/><polygon points="13.6,3.8 18.4,3.8 19.2,6.6 16,8 12.8,6.6" stroke="none"/></g>' +
+    '<g transform="rotate(144 16 16)"><line x1="16" y1="10.4" x2="16" y2="6.4"/><polygon points="13.6,3.8 18.4,3.8 19.2,6.6 16,8 12.8,6.6" stroke="none"/></g>' +
+    '<g transform="rotate(216 16 16)"><line x1="16" y1="10.4" x2="16" y2="6.4"/><polygon points="13.6,3.8 18.4,3.8 19.2,6.6 16,8 12.8,6.6" stroke="none"/></g>' +
+    '<g transform="rotate(288 16 16)"><line x1="16" y1="10.4" x2="16" y2="6.4"/><polygon points="13.6,3.8 18.4,3.8 19.2,6.6 16,8 12.8,6.6" stroke="none"/></g>' +
+    '</g>' +
+    '<circle cx="16" cy="16" r="13.2" fill="none" stroke="#222" stroke-width="1.6"/>' +
+    "</svg>",
 };

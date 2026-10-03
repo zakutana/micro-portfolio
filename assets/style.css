@@ -137,6 +137,80 @@
   --letter: 0;
 }
 
+:root[data-theme="makeup"] {
+  --font: "Fredoka", system-ui, sans-serif;
+  --bg: #e0508f;
+  --bg-image:
+    radial-gradient(circle at 18% 12%, rgba(255, 236, 160, 0.9) 0 2px, transparent 3px),
+    radial-gradient(circle at 78% 8%, rgba(255, 255, 255, 0.9) 0 2px, transparent 3px),
+    radial-gradient(circle at 90% 38%, rgba(255, 236, 160, 0.8) 0 2.5px, transparent 3.5px),
+    radial-gradient(circle at 8% 52%, rgba(255, 255, 255, 0.8) 0 2px, transparent 3px),
+    radial-gradient(circle at 60% 70%, rgba(255, 236, 160, 0.7) 0 2px, transparent 3px),
+    radial-gradient(circle at 25% 86%, rgba(255, 255, 255, 0.8) 0 2.5px, transparent 3.5px),
+    linear-gradient(165deg, #ff93bd 0%, #e0508f 52%, #9c2a78 100%);
+  --text: #4d1b3d;
+  --muted: #a5628f;
+  --title: #ffffff;
+  --title-shadow: 0 2px 0 #a8327a, 0 4px 12px rgba(90, 10, 60, 0.4);
+  --panel: #fff6fa;
+  --panel-border: 3px solid #f6c76e;
+  --panel-radius: 26px;
+  --panel-shadow: 0 6px 0 #b4337f, 0 12px 22px rgba(80, 10, 60, 0.35);
+  --row-hover: #ffe6f1;
+  --total-bg: linear-gradient(180deg, #b93a85 0%, #7d1f5c 100%);
+  --total-text: #ffe9a8;
+  --total-label: #ffd0e6;
+  --btn-bg: #fff6fa;
+  --btn-border: 3px solid #f6c76e;
+  --btn-radius: 999px;
+  --btn-active-bg: #ff4f98;
+  --btn-active-text: #ffffff;
+  --btn-shadow: 0 3px 0 #a8327a;
+  --status-ok: #1d8a4c;
+  --status-warn: #c2570c;
+  --badge-bg: #ffe0ee;
+  --title-size: 1.9rem;
+  --value-size: 1.15rem;
+  --total-size: 2rem;
+  --base-size: 1rem;
+  --letter: 0;
+}
+
+:root[data-theme="football"] {
+  --font: "Fredoka", system-ui, sans-serif;
+  --bg: #2e8b3a;
+  --bg-image:
+    radial-gradient(circle at 50% 118%, transparent 0 62px, rgba(255, 255, 255, 0.35) 62px 65px, transparent 66px),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.18), transparent 28%),
+    repeating-linear-gradient(90deg, #2f9440 0 52px, #3aa84a 52px 104px);
+  --text: #12351a;
+  --muted: #55775b;
+  --title: #ffffff;
+  --title-shadow: 0 3px 0 #145a21, 0 5px 10px rgba(0, 40, 10, 0.4);
+  --panel: #fbfdf4;
+  --panel-border: 3px solid #ffffff;
+  --panel-radius: 14px;
+  --panel-shadow: 0 5px 0 #145a21, 0 10px 18px rgba(0, 40, 10, 0.35);
+  --row-hover: #eaf6dc;
+  --total-bg: linear-gradient(180deg, #17301f 0%, #0b1a11 100%);
+  --total-text: #ffd84a;
+  --total-label: #cfe8d3;
+  --btn-bg: #ffffff;
+  --btn-border: 3px solid #145a21;
+  --btn-radius: 12px;
+  --btn-active-bg: #ffd84a;
+  --btn-active-text: #12351a;
+  --btn-shadow: 0 3px 0 #145a21;
+  --status-ok: #1d8a4c;
+  --status-warn: #c2570c;
+  --badge-bg: #e3f1d5;
+  --title-size: 1.9rem;
+  --value-size: 1.15rem;
+  --total-size: 2rem;
+  --base-size: 1rem;
+  --letter: 0;
+}
+
 :root[data-theme="minecraft"] {
   --font: "Press Start 2P", "Courier New", monospace;
   --bg: #7a5230;
@@ -259,7 +333,7 @@ body {
 .themes {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
@@ -276,8 +350,8 @@ body {
   appearance: none;
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   color: var(--text);
   background: var(--btn-bg);
@@ -290,8 +364,8 @@ body {
 }
 
 .theme-btn svg {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
 }
 
 .theme-btn:active {
@@ -536,8 +610,8 @@ body {
     height: 44px;
   }
   .theme-btn {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
   }
 }
 
