@@ -90,7 +90,11 @@ Sekce „Historie nákupů“ na stránce ukazuje každý nákup jako blok: **Bl
 
 ## Motivy
 
-Minecraft, Kirby, Waddle Dee, Pokémon, Make-up, Fotbal, Trader. Volba se ukládá do telefonu (`localStorage`), takže zůstane i po zavření stránky. `p2` začíná s Kirby (růžová), `p1` s Waddle Dee (modrá s oranžovou). Výchozí motiv je atribut `data-theme` v `index.html` stránky. Motivy jsou sady CSS proměnných v `assets/style.css`.
+Minecraft, Kirby, Waddle Dee, Pokémon, Make-up, Fotbal, Trader. Motiv se mění kulatým tlačítkem vpravo nahoře (otevře se výběr se všemi sedmi) a ukládá se do telefonu (`localStorage`), takže zůstane i po zavření stránky. `p2` začíná s Kirby (růžová), `p1` s Waddle Dee (modrá s oranžovou). Výchozí motiv je atribut `data-theme` v `index.html` stránky.
+
+Všechny motivy mají stejnou stavbu: hlavička (název, přepínač Pro, tlačítko motivu), jedna karta s růstem portfolia a postavičkou, která se přes ní dívá, čistý seznam a jeden součet dole. Liší se barvami, rámečky, písmem a postavičkou (Kirby, Waddle Dee, Pikachu, creeper, rtěnka, míč, svíčkový graf). Barevný proužek pod růstem ukazuje, z čeho se portfolio skládá, a stejnou barvou je kroužek kolem loga každé položky.
+
+Motivy jsou sady CSS proměnných na začátku `assets/style.css` (barvy, rámečky, stíny, písmo, velikost a poloha postavičky, paleta proužku `--a1` až `--a8`), pár drobných úprav je na konci bloku motivu. Postavičky a ikony jsou v `assets/icons.js` (`MICRO_PEEK`, `MICRO_TOTAL`, `MICRO_MARKS`; `MICRO_ICONS` používají i kartičky). Písma (Fredoka, Press Start 2P, Nunito, Lilita One) jsou uložená v `assets/fonts/`, stránka nestahuje nic zvenčí kromě cen.
 
 ## Ochrana heslem
 

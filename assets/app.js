@@ -10,13 +10,13 @@
   let holdings = []; // the holdings that are actually owned (quantity > 0)
 
   const THEMES = [
-    { id: "minecraft", label: "Minecraft", color: "#7a5230" },
-    { id: "kirby", label: "Kirby", color: "#ff9ccf" },
-    { id: "waddle", label: "Waddle Dee", color: "#3f5ee0" },
-    { id: "pokemon", label: "Pokémon", color: "#2a75bb" },
-    { id: "makeup", label: "Make-up", color: "#e0508f" },
-    { id: "football", label: "Fotbal", color: "#2e8b3a" },
-    { id: "trader", label: "Trader", color: "#0b0e13" },
+    { id: "minecraft", label: "Minecraft", color: "#4a3322" },
+    { id: "kirby", label: "Kirby", color: "#ffbfdf" },
+    { id: "waddle", label: "Waddle Dee", color: "#3a56d8" },
+    { id: "pokemon", label: "Pokémon", color: "#f43f3f" },
+    { id: "makeup", label: "Make-up", color: "#ffc9e0" },
+    { id: "football", label: "Fotbal", color: "#2f9440" },
+    { id: "trader", label: "Trader", color: "#0d1118" },
   ];
 
   const COINGECKO = "https://api.coingecko.com/api/v3";
@@ -59,10 +59,15 @@
     root.dataset.theme = id;
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.content = themeById(id).color;
-    const mascot = document.getElementById("mascot");
-    if (mascot) mascot.innerHTML = icons[id] || "";
-    const scene = document.getElementById("scene");
-    if (scene) scene.innerHTML = (window.MICRO_SCENES || {})[id] || "";
+    const fill = (elId, set, key = id) => {
+      const node = document.getElementById(elId);
+      if (node) node.innerHTML = (set || {})[key] || "";
+    };
+    fill("mascot", window.MICRO_PEEK);
+    fill("total-icon", window.MICRO_TOTAL);
+    fill("theme-toggle", icons);
+    const marks = window.MICRO_MARKS || {};
+    fill("brand-mark", marks, id in marks ? id : "_chart");
     document.querySelectorAll(".theme-btn").forEach((btn) => {
       btn.setAttribute("aria-pressed", String(btn.dataset.theme === id));
     });
@@ -124,6 +129,7 @@
       form,
     );
     lock.hidden = false;
+    setHero(true);
   }
 
   function showLock(onUnlock) {
@@ -166,6 +172,7 @@
         if ((await deriveHash(password)) === cfg.passHash) {
           store.set("auth", cfg.passHash);
           lock.hidden = true;
+          setHero(false);
           await onUnlock();
           return;
         }
@@ -181,17 +188,22 @@
     });
 
     lock.hidden = false;
+    setHero(true);
     input.focus();
   }
 
   /* The owner's name travels in the QR link (?n=...), so it never has to live in the repo. */
+  let ownerName = "";
   function showOwner() {
     const fromUrl = new URLSearchParams(location.search).get("n");
     if (fromUrl) store.set("name", fromUrl.trim().slice(0, 30));
-    const name = store.get("name");
-    if (!name) return;
-    $("owner").textContent = name;
-    document.title = `Micro portfolio · ${name}`;
+    ownerName = store.get("name") || "";
+    if (ownerName) document.title = `Micro portfolio · ${ownerName}`;
+  }
+
+  /* The figure looking over the top of the first card only makes sense while that card is there. */
+  function setHero(on) {
+    $("stage").classList.toggle("has-hero", on);
   }
 
   /* ---------- Prices (all converted to CZK) ---------- */
@@ -383,6 +395,19 @@
   }
 
   const $ = (id) => document.getElementById(id);
+
+  /* "1 234 Kč" -> the number plus a separate "Kč": a theme can set the currency in a plainer font
+     (some of the playful display fonts lack Czech letters like č). */
+  function moneyNode(text) {
+    const box = document.createElement("span");
+    const m = /^(.*?)[\s\u00a0]*Kč$/.exec(text);
+    if (!m) {
+      box.textContent = text;
+      return box;
+    }
+    box.append(document.createTextNode(`${m[1]}\u00a0`), el("span", "cur", "Kč"));
+    return box;
+  }
   const el = (tag, className, text) => {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -427,7 +452,8 @@
     return box;
   }
 
-  const ALLOC_COLORS = ["#ff6b9a", "#4dabf7", "#ffd43b", "#69db7c", "#b197fc", "#ff922b", "#38d9a9", "#e599f7"];
+  const ALLOC_COLORS = 8; // --a1 ... --a8 in style.css: every theme has its own palette
+  const allocColor = (i) => `var(--a${(i % ALLOC_COLORS) + 1})`;
   const DETAIL_CELLS = [
     ["price", "Cena za kus"],
     ["qty", "Kusů"],
@@ -489,28 +515,23 @@
   function buildPerf() {
     const box = el("section", "panel perf");
     box.hidden = true;
-    const top = el("div", "perf-top");
-    const icon = el("div", "perf-icon");
-    const text = el("div", "perf-text");
-    const title = el("div", "perf-title");
-    const sub = el("div", "perf-sub");
-    text.append(title, sub);
-    const side = el("div", "perf-side");
-    const pct = el("div", "perf-pct");
-    const money = el("div", "perf-money");
-    side.append(pct, money);
-    top.append(icon, text, side);
+    const cap = el("div", "perf-cap");
+    const gain = el("div", "perf-gain");
+    const num = el("b", "perf-num");
+    const unit = el("span", "perf-unit");
+    gain.append(num, unit);
+    const pills = el("div", "perf-pills");
+    const bar = el("div", "alloc-bar");
+    bar.setAttribute("aria-hidden", "true");
 
     const pro = el("div", "pro-only perf-pro");
     const allocTitle = el("div", "alloc-title", "Z čeho se portfolio skládá");
-    const bar = el("div", "alloc-bar");
     const legend = el("div", "alloc-legend");
-    const invested = el("div", "perf-invested");
-    pro.append(invested, allocTitle, bar, legend);
+    pro.append(allocTitle, legend);
 
-    box.append(top, pro);
+    box.append(cap, gain, pills, bar, pro);
     $("content").prepend(box);
-    perfRefs = { box, icon, title, sub, pct, money, bar, legend, invested };
+    perfRefs = { box, cap, num, unit, pills, bar, legend };
   }
 
   /* Purchase history: every purchase is a "block"; the first one is the genesis block.
@@ -584,11 +605,11 @@
     // Growth only counts from the start date in config.json (before that: just the plain values).
     const startDate = /^\d{4}-\d{2}-\d{2}/.test(cfg.startDate ?? "") ? cfg.startDate.slice(0, 10) : null;
     const tracking = !startDate || todayIso() >= startDate;
-    const rows = items.map((item) => {
+    const rows = items.map((item, i) => {
       const pos = position(item.holding);
       if (!tracking) pos.cost = null;
       // "notTraded": shown (dimmed) but not part of the total, the growth, the shares or the allocation
-      return { item, pos, value: item.price === null ? null : item.price * pos.qty, excluded: item.holding.notTraded === true };
+      return { i, item, pos, value: item.price === null ? null : item.price * pos.qty, excluded: item.holding.notTraded === true };
     });
 
     let total = 0;
@@ -612,12 +633,14 @@
       li.classList.toggle("is-excluded", excluded);
       valueEl.classList.remove("is-loading");
       valueEl.classList.toggle("is-stale", !item.live);
-      valueEl.textContent = value === null ? "—" : formatCzk(value);
+      valueEl.replaceChildren(value === null ? document.createTextNode("—") : moneyNode(formatCzk(value)));
       if (excluded) valueEl.append(el("small", "excl", "mimo součet"));
       // growth of this single investment, once tracking has started (next to its value, also without Pro mode)
       if (!excluded && value !== null && pos.cost !== null) {
         const r = value / pos.cost - 1;
-        valueEl.append(el("small", `micro is-${trend(r)}`, `${ARROW[trend(r)]} ${formatPct(r)}`));
+        const micro = el("small", `micro is-${trend(r)}`);
+        micro.append(el("i", "arr", ARROW[trend(r)]), document.createTextNode(formatPct(r)));
+        valueEl.append(micro);
       }
 
       cells.price.textContent = item.price === null ? "—" : formatUnitPrice(item.price);
@@ -652,11 +675,12 @@
 
     // an incomplete sum would look like a loss: show it only when every counted holding has a price
     const complete = rows.every((r) => r.excluded || r.value !== null);
-    $("total").textContent = known && complete ? formatCzk(total) : "—";
+    $("total").replaceChildren(known && complete ? moneyNode(formatCzk(total)) : document.createTextNode("—"));
     if (complete) {
       showPerformance({ costSum, valueSum, since: startDate ?? since, rows, total, waiting: !tracking });
     } else {
       perfRefs.box.hidden = true;
+      setHero(false);
     }
 
     const status = $("status");
@@ -681,19 +705,27 @@
 
   function showPerformance({ costSum, valueSum, since, rows, total, waiting }) {
     const p = perfRefs;
-    p.box.classList.remove("is-up", "is-down", "is-flat");
+    p.box.classList.remove("is-up", "is-down", "is-flat", "is-waiting");
+    p.pills.replaceChildren();
+    const pill = (text, kind = "n", arrow = "") => {
+      const node = el("span", `pill ${kind}`);
+      if (arrow) node.append(el("i", "arr", arrow));
+      node.append(document.createTextNode(text));
+      p.pills.append(node);
+    };
+    const lead = ownerName ? `${ownerName} · ` : "";
+
     if (waiting && since) {
       // before the start date: nothing is counted yet
       p.box.hidden = false;
-      p.box.classList.add("is-flat");
-      p.icon.textContent = ARROW.flat;
-      p.title.textContent = "Sledování růstu začne";
-      p.sub.textContent = formatDate(since);
-      p.pct.textContent = "";
-      p.money.textContent = "";
-      p.invested.textContent = "";
+      p.box.classList.add("is-flat", "is-waiting");
+      p.cap.textContent = ownerName || "Portfolio";
+      p.num.textContent = `Start ${formatDate(since).replace(/ 20\d\d$/, "")}`;
+      p.unit.textContent = "";
+      pill("sledování růstu začne");
     } else if (!(costSum > 0)) {
       p.box.hidden = true; // no starting point recorded yet
+      setHero(false);
       return;
     } else {
       p.box.hidden = false;
@@ -701,32 +733,35 @@
       const diff = valueSum - costSum;
       const t = trend(ratio);
       p.box.classList.add(`is-${t}`);
-      p.icon.textContent = ARROW[t];
-      p.title.textContent = t === "up" ? "Portfolio roste" : t === "down" ? "Portfolio klesá" : "Zatím beze změny";
-      p.sub.textContent = since ? `od ${formatDate(since)}` : "";
-      p.pct.textContent = formatPct(ratio);
-      p.money.textContent = formatSignedCzk(diff);
-      p.invested.textContent = `Vloženo ${formatCzk(costSum)} → dnes ${formatCzk(valueSum)}`;
+      p.cap.textContent = since ? `${lead}${lead ? "od" : "Od"} ${formatDate(since)}` : ownerName || "Portfolio";
+      const text = formatPct(ratio); // "+4,4 %": the number is big, the % small
+      const cut = text.lastIndexOf(" ");
+      p.num.textContent = text.slice(0, cut);
+      p.unit.textContent = text.slice(cut + 1);
+      pill(formatSignedCzk(diff), t === "up" ? "up" : t === "down" ? "dn" : "n", ARROW[t]);
+      pill(`Vloženo ${formatCzk(costSum)}`);
     }
+    setHero(true);
 
     p.bar.replaceChildren();
     p.legend.replaceChildren();
+    rowRefs.forEach((r) => r.li.style.removeProperty("--c"));
     rows
       .filter((r) => r.value !== null && !r.excluded)
       .sort((a, b) => b.value - a.value)
       .forEach((r, i) => {
-        const color = ALLOC_COLORS[i % ALLOC_COLORS.length];
+        const color = allocColor(i);
         const share = r.value / total;
         const seg = el("span", "alloc-seg");
         seg.style.flexGrow = String(Math.max(share, 0.0001));
-        seg.style.background = color;
-        seg.title = `${r.item.holding.symbol} ${formatPct(share, { signed: false })}`;
+        seg.style.setProperty("--c", color);
         p.bar.append(seg);
         const li = el("span", "alloc-item");
         const dot = el("i");
-        dot.style.background = color;
+        dot.style.setProperty("--c", color);
         li.append(dot, document.createTextNode(`${r.item.holding.symbol} ${formatPct(share, { signed: false })}`));
         p.legend.append(li);
+        rowRefs[r.i].li.style.setProperty("--c", color); // the ring around the logo matches its colour in the bar
       });
   }
 
@@ -740,19 +775,17 @@
 
   function buildProBar() {
     const bar = el("div", "pro-bar");
-    const label = el("label", "pro-label", "Pro režim");
+    const label = el("label", "pro-label", "Pro");
     label.htmlFor = "pro-switch";
     const sw = el("button", "switch");
     sw.type = "button";
     sw.id = "pro-switch";
     sw.setAttribute("role", "switch");
+    sw.title = "Pro režim: ukáže cenu a růst každé položky";
+    sw.setAttribute("aria-label", "Pro režim");
     sw.append(el("span", "knob"));
-    sw.title = "Ukáže cenu a růst každé položky";
     bar.append(label, sw);
-    $("themes").after(bar);
-
-    const pill = el("span", "pro-pill", "PRO");
-    document.querySelector(".title").append(pill);
+    $("tools").prepend(bar);
 
     sw.addEventListener("click", () => {
       const on = root.dataset.pro !== "1";
@@ -766,20 +799,38 @@
 
   function buildThemePicker() {
     const bar = $("themes");
+    const toggle = $("theme-toggle");
+    bar.replaceChildren();
+    const setOpen = (open) => {
+      bar.hidden = !open;
+      toggle.setAttribute("aria-expanded", String(open));
+    };
     for (const t of THEMES) {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "theme-btn";
       btn.dataset.theme = t.id;
-      btn.innerHTML = icons[t.id] || "";
-      btn.title = t.label;
       btn.setAttribute("aria-label", `Motiv ${t.label}`);
+      const pic = el("span", "theme-pic");
+      pic.innerHTML = icons[t.id] || "";
+      btn.append(pic, el("span", "theme-name", t.label));
       btn.addEventListener("click", () => {
         store.set("theme", t.id);
         applyTheme(t.id);
+        setOpen(false);
       });
       bar.append(btn);
     }
+    toggle.addEventListener("click", () => setOpen(bar.hidden));
+    document.addEventListener("click", (event) => {
+      if (!bar.hidden && !bar.contains(event.target) && !toggle.contains(event.target)) setOpen(false);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !bar.hidden) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
     applyTheme(currentTheme());
   }
 
@@ -813,6 +864,9 @@
     $("content").hidden = false;
     $("total-bar").hidden = false;
     buildPerf();
+    perfRefs.box.hidden = false;
+    perfRefs.num.textContent = "…";
+    setHero(true);
     buildList();
     buildHistory();
     buildGlossary();

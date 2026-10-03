@@ -1,4 +1,7 @@
-/* Micro portfolio – shared styles. Themes are plain CSS variable sets. */
+/* Micro portfolio – shared styles.
+   Every theme is a set of CSS variables plus a few small overrides at the end of its block.
+   The structure is the same in all of them: header, one growth card with a figure looking over its edge,
+   a clean list, one total bar. */
 
 @font-face {
   font-family: "Fredoka";
@@ -26,205 +29,491 @@
   src: url("fonts/pressstart-latin.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+@font-face {
+  font-family: "Nunito";
+  font-weight: 600 800;
+  font-display: swap;
+  src: url("fonts/nunito-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Nunito";
+  font-weight: 600 800;
+  font-display: swap;
+  src: url("fonts/nunito-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Lilita One";
+  font-display: swap;
+  src: url("fonts/lilita-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Lilita One";
+  font-display: swap;
+  src: url("fonts/lilita-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
-/* ---------- Themes ---------- */
+/* ---------- Defaults (every theme overrides what it needs) ---------- */
 
-:root,
-:root[data-theme="kirby"] {
+:root {
   --font: "Fredoka", system-ui, sans-serif;
-  --bg: #ffc2de;
+  --display: var(--font);
+  --base-size: 1rem;
+  --letter: 0;
+  --ctl-h: 42px;
+  --title-size: 1.02rem;
+  --title-weight: 600;
+  --value-size: 1.1rem;
+  --gain-size: 3.2rem;
+  --unit-scale: 0.5;
+  --total-size: 1.95rem;
+  --on-bg: #ffffff;
+  --focus: #2563eb;
+
+  --gain: #0e7c4f;
+  --loss: #b3262e;
+  --flat: #6c6c6c;
+  --gain-bg: #d9f7e8;
+  --loss-bg: #ffdede;
+  --flat-bg: #ececec;
+  --gain-big: var(--gain);
+  --loss-big: var(--loss);
+  --line: rgba(0, 0, 0, 0.12);
+
+  --a1: #ffc93c;
+  --a2: #ff7ab8;
+  --a3: #4da2ff;
+  --a4: #ff6b6b;
+  --a5: #9b8cff;
+  --a6: #5fd0a0;
+  --a7: #ffa44d;
+  --a8: #c8a0ff;
+
+  /* the figure looking over the growth card: its size, how much of it hides behind the card, where it sits */
+  --peek-w: 112px;
+  --peek-h: 112px;
+  --peek-hide: 34px;
+  --peek-right: 26px;
+  --peek-rot: 6deg;
+  --mark-size: 26px;
+}
+
+/* ---------- Kirby (default) ---------- */
+
+:root[data-theme="kirby"] {
+  --bg: #ffd9ec;
   --bg-image:
-    radial-gradient(circle at 12% 8%, rgba(255, 255, 255, 0.75) 0 26px, transparent 27px),
-    radial-gradient(circle at 18% 10%, rgba(255, 255, 255, 0.75) 0 34px, transparent 35px),
-    radial-gradient(circle at 88% 22%, rgba(255, 255, 255, 0.6) 0 30px, transparent 31px),
-    radial-gradient(circle at 80% 24%, rgba(255, 255, 255, 0.6) 0 22px, transparent 23px),
-    linear-gradient(180deg, #ffd9ec 0%, #ffa8d1 100%);
-  --text: #6b2450;
-  --muted: #9c4a7b;
-  --title: #ffffff;
-  --title-shadow: 0 2px 0 #e05a9c, 0 4px 10px rgba(224, 90, 156, 0.35);
-  --panel: #ffffff;
-  --panel-border: 3px solid #ff8cc3;
-  --panel-radius: 22px;
-  --panel-shadow: 0 6px 0 #f06aaa, 0 10px 18px rgba(176, 52, 118, 0.2);
-  --row-hover: #fff0f8;
-  --total-bg: linear-gradient(180deg, #dc4584, #c92d73);
-  --total-text: #ffffff;
-  --total-label: #ffffff;
+    radial-gradient(ellipse 46px 15px at 14% 132px, rgba(255, 255, 255, 0.85) 60%, transparent 62%),
+    radial-gradient(circle 17px at 11% 122px, rgba(255, 255, 255, 0.85) 60%, transparent 62%),
+    radial-gradient(circle 12px at 19% 124px, rgba(255, 255, 255, 0.85) 60%, transparent 62%),
+    linear-gradient(180deg, #ffbfdf 0%, #ffd9ec 20%, #ffeef7 48%, #fff8fb 100%);
+  --text: #5a1f48;
+  --muted: #a1587f;
+  --on-bg: #a52a66;
+  --line: rgba(224, 90, 156, 0.25);
+  --mark: #ff4f9a;
+
+  --brand-bg: #ffffff;
+  --brand-border: 2.5px solid #ffb4d6;
+  --brand-radius: 999px;
+  --brand-shadow: 0 3px 0 #ffa3cd;
+  --brand-text: #c0306f;
   --btn-bg: #ffffff;
-  --btn-border: 3px solid #ff8cc3;
+  --btn-border: 2.5px solid #ffb4d6;
   --btn-radius: 999px;
+  --btn-shadow: 0 3px 0 #ffa3cd;
+  --btn-text: #c0306f;
   --btn-active-bg: #ff5fa2;
   --btn-active-text: #ffffff;
-  --btn-shadow: 0 3px 0 #f06aaa;
-  --status-ok: #2a9d5c;
-  --status-warn: #c2570c;
-  --badge-bg: #ffe3f1;
-  --title-size: 1.9rem;
-  --value-size: 1.15rem;
-  --total-size: 2rem;
-  --base-size: 1rem;
-  --letter: 0;
+  --sw-off: #ffd0e6;
+  --sw-shadow: inset 0 2px 0 rgba(224, 90, 156, 0.25);
+  --toggle-bg: #ff7ab8;
+  --toggle-border: 2.5px solid #ffffff;
+  --toggle-shadow: 0 3px 0 #d63f88;
+
+  --panel: linear-gradient(180deg, #ffffff 0%, #fff2f9 100%);
+  --panel-border: 3px solid #ffb4d6;
+  --panel-radius: 30px;
+  --panel-shadow: 0 6px 0 #ffa3cd, 0 18px 28px rgba(224, 90, 156, 0.22);
+  --row-bg: #ffffff;
+  --row-border: 2.5px solid #ffd3e8;
+  --row-radius: 24px;
+  --row-shadow: 0 4px 0 #ffc2de;
+  --row-hover: #fff0f8;
+  --ring-idle: #ffd3e8;
+  --logo-border: 3px solid var(--ring-idle);
+
+  --pill-bg: #ffe3f0;
+  --pill-text: #b0507f;
+  --gain-big: #16a36a;
+
+  --total-bg: linear-gradient(180deg, #ff95c9 0%, #ff4f9a 100%);
+  --total-text: #ffffff;
+  --total-label: #ffffff;
+  --total-border: 3px solid #ffffff;
+  --total-radius: 33px;
+  --total-shadow: 0 6px 0 #d63f88, 0 16px 26px rgba(214, 63, 136, 0.42);
+  --total-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0));
+  --total-text-shadow: 0 2px 0 rgba(150, 20, 80, 0.35);
 }
 
-:root[data-theme="pokemon"] {
-  --font: "Fredoka", system-ui, sans-serif;
-  --bg: #2a75bb;
-  --bg-image:
-    radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.18) 0 120px, transparent 121px),
-    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 18px, transparent 18px 36px),
-    linear-gradient(180deg, #3d8fd8 0%, #1f5f9f 100%);
-  --text: #1c2b4d;
-  --muted: #5d6f94;
-  --title: #ffcb05;
-  --title-shadow: 0 3px 0 #2a3c8f, 0 0 2px #2a3c8f, 2px 2px 0 #2a3c8f, -2px 2px 0 #2a3c8f;
-  --panel: #ffffff;
-  --panel-border: 3px solid #ffcb05;
-  --panel-radius: 16px;
-  --panel-shadow: 0 5px 0 #1b4f86, 0 10px 18px rgba(8, 30, 70, 0.3);
-  --row-hover: #fff9d9;
-  --total-bg: linear-gradient(180deg, #ffd83a 0%, #ffcb05 100%);
-  --total-text: #1c2b4d;
-  --total-label: #6b5600;
-  --btn-bg: #ffffff;
-  --btn-border: 3px solid #ffcb05;
-  --btn-radius: 12px;
-  --btn-active-bg: #ee1515;
-  --btn-active-text: #ffffff;
-  --btn-shadow: 0 3px 0 #1b4f86;
-  --status-ok: #1d8a4c;
-  --status-warn: #c2570c;
-  --badge-bg: #e6f0fb;
-  --title-size: 1.9rem;
-  --value-size: 1.15rem;
-  --total-size: 2rem;
-  --base-size: 1rem;
-  --letter: 0;
+/* the hands of the figure rest on the edge of the card */
+:root[data-theme="kirby"] .stage.has-hero::before,
+:root[data-theme="kirby"] .stage.has-hero::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--peek-h) - var(--peek-hide) - 9px);
+  width: 28px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffb7da;
+  border: 1.5px solid #e05a9c;
+  pointer-events: none;
 }
+:root[data-theme="kirby"] .stage.has-hero::before {
+  right: 110px;
+  transform: rotate(-14deg);
+}
+:root[data-theme="kirby"] .stage.has-hero::after {
+  right: 26px;
+  transform: rotate(14deg);
+}
+
+/* ---------- Waddle Dee ---------- */
 
 :root[data-theme="waddle"] {
-  --font: "Fredoka", system-ui, sans-serif;
   --bg: #3a56d8;
   --bg-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.16) 0 2.5px, transparent 3px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.1) 0 2.5px, transparent 3px),
     linear-gradient(180deg, #4a68ea 0%, #2c3fb4 100%);
   --bg-size: 26px 26px, auto;
   --text: #4a2a14;
-  --muted: #7d5128;
-  --title: #ffffff;
-  --title-shadow: 0 3px 0 #c4401a, 0 5px 10px rgba(20, 20, 90, 0.35);
+  --muted: #86582f;
+  --on-bg: #ffffff;
+  --on-bg-shadow: 0 2px 0 #1f2f95;
+  --line: rgba(196, 64, 26, 0.25);
+  --mark: #f05a28;
+
+  --brand-bg: #fdf0d2;
+  --brand-border: 2.5px solid #f05a28;
+  --brand-radius: 999px;
+  --brand-shadow: 0 3px 0 #c4401a;
+  --brand-text: #c4401a;
+  --btn-bg: #fdf0d2;
+  --btn-border: 2.5px solid #f05a28;
+  --btn-radius: 999px;
+  --btn-shadow: 0 3px 0 #c4401a;
+  --btn-text: #c4401a;
+  --btn-active-bg: #f05a28;
+  --btn-active-text: #ffffff;
+  --sw-off: #f6d9a8;
+  --sw-shadow: inset 0 2px 0 rgba(196, 64, 26, 0.25);
+  --toggle-bg: #f05a28;
+  --toggle-border: 2.5px solid #fdf0d2;
+  --toggle-shadow: 0 3px 0 #c4401a;
+
   --panel: #fdf0d2;
   --panel-border: 3px solid #f05a28;
-  --panel-radius: 20px;
-  --panel-shadow: 0 5px 0 #c4401a, 0 10px 18px rgba(10, 15, 70, 0.3);
-  --row-hover: #ffe5b0;
-  --total-bg: linear-gradient(180deg, #cf5a14 0%, #b8360f 100%);
+  --panel-radius: 28px;
+  --panel-shadow: 0 6px 0 #c4401a, 0 18px 26px rgba(10, 15, 70, 0.3);
+  --row-bg: #fff8e6;
+  --row-border: 2.5px solid #f5b184;
+  --row-radius: 22px;
+  --row-shadow: 0 4px 0 #e0803f;
+  --row-hover: #ffeec9;
+  --ring-idle: #f5b184;
+  --logo-border: 3px solid var(--ring-idle);
+
+  --pill-bg: #fbe0a6;
+  --pill-text: #86582f;
+  --gain-big: #14803f;
+
+  --total-bg: linear-gradient(180deg, #ff8a4a 0%, #e4481a 100%);
   --total-text: #ffffff;
   --total-label: #ffffff;
-  --btn-bg: #fdf0d2;
-  --btn-border: 3px solid #f05a28;
-  --btn-radius: 14px;
-  --btn-active-bg: #f8d73c;
-  --btn-active-text: #4a2a14;
-  --btn-shadow: 0 3px 0 #c4401a;
-  --status-ok: #1d8a4c;
-  --status-warn: #c2570c;
-  --badge-bg: #fbe0a6;
-  --title-size: 1.9rem;
-  --value-size: 1.15rem;
-  --total-size: 2rem;
-  --base-size: 1rem;
-  --letter: 0;
+  --total-border: 3px solid #fdf0d2;
+  --total-radius: 33px;
+  --total-shadow: 0 6px 0 #a8310f, 0 16px 26px rgba(10, 15, 70, 0.4);
+  --total-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0));
+  --total-text-shadow: 0 2px 0 rgba(120, 30, 5, 0.4);
+
+  --a1: #f8d73c;
+  --a2: #f05a28;
+  --a3: #2f44c4;
+  --a4: #e4352f;
+  --a5: #6b3f1f;
+  --a6: #7ad37a;
+  --a7: #8fd1ff;
+  --a8: #c8a0ff;
+
+  --peek-w: 118px;
+  --peek-h: 105px;
+  --peek-hide: 24px;
+  --peek-rot: -4deg;
 }
 
-/* Make-up: lipsticks, nail polish, compacts, mascara, hearts and sparkles on candy pink */
+/* ---------- Pokémon ---------- */
+
+:root[data-theme="pokemon"] {
+  --font: "Nunito", system-ui, sans-serif;
+  --display: "Lilita One", "Nunito", system-ui, sans-serif;
+  --bg: #f7f4ec;
+  --bg-image: linear-gradient(180deg, #f43f3f 0, #dc1212 96px, #2b2b2b 96px, #2b2b2b 101px, transparent 101px);
+  --bg-attach: scroll;
+  --bg-repeat: no-repeat;
+  --text: #2b2b2b;
+  --muted: #6f6f6f;
+  --on-bg: #2b2b2b;
+  --line: rgba(43, 43, 43, 0.18);
+  --title-size: 1.45rem;
+  --title-weight: 400;
+  --title-font: "Lilita One", "Nunito", sans-serif;
+  --title-spacing: 0.01em;
+  --title-shadow: 0 3px 0 rgba(0, 0, 0, 0.28);
+  --value-size: 1.2rem;
+  --value-weight: 400;
+  --gain-size: 3.2rem;
+  --gain-weight: 400;
+  --total-size: 2.05rem;
+  --mark-size: 34px;
+  --name-weight: 800;
+
+  --brand-bg: transparent;
+  --brand-text: #ffffff;
+  --brand-pad: 0;
+  --btn-bg: #ffffff;
+  --btn-border: 3px solid #2b2b2b;
+  --btn-radius: 999px;
+  --btn-shadow: 0 3px 0 #2b2b2b;
+  --btn-text: #2b2b2b;
+  --btn-active-bg: #ee1515;
+  --btn-active-text: #ffffff;
+  --sw-off: #d8d8d8;
+  --sw-border: 2px solid #2b2b2b;
+  --knob-border: 2px solid #2b2b2b;
+  --toggle-bg: #ffffff;
+  --toggle-border: 3px solid #2b2b2b;
+  --toggle-shadow: 0 3px 0 #2b2b2b;
+
+  --panel: #ffffff;
+  --panel-border: 3.5px solid #2b2b2b;
+  --panel-radius: 22px;
+  --panel-shadow: 0 5px 0 #2b2b2b, 0 14px 22px rgba(0, 0, 0, 0.14);
+  --row-bg: #ffffff;
+  --row-border: 3px solid #2b2b2b;
+  --row-radius: 18px;
+  --row-shadow: 0 3px 0 #2b2b2b;
+  --row-hover: #fff7e0;
+  --logo-radius: 50%;
+  --logo-border: 2.5px solid #2b2b2b;
+  --logo-bg: linear-gradient(180deg, #ee1515 0 46%, #2b2b2b 46% 54%, #ffffff 54%);
+  --logo-shadow: none;
+
+  --chip-border: 2px solid #2b2b2b;
+  --pill-bg: #f1efe8;
+  --pill-text: #6b6b6b;
+  --gain: #14532d;
+  --loss: #7f1d1d;
+  --gain-bg: #7dffb0;
+  --loss-bg: #ff9b9b;
+  --gain-big: #12a05c;
+  --loss-big: #e11d2e;
+  --seg-border: 2px solid #2b2b2b;
+  --seg-shadow: none;
+
+  --total-bg: #ffffff;
+  --total-text: #2b2b2b;
+  --total-label: #2b2b2b;
+  --total-border: 4px solid #2b2b2b;
+  --total-radius: 18px;
+  --total-shadow: 0 5px 0 #2b2b2b, 0 14px 22px rgba(0, 0, 0, 0.16);
+  --total-text-shadow: none;
+
+  --a1: #ffcb05;
+  --a2: #ee1515;
+  --a3: #3b82f6;
+  --a4: #f97316;
+  --a5: #a78bfa;
+  --a6: #22c55e;
+  --a7: #ec4899;
+  --a8: #14b8a6;
+
+  --peek-w: 104px;
+  --peek-h: 104px;
+  --peek-hide: 30px;
+  --peek-rot: 4deg;
+}
+
+/* the page is white-ish below the red band: the unfinished-load / lock text stays dark */
+:root[data-theme="pokemon"] .brand-mark {
+  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.3));
+}
+
+/* ---------- Make-up ---------- */
+
 :root[data-theme="makeup"] {
-  --font: "Fredoka", system-ui, sans-serif;
-  --bg: #ff7fb6;
+  --bg: #ff86bb;
   --bg-image:
-    url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='220'%20height='220'%20viewBox='0%200%20220%20220'%3E%0A%3Cg%20fill='white'%20fill-opacity='.42'%3E%0A%3Cg%20transform='translate(34%2050)%20rotate(-20)'%3E%3Crect%20x='-7'%20y='2'%20width='14'%20height='22'%20rx='2'/%3E%3Crect%20x='-9'%20y='-3'%20width='18'%20height='6'%20rx='1.5'/%3E%3Cpath%20d='M-6%20-3%20L-6%20-15%20Q0%20-24%206%20-15%20L6%20-3Z'/%3E%3C/g%3E%0A%3Cg%20transform='translate(156%2050)%20rotate(14)'%3E%3Crect%20x='-12'%20y='0'%20width='24'%20height='26'%20rx='7'/%3E%3Crect%20x='-4'%20y='-16'%20width='8'%20height='17'%20rx='2'/%3E%3C/g%3E%0A%3Cpath%20transform='translate(104%20104)%20scale(1.25)'%20d='M0%2012%20C-18%20-2%20-8%20-16%200%20-6%20C8%20-16%2018%20-2%200%2012Z'/%3E%0A%3Cpath%20fill-rule='evenodd'%20transform='translate(42%20166)'%20d='M-17%200%20a17%2017%200%201%200%2034%200%20a17%2017%200%201%200%20-34%200%20Z%20M-10%200%20a10%2010%200%201%201%2020%200%20a10%2010%200%201%201%20-20%200%20Z'/%3E%0A%3Cg%20transform='translate(166%20166)%20rotate(-32)'%3E%3Crect%20x='-6'%20y='-2'%20width='12'%20height='28'%20rx='3'/%3E%3Crect%20x='-2'%20y='-26'%20width='4'%20height='24'%20rx='2'/%3E%3C/g%3E%0A%3Cpath%20transform='translate(190%20112)%20scale(.7)'%20d='M0%2012%20C-18%20-2%20-8%20-16%200%20-6%20C8%20-16%2018%20-2%200%2012Z'/%3E%0A%3Cpath%20transform='translate(18%20104)%20scale(.6)'%20d='M0%2012%20C-18%20-2%20-8%20-16%200%20-6%20C8%20-16%2018%20-2%200%2012Z'/%3E%0A%3C/g%3E%0A%3Cg%20fill='%23fff1a8'%20fill-opacity='.95'%3E%0A%3Cpath%20d='M96%2030%20l3%208%208%203%20-8%203%20-3%208%20-3%20-8%20-8%20-3%208%20-3z'/%3E%0A%3Cpath%20d='M196%20190%20l3%208%208%203%20-8%203%20-3%208%20-3%20-8%20-8%20-3%208%20-3z'/%3E%0A%3Cpath%20d='M112%20184%20l2%205%205%202%20-5%202%20-2%205%20-2%20-5%20-5%20-2%205%20-2z'/%3E%0A%3Cpath%20d='M200%2016%20l2%205%205%202%20-5%202%20-2%205%20-2%20-5%20-5%20-2%205%20-2z'/%3E%0A%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='220'%20height='220'%20viewBox='0%200%20220%20220'%3E%0A%3Cg%20fill='white'%20fill-opacity='.17'%3E%0A%3Cg%20transform='translate(34%2050)%20rotate(-20)'%3E%3Crect%20x='-7'%20y='2'%20width='14'%20height='22'%20rx='2'/%3E%3Crect%20x='-9'%20y='-3'%20width='18'%20height='6'%20rx='1.5'/%3E%3Cpath%20d='M-6%20-3%20L-6%20-15%20Q0%20-24%206%20-15%20L6%20-3Z'/%3E%3C/g%3E%0A%3Cg%20transform='translate(156%2050)%20rotate(14)'%3E%3Crect%20x='-12'%20y='0'%20width='24'%20height='26'%20rx='7'/%3E%3Crect%20x='-4'%20y='-16'%20width='8'%20height='17'%20rx='2'/%3E%3C/g%3E%0A%3Cpath%20transform='translate(104%20104)%20scale(1.25)'%20d='M0%2012%20C-18%20-2%20-8%20-16%200%20-6%20C8%20-16%2018%20-2%200%2012Z'/%3E%0A%3Cpath%20fill-rule='evenodd'%20transform='translate(42%20166)'%20d='M-17%200%20a17%2017%200%201%200%2034%200%20a17%2017%200%201%200%20-34%200%20Z%20M-10%200%20a10%2010%200%201%201%2020%200%20a10%2010%200%201%201%20-20%200%20Z'/%3E%0A%3Cg%20transform='translate(166%20166)%20rotate(-32)'%3E%3Crect%20x='-6'%20y='-2'%20width='12'%20height='28'%20rx='3'/%3E%3Crect%20x='-2'%20y='-26'%20width='4'%20height='24'%20rx='2'/%3E%3C/g%3E%0A%3Cpath%20transform='translate(190%20112)%20scale(.7)'%20d='M0%2012%20C-18%20-2%20-8%20-16%200%20-6%20C8%20-16%2018%20-2%200%2012Z'/%3E%0A%3Cpath%20transform='translate(18%20104)%20scale(.6)'%20d='M0%2012%20C-18%20-2%20-8%20-16%200%20-6%20C8%20-16%2018%20-2%200%2012Z'/%3E%0A%3C/g%3E%0A%3Cg%20fill='%23fff1a8'%20fill-opacity='.6'%3E%0A%3Cpath%20d='M96%2030%20l3%208%208%203%20-8%203%20-3%208%20-3%20-8%20-8%20-3%208%20-3z'/%3E%0A%3Cpath%20d='M196%20190%20l3%208%208%203%20-8%203%20-3%208%20-3%20-8%20-8%20-3%208%20-3z'/%3E%0A%3Cpath%20d='M112%20184%20l2%205%205%202%20-5%202%20-2%205%20-2%20-5%20-5%20-2%205%20-2z'/%3E%0A%3Cpath%20d='M200%2016%20l2%205%205%202%20-5%202%20-2%205%20-2%20-5%20-5%20-2%205%20-2z'/%3E%0A%3C/g%3E%3C/svg%3E"),
     linear-gradient(165deg, #ffc9e0 0%, #ff86bb 52%, #f2509c 100%);
   --bg-size: 220px 220px, auto;
   --text: #5a1d45;
   --muted: #9a427d;
-  --title: #ffffff;
-  --title-shadow: 0 2px 0 #d23a86, 0 4px 12px rgba(170, 30, 110, 0.35);
+  --on-bg: #ffffff;
+  --on-bg-shadow: 0 2px 0 #d23a86;
+  --line: rgba(210, 58, 134, 0.22);
+  --mark: #d63f90;
+
+  --brand-bg: #ffffff;
+  --brand-border: 2.5px solid #ffc2dc;
+  --brand-radius: 999px;
+  --brand-shadow: 0 3px 0 #ee5ea4;
+  --brand-text: #b82a7a;
+  --btn-bg: #ffffff;
+  --btn-border: 2.5px solid #ffc2dc;
+  --btn-radius: 999px;
+  --btn-shadow: 0 3px 0 #ee5ea4;
+  --btn-text: #b82a7a;
+  --btn-active-bg: #d63f90;
+  --btn-active-text: #ffffff;
+  --sw-off: #ffd6e9;
+  --sw-shadow: inset 0 2px 0 rgba(210, 58, 134, 0.25);
+  --toggle-bg: #d63f90;
+  --toggle-border: 2.5px solid #ffffff;
+  --toggle-shadow: 0 3px 0 #9d1f6b;
+
   --panel: #ffffff;
-  --panel-border: 3px solid #ffb3d6;
-  --panel-radius: 28px;
-  --panel-shadow: 0 6px 0 #ee5ea4, 0 12px 22px rgba(170, 30, 110, 0.28);
+  --panel-border: 3px solid #ffc2dc;
+  --panel-radius: 30px;
+  --panel-shadow: 0 6px 0 #ee5ea4, 0 18px 28px rgba(170, 30, 110, 0.28);
+  --row-bg: #ffffff;
+  --row-border: 2.5px solid #ffd6e9;
+  --row-radius: 24px;
+  --row-shadow: 0 4px 0 #f58bbd;
   --row-hover: #fff0f7;
-  --total-bg: linear-gradient(180deg, #d63f90 0%, #b82a7a 100%);
+  --ring-idle: #ffd6e9;
+  --logo-border: 3px solid var(--ring-idle);
+
+  --pill-bg: #ffe0ee;
+  --pill-text: #9a427d;
+  --gain-big: #16a36a;
+
+  --total-bg: linear-gradient(180deg, #e8559f 0%, #b82a7a 100%);
   --total-text: #ffffff;
   --total-label: #ffffff;
-  --btn-bg: #ffffff;
-  --btn-border: 3px solid #ffb3d6;
-  --btn-radius: 999px;
-  --btn-active-bg: #ff4f98;
-  --btn-active-text: #ffffff;
-  --btn-shadow: 0 3px 0 #d23a86;
-  --status-ok: #1d8a4c;
-  --status-warn: #c2570c;
-  --badge-bg: #ffe0ee;
-  --title-size: 1.9rem;
-  --value-size: 1.15rem;
-  --total-size: 2rem;
-  --base-size: 1rem;
-  --letter: 0;
+  --total-border: 3px solid #ffffff;
+  --total-radius: 33px;
+  --total-shadow: 0 6px 0 #861a5b, 0 16px 26px rgba(120, 20, 80, 0.42);
+  --total-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  --total-text-shadow: 0 2px 0 rgba(100, 10, 60, 0.4);
+
+  --a1: #ff4f98;
+  --a2: #ffc2dc;
+  --a3: #b47cff;
+  --a4: #ffd447;
+  --a5: #5ad1c4;
+  --a6: #ff8a5c;
+  --a7: #7a3df2;
+  --a8: #f27ab0;
+
+  --peek-w: 54px;
+  --peek-h: 77px;
+  --peek-hide: 4px;
+  --peek-right: 34px;
+  --peek-rot: 8deg;
 }
 
-/* Football: mown pitch with real markings, scoreboard total */
+/* ---------- Football ---------- */
+
 :root[data-theme="football"] {
-  --font: "Fredoka", system-ui, sans-serif;
-  --bg: #2e8b3a;
+  --bg: #2f9440;
   --bg-image:
-    url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20520'%3E%3Cg%20fill='none'%20stroke='white'%20stroke-opacity='.55'%20stroke-width='3'%3E%0A%3Crect%20x='14'%20y='12'%20width='272'%20height='496'/%3E%3Cline%20x1='14'%20y1='260'%20x2='286'%20y2='260'/%3E%3Ccircle%20cx='150'%20cy='260'%20r='44'/%3E%0A%3Crect%20x='64'%20y='12'%20width='172'%20height='78'/%3E%3Crect%20x='104'%20y='12'%20width='92'%20height='30'/%3E%3Cpath%20d='M112%2090%20a38%2038%200%200%200%2076%200'/%3E%0A%3Crect%20x='64'%20y='430'%20width='172'%20height='78'/%3E%3Crect%20x='104'%20y='478'%20width='92'%20height='30'/%3E%3Cpath%20d='M112%20430%20a38%2038%200%200%201%2076%200'/%3E%3C/g%3E%0A%3Ccircle%20cx='150'%20cy='260'%20r='4'%20fill='white'%20fill-opacity='.7'/%3E%3C/svg%3E"),
-    linear-gradient(180deg, rgba(0, 20, 5, 0.32), transparent 30%),
+    url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20520'%3E%3Cg%20fill='none'%20stroke='white'%20stroke-opacity='.17'%20stroke-width='3'%3E%0A%3Crect%20x='14'%20y='12'%20width='272'%20height='496'/%3E%3Cline%20x1='14'%20y1='260'%20x2='286'%20y2='260'/%3E%3Ccircle%20cx='150'%20cy='260'%20r='44'/%3E%0A%3Crect%20x='64'%20y='12'%20width='172'%20height='78'/%3E%3Crect%20x='104'%20y='12'%20width='92'%20height='30'/%3E%3Cpath%20d='M112%2090%20a38%2038%200%200%200%2076%200'/%3E%0A%3Crect%20x='64'%20y='430'%20width='172'%20height='78'/%3E%3Crect%20x='104'%20y='478'%20width='92'%20height='30'/%3E%3Cpath%20d='M112%20430%20a38%2038%200%200%201%2076%200'/%3E%3C/g%3E%0A%3Ccircle%20cx='150'%20cy='260'%20r='4'%20fill='white'%20fill-opacity='.3'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, rgba(0, 20, 5, 0.3), transparent 30%),
     repeating-linear-gradient(180deg, #2f9440 0 64px, #3cab4c 64px 128px);
   --bg-size: auto 100%, auto, auto;
   --bg-repeat: no-repeat, no-repeat, repeat;
   --bg-pos: center, 0 0, 0 0;
   --text: #12351a;
   --muted: #55775b;
-  --title: #ffffff;
-  --title-shadow: 0 3px 0 #145a21, 0 5px 10px rgba(0, 40, 10, 0.4);
+  --on-bg: #ffffff;
+  --on-bg-shadow: 0 2px 0 #145a21;
+  --line: rgba(20, 90, 33, 0.22);
+  --title-size: 0.84rem;
   --title-style: italic;
   --title-transform: uppercase;
+  --title-weight: 700;
+  --title-spacing: 0.02em;
+  --mark: #145a21;
+
+  --brand-bg: #ffffff;
+  --brand-border: 2.5px solid #145a21;
+  --brand-radius: 999px;
+  --brand-shadow: 0 3px 0 #145a21;
+  --brand-text: #145a21;
+  --btn-bg: #ffffff;
+  --btn-border: 2.5px solid #145a21;
+  --btn-radius: 999px;
+  --btn-shadow: 0 3px 0 #145a21;
+  --btn-text: #145a21;
+  --btn-active-bg: #145a21;
+  --btn-active-text: #ffffff;
+  --sw-off: #d4e8c8;
+  --sw-shadow: inset 0 2px 0 rgba(20, 90, 33, 0.25);
+  --toggle-bg: #ffd84a;
+  --toggle-border: 2.5px solid #145a21;
+  --toggle-shadow: 0 3px 0 #145a21;
+
   --panel: #fbfdf4;
   --panel-border: 3px solid #ffffff;
-  --panel-radius: 14px;
-  --panel-shadow: 0 5px 0 #145a21, 0 10px 18px rgba(0, 40, 10, 0.35);
+  --panel-radius: 20px;
+  --panel-shadow: 0 6px 0 #145a21, 0 16px 24px rgba(0, 40, 10, 0.35);
+  --row-bg: #ffffff;
+  --row-border: 2.5px solid #d5ebc7;
+  --row-radius: 16px;
+  --row-shadow: 0 4px 0 #145a21;
   --row-hover: #eaf6dc;
+  --logo-radius: 12px;
+  --ring-idle: #d5ebc7;
+  --logo-border: 3px solid var(--ring-idle);
+
+  --pill-bg: #e3f1d5;
+  --pill-text: #3f6a47;
+  --gain: #0e7c3a;
+  --gain-big: #11803a;
+
+  --total-font: "Press Start 2P", "Courier New", monospace;
+  --total-size: 1.15rem;
   --total-bg: linear-gradient(180deg, #17301f 0%, #08140c 100%);
   --total-text: #ffd84a;
   --total-label: #cfe8d3;
-  --total-font: "Press Start 2P", "Courier New", monospace;
-  --btn-bg: #ffffff;
-  --btn-border: 3px solid #145a21;
-  --btn-radius: 12px;
-  --btn-active-bg: #ffd84a;
-  --btn-active-text: #12351a;
-  --btn-shadow: 0 3px 0 #145a21;
-  --status-ok: #1d8a4c;
-  --status-warn: #c2570c;
-  --badge-bg: #e3f1d5;
-  --title-size: 1.55rem;
-  --value-size: 1.15rem;
-  --total-size: 1.15rem;
-  --base-size: 1rem;
-  --letter: 0;
+  --total-border: 3px solid #ffd84a;
+  --total-radius: 16px;
+  --total-shadow: 0 6px 0 #0a3d15, 0 16px 26px rgba(0, 30, 8, 0.45);
+  --total-text-shadow: none;
+
+  --a1: #ffd84a;
+  --a2: #1f8a3a;
+  --a3: #e4352f;
+  --a4: #2f6bdb;
+  --a5: #f58a1f;
+  --a6: #7a3df2;
+  --a7: #12351a;
+  --a8: #8fd1ff;
+
+  --peek-w: 56px;
+  --peek-h: 56px;
+  --peek-hide: 6px;
+  --peek-right: 34px;
+  --peek-rot: 10deg;
 }
 
-:root[data-theme="football"] .list li:nth-child(even) {
-  background: #eef6e2;
-}
+/* ---------- Trader ---------- */
 
-:root[data-theme="football"] .total {
-  border-top: 4px solid #ffd84a;
-  border-radius: 14px 14px 0 0;
-}
-
-/* Trader: dark terminal with a grid, amber accents and green/red candles */
 :root[data-theme="trader"] {
   --font: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   --bg: #0b0e13;
@@ -234,59 +523,83 @@
     radial-gradient(ellipse at 50% -10%, rgba(245, 166, 35, 0.12), transparent 55%),
     linear-gradient(180deg, #0d1118 0%, #07090d 100%);
   --bg-size: 28px 28px, 28px 28px, auto, auto;
+  --letter: 0.01em;
+  --base-size: 0.92rem;
   --text: #dbe2ee;
-  --muted: #7d889b;
-  --title: #f5a623;
-  --title-shadow: none;
+  --muted: #8b95a7;
+  --on-bg: #f5a623;
+  --line: #263044;
+  --title-size: 0.8rem;
   --title-transform: uppercase;
-  --panel: #121823;
-  --panel-border: 1px solid #263044;
-  --panel-radius: 8px;
-  --panel-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
-  --row-hover: #18202e;
-  --total-bg: linear-gradient(180deg, #111724 0%, #0a0e15 100%);
-  --total-text: #f1f5fb;
-  --total-label: #f5a623;
+  --title-spacing: 0.1em;
+  --title-weight: 700;
+  --value-size: 1.02rem;
+  --gain-size: 2.9rem;
+  --total-size: 1.6rem;
+  --mark: #f5a623;
+
+  --brand-bg: transparent;
+  --brand-text: #f5a623;
+  --brand-pad: 0;
   --btn-bg: #161d2a;
   --btn-border: 1px solid #2d384c;
   --btn-radius: 8px;
+  --btn-text: #dbe2ee;
   --btn-active-bg: #f5a623;
   --btn-active-text: #1a1203;
-  --btn-shadow: none;
-  --status-ok: #2ee59d;
-  --status-warn: #f5a623;
-  --badge-bg: #1b2331;
+  --sw-off: #2a3447;
+  --sw-radius: 6px;
+  --knob-radius: 4px;
+  --toggle-bg: #161d2a;
+  --toggle-border: 1px solid #2d384c;
+  --toggle-radius: 10px;
+
+  --panel: #121823;
+  --panel-border: 1px solid #263044;
+  --panel-radius: 12px;
+  --panel-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
+  --row-bg: #121823;
+  --row-border: 1px solid #1f2837;
+  --row-radius: 10px;
+  --row-shadow: none;
+  --row-hover: #18202e;
+  --logo-radius: 8px;
+  --logo-border: 1px solid #263044;
+  --logo-shadow: none;
+  --focus: #f5a623;
+
   --gain: #2ee59d;
   --loss: #ff5c6c;
   --flat: #8b95a7;
   --gain-bg: rgba(46, 229, 157, 0.14);
   --loss-bg: rgba(255, 92, 108, 0.14);
   --flat-bg: rgba(255, 255, 255, 0.08);
-  --title-size: 1.25rem;
-  --value-size: 1.05rem;
-  --total-size: 1.7rem;
-  --base-size: 0.92rem;
-  --letter: 0.01em;
-}
+  --pill-bg: #1b2331;
+  --pill-text: #9aa6b8;
+  --seg-shadow: none;
 
-:root[data-theme="trader"] .title {
-  letter-spacing: 0.14em;
-}
+  --total-bg: linear-gradient(180deg, #111724 0%, #0a0e15 100%);
+  --total-text: #f1f5fb;
+  --total-label: #f5a623;
+  --total-border: 1px solid #f5a623;
+  --total-radius: 12px;
+  --total-shadow: 0 -8px 28px rgba(0, 0, 0, 0.5);
+  --total-text-shadow: none;
 
-:root[data-theme="trader"] .owner,
-:root[data-theme="trader"] .themes-label {
-  color: #8b95a7;
-  text-shadow: none;
-}
+  --a1: #f5a623;
+  --a2: #2ee59d;
+  --a3: #4dabf7;
+  --a4: #ff5c6c;
+  --a5: #b197fc;
+  --a6: #38d9a9;
+  --a7: #ffd43b;
+  --a8: #e599f7;
 
-:root[data-theme="trader"] .list li + li {
-  border-top: 1px solid #1f2837;
-}
-
-:root[data-theme="trader"] .total {
-  border-top: 1px solid #f5a623;
-  border-radius: 0;
-  box-shadow: 0 -12px 28px rgba(0, 0, 0, 0.55);
+  --peek-w: 80px;
+  --peek-h: 59px;
+  --peek-hide: 14px;
+  --peek-right: 30px;
+  --peek-rot: 0deg;
 }
 
 :root[data-theme="trader"] .total-label {
@@ -294,65 +607,110 @@
   letter-spacing: 0.14em;
   font-size: 0.8rem;
 }
-
-:root[data-theme="trader"] .perf-icon {
-  color: #04120b;
+:root[data-theme="trader"] .alloc-seg {
+  border-radius: 3px;
 }
-
-:root[data-theme="trader"] .perf-pro {
-  border-top-color: #263044;
-}
-
 :root[data-theme="trader"] .alloc-bar {
-  background: rgba(255, 255, 255, 0.08);
+  height: 8px;
 }
-
 :root[data-theme="trader"] .mascot {
   filter: none;
 }
 
-:root[data-theme="trader"] .logo {
-  border-radius: 8px;
-}
-
-:root[data-theme="trader"] .scene {
-  opacity: 0.95;
-}
+/* ---------- Minecraft ---------- */
 
 :root[data-theme="minecraft"] {
   --font: "Press Start 2P", "Courier New", monospace;
-  --bg: #7a5230;
+  --bg: #4a3322;
   --bg-image:
+    radial-gradient(120% 60% at 50% 0%, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.52) 70%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' shape-rendering='crispEdges'%3E%3Crect width='64' height='64' fill='%238a5e37'/%3E%3Cg fill='%23704a2a'%3E%3Crect x='0' y='8' width='8' height='8'/%3E%3Crect x='24' y='0' width='8' height='8'/%3E%3Crect x='40' y='16' width='8' height='8'/%3E%3Crect x='8' y='32' width='8' height='8'/%3E%3Crect x='48' y='40' width='8' height='8'/%3E%3Crect x='24' y='48' width='8' height='8'/%3E%3Crect x='56' y='56' width='8' height='8'/%3E%3C/g%3E%3Cg fill='%239c6d42'%3E%3Crect x='16' y='16' width='8' height='8'/%3E%3Crect x='56' y='8' width='8' height='8'/%3E%3Crect x='32' y='32' width='8' height='8'/%3E%3Crect x='0' y='48' width='8' height='8'/%3E%3Crect x='40' y='56' width='8' height='8'/%3E%3C/g%3E%3Cg fill='%2358391f'%3E%3Crect x='48' y='24' width='8' height='8'/%3E%3Crect x='16' y='56' width='8' height='8'/%3E%3Crect x='8' y='0' width='8' height='8'/%3E%3C/g%3E%3C/svg%3E");
-  --text: #3a3a3a;
-  --muted: #4d4d4d;
-  --title: #ffffff;
-  --title-shadow: 3px 3px 0 #3f3f3f;
-  --panel: #c6c6c6;
-  --panel-border: 4px solid;
-  --panel-radius: 0;
-  --panel-shadow: 0 0 0 4px #000;
-  --row-hover: #d8d8d8;
-  --total-bg: #3f7d27;
-  --total-text: #ffffff;
-  --total-label: #e2f5d3;
-  --btn-bg: #8b8b8b;
-  --btn-border: 4px solid;
+  --bg-size: auto, 64px 64px;
+  --base-size: 0.6rem;
+  --ctl-h: 38px;
+  --text: #2b2b2b;
+  --muted: #6a6a6a;
+  --on-bg: #ffffff;
+  --on-bg-shadow: 2px 2px 0 #2b2b2b;
+  --line: #8b8b8b;
+  --focus: #ffffff;
+  --title-size: 0.82rem;
+  --title-weight: 400;
+  --title-shadow: 3px 3px 0 #2b2b2b;
+  --value-size: 0.68rem;
+  --value-weight: 400;
+  --gain-size: 1.9rem;
+  --gain-weight: 400;
+  --unit-scale: 1;
+  --total-size: 1.05rem;
+  --name-weight: 400;
+
+  --brand-bg: transparent;
+  --brand-text: #ffffff;
+  --brand-pad: 0;
+  --btn-bg: #7c7c7c;
+  --btn-border: 0;
   --btn-radius: 0;
+  --btn-shadow: 0 0 0 3px #000, inset 3px 3px 0 #b8b8b8, inset -3px -3px 0 #4a4a4a;
+  --btn-text: #ffffff;
   --btn-active-bg: #5fa83a;
   --btn-active-text: #ffffff;
-  --btn-shadow: 0 0 0 3px #000;
-  --status-ok: #2f7d1c;
-  --status-warn: #b45309;
-  --badge-bg: #8b8b8b;
-  --title-size: 1rem;
-  --value-size: 0.66rem;
-  --total-size: 1.05rem;
-  --base-size: 0.6rem;
-  --letter: 0;
-  --gain: #0b5a22;
-  --loss: #a3180e;
-  --flat: #505050;
+  --sw-off: #3b3b3b;
+  --sw-radius: 0;
+  --sw-shadow: inset 2px 2px 0 #1b1b1b, inset -2px -2px 0 #6b6b6b;
+  --knob-radius: 0;
+  --toggle-bg: #7c7c7c;
+  --toggle-border: 0;
+  --toggle-radius: 0;
+  --toggle-shadow: 0 0 0 3px #000, inset 3px 3px 0 #b8b8b8, inset -3px -3px 0 #4a4a4a;
+
+  --panel: #c6c6c6;
+  --panel-border: 0;
+  --panel-radius: 0;
+  --panel-shadow: 0 0 0 4px #000, inset 4px 4px 0 #ffffff, inset -4px -4px 0 #555555, 6px 6px 0 4px rgba(0, 0, 0, 0.35);
+  --row-bg: #c6c6c6;
+  --row-border: 0;
+  --row-radius: 0;
+  --row-shadow: 0 0 0 3px #000, inset 3px 3px 0 #ffffff, inset -3px -3px 0 #555555;
+  --row-hover: #d6d6d6;
+  --logo-radius: 0;
+  --logo-bg: #8b8b8b;
+  --logo-shadow: inset 3px 3px 0 #373737, inset -3px -3px 0 #ffffff;
+
+  --pill-bg: transparent;
+  --pill-text: #555555;
+  --gain: #1a7a00;
+  --loss: #b3201a;
+  --flat: #555555;
+  --gain-bg: transparent;
+  --loss-bg: transparent;
+  --flat-bg: transparent;
+  --gain-big: #80ff20;
+  --loss-big: #ff6b5a;
+  --gain-shadow: -3px 0 #000, 3px 0 #000, 0 -3px #000, 0 3px #000, 0 5px 0 #000;
+
+  --total-bg: #1a1a1a;
+  --total-text: #ffd23f;
+  --total-label: #ffffff;
+  --total-border: 0;
+  --total-radius: 0;
+  --total-shadow: 0 0 0 3px #000, inset 3px 3px 0 #5b5b5b, inset -3px -3px 0 #000, 6px 6px 0 3px rgba(0, 0, 0, 0.35);
+  --total-text-shadow: 3px 3px 0 #4a3a00;
+
+  --a1: #5fe04a;
+  --a2: #ffd83a;
+  --a3: #4fe3d6;
+  --a4: #ff4a3a;
+  --a5: #3a66ff;
+  --a6: #b36bff;
+  --a7: #ff9a3a;
+  --a8: #ffffff;
+
+  --peek-w: 56px;
+  --peek-h: 56px;
+  --peek-hide: 6px;
+  --peek-right: 30px;
+  --peek-rot: 0deg;
 }
 
 /* ---------- Base ---------- */
@@ -378,12 +736,10 @@ body {
   background-size: var(--bg-size, auto);
   background-repeat: var(--bg-repeat, repeat);
   background-position: var(--bg-pos, 0 0);
-  background-attachment: fixed;
-  image-rendering: auto;
+  background-attachment: var(--bg-attach, fixed);
 }
 
 :root[data-theme="minecraft"] body {
-  image-rendering: pixelated;
   line-height: 1.6;
 }
 
@@ -392,153 +748,519 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   margin: 0 auto;
-  padding: 18px 16px 0;
+  padding: 16px 16px 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 /* ---------- Header ---------- */
 
 .header {
+  position: relative;
+  z-index: 40;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
+  min-height: var(--ctl-h);
 }
 
-.mascot {
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  height: var(--ctl-h);
+  padding: var(--brand-pad, 0 16px 0 7px);
+  color: var(--brand-text);
+  background: var(--brand-bg, none);
+  border: var(--brand-border, 0);
+  border-radius: var(--brand-radius, 0);
+  box-shadow: var(--brand-shadow, none);
+}
+
+.brand-mark {
   flex: none;
-  width: 64px;
-  height: 64px;
-  filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.18));
+  width: var(--mark-size);
+  height: var(--mark-size);
 }
 
-.mascot svg {
+.brand-mark:empty {
+  display: none;
+}
+
+.brand-mark svg {
+  display: block;
   width: 100%;
   height: 100%;
-  display: block;
-}
-
-.titles {
-  min-width: 0;
 }
 
 .title {
   margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--title-font, var(--font));
+  font-size: var(--title-size);
+  font-weight: var(--title-weight);
   font-style: var(--title-style, normal);
   text-transform: var(--title-transform, none);
-  font-size: var(--title-size);
-  line-height: 1.1;
-  font-weight: 700;
-  color: var(--title);
-  text-shadow: var(--title-shadow);
+  letter-spacing: var(--title-spacing, 0.01em);
+  line-height: 1.15;
+  text-shadow: var(--title-shadow, none);
 }
 
-.owner {
-  margin: 6px 0 0;
-  font-size: calc(var(--base-size) * 1.15);
-  font-weight: 600;
-  color: var(--title);
-  text-shadow: var(--title-shadow);
-  opacity: 0.95;
-}
-
-/* ---------- Theme picker ---------- */
-
-.themes {
+.header-tools {
+  margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
 }
 
-.themes-label {
-  flex: none;
-  margin-right: 4px;
-  font-size: calc(var(--base-size) * 0.9);
-  font-weight: 600;
-  color: var(--title);
-  text-shadow: var(--title-shadow);
-  margin-right: 2px;
-}
-
-.theme-btn {
-  appearance: none;
-  display: grid;
-  place-items: center;
-  flex: 1 1 0;
-  min-width: 0;
-  max-width: 44px;
-  aspect-ratio: 1 / 1;
-  padding: 0;
-  color: var(--text);
+/* Pro switch */
+.pro-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: var(--ctl-h);
+  padding: 0 8px 0 13px;
+  color: var(--btn-text);
   background: var(--btn-bg);
   border: var(--btn-border);
   border-radius: var(--btn-radius);
   box-shadow: var(--btn-shadow);
+}
+
+.pro-label {
+  font-weight: 700;
+  font-size: calc(var(--base-size) * 0.9);
+  cursor: pointer;
+}
+
+:root[data-theme="minecraft"] .pro-label {
+  text-shadow: 2px 2px 0 #3e3e3e;
+}
+
+.switch {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 40px;
+  height: 24px;
+  padding: 0;
+  border: var(--sw-border, 0);
+  border-radius: var(--sw-radius, 999px);
+  background: var(--sw-off, rgba(0, 0, 0, 0.14));
+  box-shadow: var(--sw-shadow, none);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: transform 0.08s ease;
 }
 
-.theme-btn svg {
-  width: 64%;
-  height: 64%;
+.switch .knob {
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  border: var(--knob-border, 0);
+  border-radius: var(--knob-radius, 50%);
+  background: #ffffff;
+  box-shadow: 0 1.5px 0 rgba(0, 0, 0, 0.25);
+  transition: left 0.15s ease;
 }
 
-.theme-btn:active {
+.switch[aria-checked="true"] {
+  background: var(--btn-active-bg);
+}
+
+.switch[aria-checked="true"] .knob {
+  left: calc(100% - 19px);
+}
+
+.switch:focus-visible,
+.theme-toggle:focus-visible,
+.theme-btn:focus-visible,
+.pw-btn:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.row:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: -4px; /* inside: the card clips anything outside of it */
+}
+
+/* theme button + the pop-over with all themes */
+.theme-toggle {
+  appearance: none;
+  flex: none;
+  width: var(--ctl-h);
+  height: var(--ctl-h);
+  padding: 0;
+  display: grid;
+  place-items: center;
+  background: var(--toggle-bg);
+  border: var(--toggle-border);
+  border-radius: var(--toggle-radius, 50%);
+  box-shadow: var(--toggle-shadow, none);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.theme-toggle svg {
+  display: block;
+  width: 62%;
+  height: 62%;
+}
+
+.theme-toggle:active {
   transform: translateY(2px);
 }
 
-.theme-btn[aria-pressed="true"] {
-  background: var(--btn-active-bg);
-  color: var(--btn-active-text);
+.themes {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(100%, 340px);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  padding: 10px;
+  background: var(--panel);
+  border: var(--panel-border);
+  border-radius: min(var(--panel-radius), 24px);
+  box-shadow: var(--panel-shadow), 0 22px 44px rgba(0, 0, 0, 0.28);
 }
 
-.theme-btn:focus-visible,
-.row:focus-visible {
-  outline: 3px solid #fff;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.55);
+.theme-btn {
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 8px 2px 7px;
+  font: inherit;
+  font-size: calc(var(--base-size) * 0.66);
+  font-weight: 700;
+  color: var(--text);
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: min(var(--row-radius), 16px);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.theme-pic {
+  display: block;
+  width: 34px;
+  height: 34px;
+}
+
+.theme-pic svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.theme-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.theme-btn[aria-pressed="true"] {
+  background: var(--pill-bg, var(--flat-bg));
+  border-color: var(--btn-active-bg);
 }
 
 :root[data-theme="minecraft"] .theme-btn {
-  border-color: #fff #555 #555 #fff;
+  font-size: 0.4rem;
+  border-radius: 0;
 }
 
-/* ---------- Panel + list ---------- */
+/* ---------- Stage: the growth card and the figure that looks over its edge ---------- */
+
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.stage.has-hero {
+  padding-top: calc(var(--peek-h) - var(--peek-hide));
+}
+
+.mascot {
+  display: none;
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: var(--peek-right);
+  width: var(--peek-w);
+  height: var(--peek-h);
+  transform: rotate(var(--peek-rot));
+  filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.16));
+  pointer-events: none;
+}
+
+.stage.has-hero .mascot {
+  display: block;
+}
+
+.mascot svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 
 .panel {
+  position: relative;
+  z-index: 1;
   background: var(--panel);
   border: var(--panel-border);
   border-radius: var(--panel-radius);
   box-shadow: var(--panel-shadow);
-  overflow: hidden;
 }
 
-:root[data-theme="minecraft"] .panel {
-  border-color: #fff #555 #555 #fff;
+#content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.perf {
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.perf-cap {
+  font-size: calc(var(--base-size) * 0.82);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+:root[data-theme="minecraft"] .perf-cap {
+  font-size: 0.52rem;
+}
+
+.perf-gain {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 2px;
+  font-family: var(--display);
+  line-height: 1;
+  color: var(--flat);
+  text-shadow: var(--gain-shadow, none);
+  white-space: nowrap;
+}
+
+.perf-num {
+  font-size: var(--gain-size);
+  font-weight: var(--gain-weight, 700);
+  font-variant-numeric: tabular-nums;
+}
+
+.perf-unit {
+  font-size: calc(var(--gain-size) * var(--unit-scale));
+  font-weight: var(--gain-weight, 700);
+}
+
+.perf.is-up .perf-gain {
+  color: var(--gain-big);
+}
+
+.perf.is-down .perf-gain {
+  color: var(--loss-big);
+}
+
+.perf.is-waiting .perf-num {
+  font-size: calc(var(--gain-size) * 0.6);
+}
+
+.perf-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.pill {
+  padding: 3px 10px;
+  border: var(--chip-border, 0);
+  border-radius: 999px;
+  font-family: var(--font);
+  font-size: calc(var(--base-size) * 0.78);
+  font-weight: 700;
+  color: var(--pill-text, var(--flat));
+  background: var(--pill-bg, var(--flat-bg));
+}
+
+.pill.up {
+  color: var(--gain);
+  background: var(--gain-bg);
+}
+
+.pill.dn {
+  color: var(--loss);
+  background: var(--loss-bg);
+}
+
+.arr {
+  font-style: normal;
+}
+
+.pill .arr {
+  margin-right: 0.35em;
+}
+
+.alloc-bar {
+  display: flex;
+  gap: 3px;
+  height: 12px;
+  margin-top: 12px;
+}
+
+.alloc-seg {
+  flex-basis: 0;
+  min-width: 6px;
+  border: var(--seg-border, 0);
+  border-radius: 6px;
+  background: var(--c);
+  box-shadow: var(--seg-shadow, inset 0 -3px 0 rgba(0, 0, 0, 0.13), inset 0 2px 0 rgba(255, 255, 255, 0.45));
+}
+
+.perf-pro {
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 2px dashed var(--line);
+}
+
+.alloc-title {
+  color: var(--muted);
+  font-size: calc(var(--base-size) * 0.78);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.alloc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: calc(var(--base-size) * 0.85);
+  font-weight: 600;
+}
+
+.alloc-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.alloc-item i {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  background: var(--c);
+}
+
+:root[data-theme="pokemon"] .alloc-item i {
+  border: 2px solid #2b2b2b;
+}
+
+:root[data-theme="minecraft"] .alloc-item i {
+  border-radius: 0;
+}
+
+/* Minecraft: the bar is an experience bar, the numbers below it are captions */
+:root[data-theme="minecraft"] .alloc-bar {
+  order: 3;
+  gap: 2px;
+  height: 14px;
+  padding: 2px;
+  background: #1e1e1e;
+  box-shadow: 0 0 0 2px #000, inset 2px 2px 0 #3a3a3a;
+}
+
+:root[data-theme="minecraft"] .alloc-seg {
+  border-radius: 0;
+  --seg-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.4), inset 0 -3px 0 rgba(0, 0, 0, 0.3);
+}
+
+:root[data-theme="minecraft"] .perf-pills {
+  order: 4;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+:root[data-theme="minecraft"] .pill {
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.52rem;
+}
+
+:root[data-theme="minecraft"] .perf-pro {
+  order: 5;
+}
+
+/* ---------- List ---------- */
+
+.section-title {
+  margin: 4px 6px -4px;
+  font-family: var(--display);
+  font-size: calc(var(--base-size) * 1.2);
+  font-weight: 600;
+  color: var(--on-bg);
+  text-shadow: var(--on-bg-shadow, none);
+}
+
+:root[data-theme="pokemon"] .section-title {
+  font-weight: 400;
+  font-size: 1.35rem;
+}
+
+:root[data-theme="minecraft"] .section-title {
+  font-weight: 400;
+  font-size: 0.7rem;
 }
 
 .list {
   list-style: none;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
 }
 
-.list li + li {
-  border-top: 2px dashed rgba(0, 0, 0, 0.1);
-}
-
-:root[data-theme="minecraft"] .list li + li {
-  border-top: 4px solid #8b8b8b;
+.list li {
+  background: var(--row-bg);
+  border: var(--row-border);
+  border-radius: var(--row-radius);
+  box-shadow: var(--row-shadow);
+  overflow: hidden;
 }
 
 .row {
   display: grid;
-  grid-template-columns: 52px minmax(0, 1fr) auto;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
+  gap: 12px;
+  min-height: 60px;
+  padding: 8px 14px 8px 9px;
   color: inherit;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
@@ -551,44 +1273,51 @@ body {
 }
 
 .logo {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  background: var(--badge-bg);
-  overflow: hidden;
-  display: grid;
-  place-items: center;
-  font-weight: 700;
-  font-size: 1.4rem;
-  color: var(--text);
-}
-
-:root[data-theme="minecraft"] .row {
-  gap: 10px;
-  padding: 12px;
-  grid-template-columns: 44px minmax(0, 1fr) auto;
-}
-
-:root[data-theme="minecraft"] .logo {
   width: 44px;
   height: 44px;
-}
-
-:root[data-theme="minecraft"] .themes {
-  gap: 5px;
-}
-
-:root[data-theme="minecraft"] .logo {
-  border-radius: 0;
-  border: 3px solid;
-  border-color: #555 #fff #fff #555;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--text);
+  background: var(--logo-bg, #ffffff);
+  border: var(--logo-border, 0);
+  border-radius: var(--logo-radius, 50%);
+  box-shadow: var(--logo-shadow, 0 2px 0 rgba(0, 0, 0, 0.1));
 }
 
 .logo img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+}
+
+/* the ring around the logo has the colour of its part in the bar */
+:root[data-theme="kirby"] .logo,
+:root[data-theme="waddle"] .logo,
+:root[data-theme="makeup"] .logo,
+:root[data-theme="football"] .logo {
+  border-color: var(--c, var(--ring-idle));
+}
+
+/* Pokémon: the logo sits in a Poké Ball; Minecraft: in an inventory slot */
+:root[data-theme="pokemon"] .logo {
+  padding: 3px;
+}
+:root[data-theme="pokemon"] .logo img {
+  border: 2.5px solid #2b2b2b;
+  border-radius: 50%;
+  background: #ffffff;
+}
+:root[data-theme="minecraft"] .logo {
+  padding: 6px;
+  font-size: 0.9rem;
+}
+:root[data-theme="minecraft"] .logo img {
+  border: 2px solid #1b1b1b;
+  background: #ffffff;
 }
 
 .name {
@@ -597,8 +1326,9 @@ body {
 
 .name strong {
   display: block;
-  font-size: calc(var(--base-size) * 1.15);
-  font-weight: 600;
+  font-size: calc(var(--base-size) * 1.08);
+  font-weight: var(--name-weight, 600);
+  line-height: 1.1;
   overflow-wrap: anywhere;
 }
 
@@ -606,29 +1336,38 @@ body {
   display: block;
   margin-top: 4px;
   color: var(--muted);
-  font-size: calc(var(--base-size) * 0.8);
-  font-weight: 500;
+  font-size: calc(var(--base-size) * 0.78);
+  font-weight: 600;
 }
 
-.value {
-  font-size: var(--value-size);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  text-align: right;
+:root[data-theme="minecraft"] .name strong {
+  font-size: 0.62rem;
+}
+:root[data-theme="minecraft"] .name small {
+  margin-top: 7px;
+  font-size: 0.5rem;
 }
 
 .value {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  gap: 4px;
+  font-family: var(--display);
+  font-size: var(--value-size);
+  font-weight: var(--value-weight, 700);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  white-space: nowrap;
+  text-align: right;
 }
 
 .value .micro {
-  margin-top: 4px;
-  padding: 1px 7px;
+  padding: 1px 8px;
+  border: var(--chip-border, 0);
   border-radius: 999px;
-  font-size: 0.62em;
+  font-family: var(--font);
+  font-size: calc(var(--base-size) * 0.72);
   font-weight: 700;
   letter-spacing: 0;
   white-space: nowrap;
@@ -646,8 +1385,27 @@ body {
   color: var(--loss);
 }
 
-:root[data-theme="minecraft"] .value .micro {
-  border-radius: 0;
+.value .micro .arr {
+  margin-right: 0.3em;
+}
+
+.cur {
+  font-size: 1em;
+}
+
+.total-value .cur {
+  font-size: 0.66em;
+}
+
+:root[data-theme="pokemon"] .cur {
+  font-family: var(--font);
+  font-weight: 800;
+  font-size: 0.62em;
+}
+
+:root[data-theme="minecraft"] .total-value .cur,
+:root[data-theme="football"] .total-value .cur {
+  font-size: 1em;
 }
 
 .value.is-stale {
@@ -665,6 +1423,76 @@ body {
   }
 }
 
+/* Minecraft: growth is a small triangle and a number, not a pill */
+:root[data-theme="minecraft"] .value {
+  gap: 9px;
+}
+:root[data-theme="minecraft"] .value .micro {
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.5rem;
+}
+.perf-gain {
+  gap: 4px;
+}
+:root[data-theme="minecraft"] .perf-gain {
+  gap: 8px;
+}
+:root[data-theme="minecraft"] .arr {
+  display: inline-block;
+  vertical-align: baseline;
+  width: 0;
+  height: 0;
+  margin-right: 5px;
+  font-size: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+}
+:root[data-theme="minecraft"] .is-up > .arr,
+:root[data-theme="minecraft"] .pill.up > .arr {
+  border-bottom: 7px solid currentColor;
+}
+:root[data-theme="minecraft"] .is-down > .arr,
+:root[data-theme="minecraft"] .pill.dn > .arr {
+  border-top: 7px solid currentColor;
+}
+:root[data-theme="minecraft"] .is-flat > .arr,
+:root[data-theme="minecraft"] .pill.n > .arr {
+  display: none;
+}
+
+/* a holding that is not traded yet: visible, but clearly "outside" the portfolio */
+.list li.is-excluded {
+  opacity: 0.6;
+  filter: grayscale(1);
+  border-style: dashed;
+  box-shadow: none;
+}
+
+:root[data-theme="minecraft"] .list li.is-excluded {
+  opacity: 0.7;
+  border-style: solid;
+  box-shadow: 0 0 0 3px #4a4a4a, inset 3px 3px 0 #cfcfcf, inset -3px -3px 0 #777;
+}
+
+.list li.is-excluded .value {
+  color: var(--muted);
+}
+
+.value .excl {
+  display: block;
+  margin-top: 1px;
+  font-family: var(--font);
+  font-size: calc(var(--base-size) * 0.7);
+  font-weight: 600;
+  color: var(--muted);
+  text-align: right;
+}
+
+:root[data-theme="minecraft"] .value .excl {
+  font-size: 0.46rem;
+}
+
 /* ---------- Status + total ---------- */
 
 .status {
@@ -672,8 +1500,12 @@ body {
   text-align: center;
   font-size: calc(var(--base-size) * 0.85);
   font-weight: 600;
-  color: var(--title);
-  text-shadow: var(--title-shadow);
+  color: var(--on-bg);
+  text-shadow: var(--on-bg-shadow, none);
+}
+
+.status:empty {
+  display: none;
 }
 
 .status .dot {
@@ -693,65 +1525,76 @@ body {
 
 .spacer {
   flex: 1;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.scene {
-  /* full width, edge to edge, so hills and ground run off the screen */
-  width: calc(100% + 32px);
-  margin-inline: -16px;
-  margin-bottom: -30px; /* sit flush on the total bar */
-}
-
-.scene svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: 170px;
-}
-
-.scene:empty {
-  display: none;
 }
 
 .total {
   position: sticky;
-  bottom: 0;
-  margin: 0 -16px;
-  padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  background: var(--total-bg);
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  z-index: 20;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 66px;
+  margin: 0 0 calc(14px + env(safe-area-inset-bottom));
+  padding: 0 22px 0 12px;
   color: var(--total-text);
-  border-top: var(--panel-border);
-  border-radius: var(--panel-radius) var(--panel-radius) 0 0;
-  box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.18);
+  background: var(--total-bg);
+  border: var(--total-border);
+  border-radius: var(--total-radius);
+  box-shadow: var(--total-shadow);
 }
 
-:root[data-theme="minecraft"] .total {
-  border-color: #fff #555 #555 #fff;
-  border-width: 4px;
-  border-style: solid;
-  box-shadow: 0 -4px 0 #000;
-  text-shadow: 3px 3px 0 #2d5a17;
+.total::before {
+  content: "";
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: 4px;
+  height: 14px;
+  border-radius: 7px;
+  background: var(--total-gloss, none);
+  pointer-events: none;
+}
+
+.total > * {
+  position: relative;
+}
+
+.total-icon {
+  width: 38px;
+  height: 38px;
+}
+
+.total-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.2));
 }
 
 .total-label {
-  font-size: calc(var(--base-size) * 1.1);
-  font-weight: 600;
+  font-size: calc(var(--base-size) * 1.05);
+  font-weight: 700;
   color: var(--total-label);
 }
 
 .total-value {
-  font-family: var(--total-font, inherit);
+  font-family: var(--total-font, var(--display));
   font-size: var(--total-size);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+  text-shadow: var(--total-text-shadow, none);
+}
+
+:root[data-theme="pokemon"] .total-value,
+:root[data-theme="minecraft"] .total-value {
+  font-weight: 400;
+}
+
+:root[data-theme="minecraft"] .total {
+  padding-left: 14px;
 }
 
 /* ---------- Lock screen ---------- */
@@ -768,6 +1611,7 @@ body {
 
 .lock h2 {
   margin: 12px 0 8px;
+  font-family: var(--display);
   font-size: calc(var(--base-size) * 1.4);
 }
 
@@ -777,170 +1621,84 @@ body {
   line-height: 1.5;
 }
 
-/* ---------- Growth, Pro mode ---------- */
-
-:root {
-  --gain: #11803a;
-  --loss: #c5281c;
-  --flat: #6c6c6c;
-  --gain-bg: #dcf5e4;
-  --loss-bg: #fde3e0;
-  --flat-bg: #ececec;
-}
-
-#content {
+/* password form on the lock screen */
+.pw-form {
+  margin-top: 16px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-
-.perf {
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.perf-top {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
 }
 
-.perf-icon {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  color: #fff;
-  background: var(--flat);
-}
-
-.perf.is-up .perf-icon {
-  background: var(--gain);
-}
-
-.perf.is-down .perf-icon {
-  background: var(--loss);
-}
-
-.perf-title {
+.pw-input {
+  width: 100%;
+  max-width: 11em;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 1.6rem;
   font-weight: 700;
-  font-size: calc(var(--base-size) * 1.1);
+  letter-spacing: 0.3em;
+  text-align: center;
+  text-transform: lowercase;
+  color: var(--text);
+  background: #ffffff;
+  border: var(--btn-border);
+  border-radius: min(var(--btn-radius), 16px);
 }
 
-.perf-sub {
-  margin-top: 3px;
+:root[data-theme="minecraft"] .pw-input {
+  font-size: 1rem;
+  border: 4px solid;
+  border-color: #555 #fff #fff #555;
+}
+
+.pw-input:focus-visible {
+  outline: 3px solid var(--btn-active-bg);
+  outline-offset: 2px;
+}
+
+.pw-btn {
+  appearance: none;
+  padding: 10px 24px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--btn-active-text);
+  background: var(--btn-active-bg);
+  border: var(--btn-border);
+  border-radius: var(--btn-radius);
+  box-shadow: var(--btn-shadow);
+  cursor: pointer;
+}
+
+.pw-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.pw-message {
+  min-height: 1.4em;
+  margin: 0;
+  font-size: calc(var(--base-size) * 0.95);
+  font-weight: 600;
   color: var(--muted);
-  font-size: calc(var(--base-size) * 0.85);
 }
 
-.perf-side {
-  text-align: right;
-}
-
-.perf-pct {
-  font-weight: 700;
-  font-size: calc(var(--value-size) * 1.45);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.perf-money {
-  margin-top: 2px;
-  font-size: calc(var(--base-size) * 0.9);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.perf.is-up .perf-pct,
-.perf.is-up .perf-money {
-  color: var(--gain);
-}
-
-.perf.is-down .perf-pct,
-.perf.is-down .perf-money {
+.pw-message.is-error {
   color: var(--loss);
 }
 
-.perf.is-flat .perf-pct,
-.perf.is-flat .perf-money {
-  color: var(--flat);
-}
+/* ---------- Pro mode: details of each holding, history, glossary ---------- */
 
-.perf-pro {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-top: 12px;
-  border-top: 2px dashed rgba(0, 0, 0, 0.12);
-}
-
-.perf-invested {
-  font-size: calc(var(--base-size) * 0.9);
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.alloc-title {
-  color: var(--muted);
-  font-size: calc(var(--base-size) * 0.8);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.alloc-bar {
-  display: flex;
-  gap: 2px;
-  height: 16px;
-  padding: 2px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.alloc-seg {
-  flex-basis: 0;
-  min-width: 4px;
-  border-radius: 999px;
-}
-
-:root[data-theme="minecraft"] .alloc-bar,
-:root[data-theme="minecraft"] .alloc-seg {
-  border-radius: 0;
-}
-
-.alloc-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 14px;
-  font-size: calc(var(--base-size) * 0.85);
-  font-weight: 600;
-}
-
-.alloc-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-variant-numeric: tabular-nums;
-}
-
-.alloc-item i {
-  width: 11px;
-  height: 11px;
-  border-radius: 3px;
-  flex: none;
-}
-
-/* per-holding detail (Pro mode only) */
 .detail {
   display: none;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px 8px;
-  padding: 0 16px 14px;
+  padding: 10px 14px 14px;
+  border-top: 2px dashed var(--line);
+}
+
+:root[data-pro="1"] .detail {
+  display: grid;
 }
 
 .cell {
@@ -948,29 +1706,6 @@ body {
   flex-direction: column;
   gap: 3px;
   min-width: 0;
-}
-
-/* a holding that is not traded yet: visible, but clearly "outside" the portfolio */
-.list li.is-excluded {
-  opacity: 0.55;
-  filter: grayscale(1);
-}
-
-.list li.is-excluded .value {
-  color: var(--muted);
-}
-
-.value .excl {
-  display: block;
-  margin-top: 3px;
-  font-size: 0.62em;
-  font-weight: 600;
-  color: var(--muted);
-  text-align: right;
-}
-
-.block-lines li.is-excluded {
-  opacity: 0.55;
 }
 
 .cell.wide {
@@ -1032,8 +1767,11 @@ body {
   border-radius: 0;
 }
 
-:root[data-pro="1"] .detail {
-  display: grid;
+:root[data-theme="minecraft"] .cell .k,
+:root[data-theme="minecraft"] .alloc-title,
+:root[data-theme="minecraft"] .block-tag {
+  font-size: 0.48rem;
+  text-transform: none;
 }
 
 .pro-only {
@@ -1046,108 +1784,6 @@ body {
 
 :root[data-pro="1"] .glossary.pro-only {
   display: block;
-}
-
-/* the switch + PRO pill */
-.pro-bar {
-  align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 5px 7px 5px 14px;
-  background: var(--btn-bg);
-  border: var(--btn-border);
-  border-radius: var(--btn-radius);
-  box-shadow: var(--btn-shadow);
-}
-
-:root[data-theme="minecraft"] .pro-bar {
-  border-color: #fff #555 #555 #fff;
-  background: #8b8b8b;
-}
-
-.pro-label {
-  font-weight: 700;
-  font-size: calc(var(--base-size) * 0.95);
-  color: var(--text);
-  cursor: pointer;
-}
-
-:root[data-theme="minecraft"] .pro-label {
-  color: #fff;
-  text-shadow: 2px 2px 0 #3f3f3f;
-}
-
-:root[data-theme="minecraft"] .cell .k,
-:root[data-theme="minecraft"] .alloc-title {
-  text-transform: none;
-}
-
-.switch {
-  appearance: none;
-  position: relative;
-  flex: none;
-  width: 54px;
-  height: 30px;
-  padding: 0;
-  border: var(--btn-border);
-  border-radius: var(--btn-radius);
-  background: rgba(0, 0, 0, 0.16);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-:root[data-theme="minecraft"] .switch {
-  border-color: #fff #555 #555 #fff;
-}
-
-.switch .knob {
-  position: absolute;
-  top: 50%;
-  left: 3px;
-  width: 20px;
-  height: 20px;
-  border-radius: calc(var(--btn-radius) * 0.5);
-  background: var(--btn-active-bg);
-  transform: translateY(-50%);
-  transition: left 0.15s ease;
-}
-
-.switch[aria-checked="true"] {
-  background: var(--btn-active-bg);
-}
-
-.switch[aria-checked="true"] .knob {
-  left: calc(100% - 23px);
-  background: var(--btn-bg);
-}
-
-.switch:focus-visible {
-  outline: 3px solid #fff;
-  outline-offset: 2px;
-}
-
-.pro-pill {
-  display: none;
-  margin-left: 10px;
-  padding: 2px 9px;
-  border-radius: 999px;
-  vertical-align: middle;
-  font-size: 0.45em;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: #4a2f00;
-  text-shadow: none;
-  background: linear-gradient(135deg, #fff0a8, #f6b73c);
-  box-shadow: 0 0 14px rgba(255, 200, 60, 0.85);
-}
-
-:root[data-theme="minecraft"] .pro-pill {
-  border-radius: 0;
-}
-
-:root[data-pro="1"] .pro-pill {
-  display: inline-block;
 }
 
 .glossary {
@@ -1175,12 +1811,6 @@ body {
   line-height: 1.45;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .switch .knob {
-    transition: none;
-  }
-}
-
 /* purchase history */
 .history {
   padding: 4px 16px 14px;
@@ -1202,9 +1832,9 @@ body {
 }
 
 .block {
-  padding: 10px 12px 10px;
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  border-radius: calc(var(--panel-radius) * 0.55);
+  padding: 10px 12px;
+  border: 2px solid var(--line);
+  border-radius: min(var(--panel-radius), 16px);
 }
 
 .block.is-genesis {
@@ -1264,6 +1894,10 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+.block-lines li.is-excluded {
+  opacity: 0.55;
+}
+
 .block-lines .sym {
   font-weight: 700;
 }
@@ -1283,7 +1917,7 @@ body {
   gap: 10px;
   margin-top: 8px;
   padding-top: 7px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid var(--line);
   font-size: calc(var(--base-size) * 0.9);
   color: var(--muted);
 }
@@ -1298,99 +1932,46 @@ body {
   border-radius: 0;
 }
 
-:root[data-theme="trader"] .block {
-  border-color: #263044;
-}
-
-:root[data-theme="trader"] .block-total {
-  border-top-color: #263044;
-}
-
-/* password form on the lock screen */
-.pw-form {
-  margin-top: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-
-.pw-input {
-  width: 100%;
-  max-width: 11em;
-  padding: 10px 12px;
-  font: inherit;
-  font-size: 1.6rem;
-  font-weight: 700;
-  letter-spacing: 0.3em;
-  text-align: center;
-  text-transform: lowercase;
-  color: var(--text);
-  background: var(--btn-bg);
-  border: var(--btn-border);
-  border-radius: var(--btn-radius);
-}
-
-:root[data-theme="minecraft"] .pw-input {
-  font-size: 1rem;
-  border-color: #555 #fff #fff #555;
-}
-
-.pw-input:focus-visible {
-  outline: 3px solid var(--btn-active-bg);
-  outline-offset: 2px;
-}
-
-.pw-btn {
-  appearance: none;
-  padding: 10px 24px;
-  font: inherit;
-  font-weight: 700;
-  color: var(--btn-active-text);
-  background: var(--btn-active-bg);
-  border: var(--btn-border);
-  border-radius: var(--btn-radius);
-  box-shadow: var(--btn-shadow);
-  cursor: pointer;
-}
-
-.pw-btn:disabled {
-  opacity: 0.6;
-  cursor: wait;
-}
-
-.pw-message {
-  min-height: 1.4em;
-  margin: 0;
-  font-size: calc(var(--base-size) * 0.95);
-  font-weight: 600;
-  color: var(--muted);
-}
-
-.pw-message.is-error {
-  color: var(--loss);
-}
-
 [hidden] {
   display: none !important;
 }
 
 @media (max-width: 380px) {
-  .mascot {
-    width: 52px;
-    height: 52px;
+  .app {
+    padding-inline: 12px;
+  }
+  .header,
+  .header-tools {
+    gap: 6px;
+  }
+  .brand {
+    padding-right: 11px;
+  }
+  .title {
+    font-size: calc(var(--title-size) * 0.9);
+  }
+  .pro-bar {
+    padding-left: 10px;
+    gap: 6px;
   }
   .row {
-    grid-template-columns: 44px minmax(0, 1fr) auto;
     gap: 10px;
-    padding: 12px;
+    padding-right: 11px;
+  }
+  .perf {
+    padding-inline: 16px;
   }
   .detail {
-    padding: 0 12px 12px;
+    padding-inline: 12px;
   }
-  .logo {
-    width: 44px;
-    height: 44px;
+}
+
+@media (max-width: 340px) {
+  .brand-mark {
+    display: none;
+  }
+  .brand {
+    padding-left: 12px;
   }
 }
 
@@ -1398,21 +1979,7 @@ body {
   .value.is-loading {
     animation: none;
   }
-  .theme-btn {
+  .switch .knob {
     transition: none;
   }
-}
-
-/* older browsers without aspect-ratio (Safari < 15): give the theme buttons a fixed height */
-@supports not (aspect-ratio: 1 / 1) {
-  .theme-btn {
-    height: 38px;
-  }
-}
-
-/* Minecraft: the pixel font is wide, so the small captions get a little more size */
-:root[data-theme="minecraft"] .cell .k,
-:root[data-theme="minecraft"] .alloc-title,
-:root[data-theme="minecraft"] .block-tag {
-  font-size: 0.52rem;
 }
