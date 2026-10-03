@@ -43,6 +43,8 @@ Zdroje živé ceny (obojí zdarma, bez API klíče):
 - `{ "type": "coingecko", "id": "<id mince>" }` – krypto, cena rovnou v Kč. Id je v URL na coingecko.com (`/coins/<id>`).
 - `{ "type": "dexscreener", "chain": "solana", "address": "<adresa tokenu>" }` – tokenizované akcie (např. RoboStrategy **BOT**) a menší tokeny. Cena je v USD a převádí se na Kč aktuálním kurzem. Vybere se pár s největší likviditou. Tokenizované akcie se obchodují 24/7, takže cena se hýbe i o víkendu.
 
+- `{ "type": "fixed", "priceUsd": 0.001 }` (nebo `"priceCzk"`) – pro něco, co se zatím neobchoduje: cena napsaná natvrdo, USD se přepočítá živým kurzem. U položky může být `"note": "zatím se neobchoduje"`, které se ukáže pod symbolem. Až se začne obchodovat, nahradí se zdroj za `coingecko` nebo `dexscreener`.
+
 **Tržní kapitalizace** (Pro režim): u kryptoměn ji vrací CoinGecko. U tokenizovaných akcií se počítá jako živá cena × počet akcií firmy, který je v položce jako `"sharesOutstanding"` (např. BOT 24,4 mil., Tesla 3,237 mld., SpaceX 13,57 mld.). Je to přibližný, ručně zapsaný údaj, občas ho tedy aktualizuj. Bez `sharesOutstanding` se ukáže pomlčka.
 
 Když se ceny nepodaří načíst, stránka ukáže poslední známé (uložené v telefonu) a upozorní na to.
@@ -66,8 +68,9 @@ node tools/portfolio.mjs add p2 BOT --qty 0.5
 Úvodní portfolio se dá zadat rovnou **v korunách**; počty kusů se spočítají z cen v ten okamžik:
 
 ```sh
-node tools/portfolio.mjs genesis all --amounts BOT=200,SPCX=100,TSLA=100,CARDS=200,SUI=200 --start 2026-10-10
+node tools/portfolio.mjs genesis all --amounts BOT=200,SPCX=100,TSLA=100,CARDS=200,SUI=200 --units ET10=100000 --start 2026-10-10
 ```
+`--units` zapíše přesný počet kusů (u pevné ceny, třeba ET10), `--amounts` počítá kusy z korun.
 
 Datum, které stránka ukazuje jako začátek sledování, je `startDate` v `config.json` (teď `2026-10-10`). Před tímto dnem stránka jen píše „Sledování růstu začne …“ a růst ani zisky nepočítá. Nastavit se dá i při zápisu snímku: `genesis all --force --start 2026-10-10`.
 

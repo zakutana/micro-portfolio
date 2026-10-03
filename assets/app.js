@@ -190,7 +190,13 @@
   }
 
   const sourceKey = (h) =>
-    h.source.type === "coingecko" ? `cg:${h.source.id}` : `dex:${h.source.chain}:${h.source.address}`;
+    h.source.type === "coingecko"
+      ? `cg:${h.source.id}`
+      : h.source.type === "fixed"
+        ? `fixed:${h.symbol}`
+        : `dex:${h.source.chain}:${h.source.address}`;
+  // not traded yet: a price written into config.json by hand, "priceCzk" or "priceUsd" (converted at the live rate)
+  const isFixed = (h) => h.source.type === "fixed";
 
   function readCache() {
     try {
@@ -204,11 +210,12 @@
     const cache = readCache();
     const cachedPrices = cache.prices ?? {};
     const dexHoldings = holdings.filter((h) => h.source.type === "dexscreener");
+    const needsFx = dexHoldings.length > 0 || holdings.some((h) => isFixed(h) && isPrice(h.source.priceUsd));
     const cgIds = [...new Set(holdings.filter((h) => h.source.type === "coingecko").map((h) => h.source.id))];
 
     const [cg, fxLive, ...dex] = await Promise.all([
       fetchCoinGecko(cgIds),
-      dexHoldings.length ? fetchUsdCzk() : null,
+      needsFx ? fetchUsdCzk() : null,
       ...dexHoldings.map((h) => fetchDex(h.source)),
     ]);
     const fx = fxLive ?? cache.fx ?? null;
@@ -225,6 +232,9 @@
         price = hit?.price ?? null;
         change24 = hit?.change24 ?? null;
         marketCap = hit?.marketCap ?? null;
+      } else if (isFixed(h)) {
+        if (isPrice(h.source.priceCzk)) price = h.source.priceCzk;
+        else if (isPrice(h.source.priceUsd) && isPrice(fx)) price = h.source.priceUsd * fx;
       } else {
         const hit = dexByKey.get(key);
         if (hit && isPrice(hit.usd) && isPrice(fx)) {
@@ -236,7 +246,7 @@
       }
       const cap = isPrice(marketCap) ? marketCap : null;
       if (isPrice(price)) {
-        fresh[key] = price;
+        if (!isFixed(h)) fresh[key] = price; // a hand-written price is not "fetched": it must not move the last-success time
         return { holding: h, price, change24: Number.isFinite(change24) ? change24 : null, marketCap: cap, live: true };
       }
       const stale = cachedPrices[key];
@@ -380,7 +390,7 @@
       a.setAttribute("aria-label", `${h.name} – otevřít web`);
 
       const name = el("span", "name");
-      name.append(el("strong", "", h.name), el("small", "", h.symbol));
+      name.append(el("strong", "", h.name), el("small", "", h.note ? `${h.symbol} · ${h.note}` : h.symbol));
 
       const value = el("span", "value is-loading", "…");
       a.append(logoNode(h), name, value);

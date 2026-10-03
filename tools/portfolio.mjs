@@ -7,6 +7,7 @@
  *   ... --start 2026-10-10                          also set the date shown as the start of tracking (startDate)
  *   ... --amounts BOT=200,SPCX=100,TSLA=100,CARDS=200,SUI=200
  *                                                   start from these CZK amounts: quantities = amount / today's price
+ *   ... --units ET10=100000                         start from an exact number of units (can be combined with --amounts)
  *   node tools/portfolio.mjs add p1 SUI --czk 200  buy 200 CZK worth of SUI at today's price
  *   node tools/portfolio.mjs add p1 SUI --qty 5    buy 5 units of SUI at today's price
  *
@@ -51,9 +52,13 @@ async function currentPrices(holdings) {
     for (const r of rows) if (isPrice(r.current_price)) out.set(`cg:${r.id}`, r.current_price);
   }
   const dex = holdings.filter((h) => h.source.type === "dexscreener");
-  if (dex.length) {
+  const fixed = holdings.filter((h) => h.source.type === "fixed");
+  for (const h of fixed) if (isPrice(h.source.priceCzk)) out.set(keyOf(h), h.source.priceCzk);
+  const fixedUsd = fixed.filter((h) => isPrice(h.source.priceUsd) && !isPrice(h.source.priceCzk));
+  if (dex.length || fixedUsd.length) {
     const fx = (await getJson("https://open.er-api.com/v6/latest/USD"))?.rates?.CZK;
     if (!isPrice(fx)) throw new Error("USD/CZK rate unavailable");
+    for (const h of fixedUsd) out.set(keyOf(h), h.source.priceUsd * fx);
     for (const h of dex) {
       const { chain, address } = h.source;
       const pairs = await getJson(`https://api.dexscreener.com/tokens/v1/${chain}/${address}`);
@@ -67,7 +72,12 @@ async function currentPrices(holdings) {
   return out;
 }
 
-const keyOf = (h) => (h.source.type === "coingecko" ? `cg:${h.source.id}` : `dex:${h.source.chain}:${h.source.address}`);
+const keyOf = (h) =>
+  h.source.type === "coingecko"
+    ? `cg:${h.source.id}`
+    : h.source.type === "fixed"
+      ? `fixed:${h.symbol}`
+      : `dex:${h.source.chain}:${h.source.address}`;
 const round = (n, digits) => Number(n.toFixed(digits));
 const lotsOf = (h) => (Array.isArray(h.lots) ? h.lots : h.qty > 0 ? [{ qty: h.qty }] : []);
 const totalQty = (h) => lotsOf(h).reduce((a, l) => a + l.qty, 0);
@@ -86,15 +96,15 @@ function save(file, cfg) {
 }
 const pages = () => fs.readdirSync(ROOT).filter((d) => /^p\d+$/.test(d));
 
-function parseAmounts(text, holdings) {
+function parseAmounts(text, holdings, label = "--amounts") {
   if (text === undefined) return null;
   const out = new Map();
   for (const part of text.split(",")) {
     const [sym, value] = part.split("=");
     const czk = Number(value);
-    if (!sym || !(czk > 0)) throw new Error(`--amounts: bad entry "${part}" (expected SYMBOL=CZK)`);
+    if (!sym || !(czk > 0)) throw new Error(`${label}: bad entry "${part}" (expected SYMBOL=NUMBER)`);
     if (!holdings.some((h) => h.symbol.toUpperCase() === sym.trim().toUpperCase())) {
-      throw new Error(`--amounts: no holding with symbol "${sym}"`);
+      throw new Error(`${label}: no holding with symbol "${sym}"`);
     }
     out.set(sym.trim().toUpperCase(), czk);
   }
@@ -105,20 +115,23 @@ function parseAmounts(text, holdings) {
 async function planGenesis(id) {
   const { file, cfg } = load(id);
   const amounts = parseAmounts(flag("--amounts"), cfg.holdings);
-  const force = args.includes("--force") || amounts !== null; // amounts always define a fresh starting point
+  const units = parseAmounts(flag("--units"), cfg.holdings, "--units");
+  const force = args.includes("--force") || amounts !== null || units !== null; // these always define a fresh starting point
   const prices = await currentPrices(cfg.holdings);
   const now = new Date().toISOString();
   for (const h of cfg.holdings) {
     let qty;
-    if (amounts) {
-      const czk = amounts.get(h.symbol.toUpperCase());
-      if (czk === undefined) {
-        console.log(`${id} ${h.symbol}: not in --amounts, left unchanged`);
+    if (amounts || units) {
+      const sym = h.symbol.toUpperCase();
+      const czk = amounts?.get(sym);
+      const fixedUnits = units?.get(sym);
+      if (czk === undefined && fixedUnits === undefined) {
+        console.log(`${id} ${h.symbol}: not in --amounts/--units, left unchanged`);
         continue;
       }
       const p = prices.get(keyOf(h));
       if (!isPrice(p)) throw new Error(`${id} ${h.symbol}: no current price, nothing written`);
-      qty = round(czk / p, 6);
+      qty = fixedUnits !== undefined ? fixedUnits : round(czk / p, 6);
     } else {
       // With --force the "qty" field is the quantity to start from (edit it first); otherwise the existing lots.
       qty = force && h.qty > 0 ? h.qty : totalQty(h);
