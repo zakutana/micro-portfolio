@@ -58,3 +58,5 @@ npm run cards -- --rotate p2          # nový kód pro p2 (starý QR přestane f
 
 Výstup je v `private/cards/` (necommituje se): `<id>-front.png`, `<id>-back.png`, `<id>-card.pdf` (85,6 × 54 mm, 2 strany) a `karticky-A4.pdf` pro domácí tisk.
 Po změně kódu je potřeba commitnout a pushnout aktualizovaný `config.js`.
+
+**QR kódy se nemění**, dokud sám nepoužiješ `--rotate`. Úpravy seznamu, cen i motivů je neovlivní. Nepřejmenovávej složky `p1/` a `p2/` (jsou v QR adrese). Nástroj odmítne vytvořit nový kód pro stránku, která už jeden má, a vypíše, jak ho obnovit.

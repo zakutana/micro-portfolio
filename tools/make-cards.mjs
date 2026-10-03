@@ -4,7 +4,7 @@
  *
  *   npm install                      (once)
  *   npm run cards                    create codes if missing, update the hashes, render cards
- *   npm run cards -- --rotate p2     give page p2 a new code (the old QR stops working)
+ *   npm run cards -- --rotate p2     give page p2 a new code (the old QR STOPS working, only do this on purpose)
  *   npm run cards -- --base https://example.com/micro-portfolio
  *
  * The plain codes live ONLY in private/codes.json and in the QR codes (private/ is git-ignored).
@@ -51,10 +51,20 @@ for (const p of people.people) {
 const codes = fs.existsSync(CODES_FILE) ? JSON.parse(fs.readFileSync(CODES_FILE, "utf8")) : {};
 
 for (const p of people.people) {
-  if (!codes[p.id] || rotate.has(p.id)) codes[p.id] = newCode();
-
   const configPath = path.join(ROOT, p.id, "config.js");
   const source = fs.readFileSync(configPath, "utf8");
+  const alreadyIssued = /codeHash:\s*"[0-9a-f]{64}"/.test(source);
+
+  // Never silently replace a code that is already printed on a card: that would kill the QR.
+  if (!codes[p.id] && alreadyIssued && !rotate.has(p.id)) {
+    throw new Error(
+      `${p.id} already has a code in use, but it is missing from ${CODES_FILE}.\n` +
+        `The printed QR is still valid. Restore the code into ${CODES_FILE} (the QR link holds it as ?k=...),\n` +
+        `or run with --rotate ${p.id} if you really want a new code and new cards.`,
+    );
+  }
+  if (!codes[p.id] || rotate.has(p.id)) codes[p.id] = newCode();
+
   if (!/codeHash:\s*"[0-9a-f]*"/.test(source)) throw new Error(`${configPath}: no codeHash field found`);
   fs.writeFileSync(configPath, source.replace(/codeHash:\s*"[0-9a-f]*"/, `codeHash: "${hashOf(p.id, codes[p.id])}"`));
 }
