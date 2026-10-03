@@ -180,7 +180,6 @@ function backPage(p, url, qr) {
   return `<section class="page back" style="background:${pal.back.stops[0][1]}">
     ${gradientSvg(PAGE_W, PAGE_H, pal.back)}
     ${guilloche(71, 67)}
-    <div class="stripe">${gradientSvg(PAGE_W, 10, { angle: 180, stops: [[0, "#1c1c26"], [0.6, "#06060a"], [1, "#191923"]] }, 40, "bg")}</div>
     <div class="qr">${qr.svg}</div>
     <div class="scan">Naskenuj kamerou mobilu.</div>
     <div class="mini ${p.mascot}">${MASCOT[p.mascot]}</div>
@@ -229,11 +228,10 @@ html, body { width: ${SW}mm; background: #fff; -webkit-print-color-adjust: exact
 .hero svg, .mini svg { width: 100%; height: 100%; display: block }
 
 /* back */
-.stripe { left: 0; right: 0; top: 8mm; height: 10mm }
-.qr { left: 8mm; bottom: 8mm; line-height: 0 }
+.qr { left: 8mm; top: 50%; transform: translateY(-50%); line-height: 0 }
 .qr svg { display: block }
-.scan { left: 42mm; top: 24mm; width: 43.5mm; font: 800 4.2mm/1.2 "Nunito", sans-serif }
-.mini { left: 42mm; bottom: 8mm; width: 16mm; height: 16mm }
+.scan { left: 42mm; top: 15.8mm; width: 43.5mm; font: 800 4.2mm/1.2 "Nunito", sans-serif }
+.mini { left: 42mm; top: 30mm; width: 16mm; height: 16mm }
 .mini.waddle { width: 17.5mm }
 `;
 };
