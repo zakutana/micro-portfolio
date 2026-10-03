@@ -5,6 +5,8 @@
  *   node tools/portfolio.mjs genesis p1            freeze today's prices as the starting point ("genesis")
  *   node tools/portfolio.mjs genesis all --force   start over at today's prices, from each holding's "qty" (edit it first)
  *   ... --start 2026-10-10                          also set the date shown as the start of tracking (startDate)
+ *   ... --amounts BOT=200,SPCX=100,TSLA=100,CARDS=200,SUI=200
+ *                                                   start from these CZK amounts: quantities = amount / today's price
  *   node tools/portfolio.mjs add p1 SUI --czk 200  buy 200 CZK worth of SUI at today's price
  *   node tools/portfolio.mjs add p1 SUI --qty 5    buy 5 units of SUI at today's price
  *
@@ -84,15 +86,43 @@ function save(file, cfg) {
 }
 const pages = () => fs.readdirSync(ROOT).filter((d) => /^p\d+$/.test(d));
 
+function parseAmounts(text, holdings) {
+  if (text === undefined) return null;
+  const out = new Map();
+  for (const part of text.split(",")) {
+    const [sym, value] = part.split("=");
+    const czk = Number(value);
+    if (!sym || !(czk > 0)) throw new Error(`--amounts: bad entry "${part}" (expected SYMBOL=CZK)`);
+    if (!holdings.some((h) => h.symbol.toUpperCase() === sym.trim().toUpperCase())) {
+      throw new Error(`--amounts: no holding with symbol "${sym}"`);
+    }
+    out.set(sym.trim().toUpperCase(), czk);
+  }
+  return out;
+}
+
 /* Works out the new config for one page without writing anything (so "genesis all" is all-or-nothing). */
 async function planGenesis(id) {
   const { file, cfg } = load(id);
-  const force = args.includes("--force");
+  const amounts = parseAmounts(flag("--amounts"), cfg.holdings);
+  const force = args.includes("--force") || amounts !== null; // amounts always define a fresh starting point
   const prices = await currentPrices(cfg.holdings);
   const now = new Date().toISOString();
   for (const h of cfg.holdings) {
-    // With --force the "qty" field is the quantity to start from (edit it first); otherwise the existing lots.
-    const qty = force && h.qty > 0 ? h.qty : totalQty(h);
+    let qty;
+    if (amounts) {
+      const czk = amounts.get(h.symbol.toUpperCase());
+      if (czk === undefined) {
+        console.log(`${id} ${h.symbol}: not in --amounts, left unchanged`);
+        continue;
+      }
+      const p = prices.get(keyOf(h));
+      if (!isPrice(p)) throw new Error(`${id} ${h.symbol}: no current price, nothing written`);
+      qty = round(czk / p, 6);
+    } else {
+      // With --force the "qty" field is the quantity to start from (edit it first); otherwise the existing lots.
+      qty = force && h.qty > 0 ? h.qty : totalQty(h);
+    }
     if (!qty) continue;
     if (Array.isArray(h.lots) && h.lots.length && !force) {
       console.log(`${id} ${h.symbol}: already has a starting point (use --force to start over)`);

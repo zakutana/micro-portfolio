@@ -254,7 +254,7 @@
   const nf = (opts) => new Intl.NumberFormat("cs-CZ", opts);
   const czk0 = nf({ style: "currency", currency: "CZK", minimumFractionDigits: 0, maximumFractionDigits: 0 });
   const czk2 = nf({ style: "currency", currency: "CZK", maximumFractionDigits: 2 });
-  const formatCzk = (v) => (v < 100 ? czk2 : czk0).format(v);
+  const formatCzk = (v) => (Math.round(v * 100) / 100 < 100 ? czk2 : czk0).format(v); // 99,998 -> "100 Kč"
   const MINUS = "−";
 
   /* Price of one unit: more decimals for cheap things. */

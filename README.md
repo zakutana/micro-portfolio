@@ -63,6 +63,12 @@ node tools/portfolio.mjs add p1 SUI --czk 200
 node tools/portfolio.mjs add p2 BOT --qty 0.5
 ```
 
+Úvodní portfolio se dá zadat rovnou **v korunách**; počty kusů se spočítají z cen v ten okamžik:
+
+```sh
+node tools/portfolio.mjs genesis all --amounts BOT=200,SPCX=100,TSLA=100,CARDS=200,SUI=200 --start 2026-10-10
+```
+
 Datum, které stránka ukazuje jako začátek sledování, je `startDate` v `config.json` (teď `2026-10-10`). Před tímto dnem stránka jen píše „Sledování růstu začne …“ a růst ani zisky nepočítá. Nastavit se dá i při zápisu snímku: `genesis all --force --start 2026-10-10`.
 
 **Pozor, prodej zatím není ošetřený.** Nákupy a nové položky jsou v pořádku. Ale položku **nemazat** a **nesnižovat jí počet kusů** (ani ručně v `config.json`): zisk nebo ztráta z ní by zmizely z celkového růstu a procento by skočilo. Před prvním prodejem je potřeba do `tools/portfolio.mjs` doplnit příkaz `sell`, který si zapamatuje výnos z prodeje, a až pak prodej provést. Záznamy nákupů (`lots`) jsou na to už připravené, nic se nemusí převádět.

@@ -13,12 +13,12 @@
       },
       "lots": [
         {
-          "date": "2026-10-03T08:43:19.794Z",
-          "qty": 100,
-          "price": 6.05
+          "date": "2026-10-03T09:36:10.475Z",
+          "qty": 33.167496,
+          "price": 6.03
         }
       ],
-      "qty": 100
+      "qty": 33.167496
     },
     {
       "name": "RoboStrategy",
@@ -32,12 +32,12 @@
       },
       "lots": [
         {
-          "date": "2026-10-03T08:43:19.794Z",
-          "qty": 1,
-          "price": 631.046191
+          "date": "2026-10-03T09:36:10.475Z",
+          "qty": 0.316967,
+          "price": 630.981027
         }
       ],
-      "qty": 1,
+      "qty": 0.316967,
       "sharesOutstanding": 24400000
     },
     {
@@ -51,19 +51,19 @@
       },
       "lots": [
         {
-          "date": "2026-10-03T08:43:19.794Z",
-          "qty": 10,
-          "price": 25.15
+          "date": "2026-10-03T09:36:10.475Z",
+          "qty": 7.852375,
+          "price": 25.47
         }
       ],
-      "qty": 10
+      "qty": 7.852375
     },
     {
       "name": "Tesla",
       "symbol": "TSLA",
       "logo": "../assets/logos/tesla.png",
       "url": "https://www.tesla.com",
-      "qty": 0.2,
+      "qty": 0.012415,
       "source": {
         "type": "dexscreener",
         "chain": "solana",
@@ -72,9 +72,9 @@
       "sharesOutstanding": 3237000000,
       "lots": [
         {
-          "date": "2026-10-03T09:33:34.666Z",
-          "qty": 0.2,
-          "price": 8054.679487
+          "date": "2026-10-03T09:36:10.475Z",
+          "qty": 0.012415,
+          "price": 8054.8967
         }
       ]
     },
@@ -83,7 +83,7 @@
       "symbol": "SPCX",
       "logo": "../assets/logos/spacex.png",
       "url": "https://www.spacex.com",
-      "qty": 0.2,
+      "qty": 0.029031,
       "source": {
         "type": "dexscreener",
         "chain": "solana",
@@ -92,8 +92,8 @@
       "sharesOutstanding": 13570000000,
       "lots": [
         {
-          "date": "2026-10-03T09:33:34.666Z",
-          "qty": 0.2,
+          "date": "2026-10-03T09:36:10.475Z",
+          "qty": 0.029031,
           "price": 3444.558204
         }
       ]
