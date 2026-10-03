@@ -650,8 +650,14 @@
       }
     });
 
-    $("total").textContent = known ? formatCzk(total) : "—";
-    showPerformance({ costSum, valueSum, since: startDate ?? since, rows, total, waiting: !tracking });
+    // an incomplete sum would look like a loss: show it only when every counted holding has a price
+    const complete = rows.every((r) => r.excluded || r.value !== null);
+    $("total").textContent = known && complete ? formatCzk(total) : "—";
+    if (complete) {
+      showPerformance({ costSum, valueSum, since: startDate ?? since, rows, total, waiting: !tracking });
+    } else {
+      perfRefs.box.hidden = true;
+    }
 
     const status = $("status");
     status.classList.toggle("is-warn", !allLive);
