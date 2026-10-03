@@ -64,6 +64,10 @@ Za proxy: `NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=<ca bundle> node tools/portf
 Bez zapsaných nákupů (starý formát `qty`) se růst nezobrazí, ale hodnoty ano.
 Nová položka: přidej ji do `config.json` s `"qty": 0` a pak ji koupí příkaz `add`.
 
+## Historie nákupů (zdroj všech výpočtů)
+
+Sekce „Historie nákupů“ na stránce ukazuje každý nákup jako blok: **Blok #0 je genesis** (startovní portfolio), další bloky jsou dokoupení, nejnovější nahoře. Nákupy zapsané ve stejné minutě tvoří jeden blok. Hodnoty, vložené peníze, zisky i celkový růst se počítají právě z těchto záznamů (`lots` v `config.json`), takže historie a čísla se nemohou rozejít. Dokoupení se zapisuje příkazem `add` a hned se ukáže jako nový blok.
+
 ## Motivy
 
 Minecraft, Kirby, Waddle Dee, Pokémon, Make-up, Fotbal, Trader. Volba se ukládá do telefonu (`localStorage`), takže zůstane i po zavření stránky. `p2` začíná s Kirby (růžová), `p1` s Waddle Dee (modrá s oranžovou). Výchozí motiv je atribut `data-theme` v `index.html` stránky. Motivy jsou sady CSS proměnných v `assets/style.css`.

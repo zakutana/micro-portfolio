@@ -414,6 +414,62 @@
     perfRefs = { box, icon, title, sub, pct, money, bar, legend, invested };
   }
 
+  /* Purchase history: every purchase is a "block"; the first one is the genesis block.
+     The holdings, the cost and the growth are all calculated from these same records. */
+  function buildHistory() {
+    const lots = [];
+    for (const h of cfg.holdings) {
+      if (!Array.isArray(h.lots)) continue;
+      for (const l of h.lots) if (l.qty > 0 && l.price > 0 && l.date) lots.push({ h, ...l });
+    }
+    if (!lots.length) return;
+
+    // purchases recorded within the same minute belong to one block
+    const byDate = new Map();
+    for (const l of lots) {
+      const key = l.date.slice(0, 16);
+      if (!byDate.has(key)) byDate.set(key, []);
+      byDate.get(key).push(l);
+    }
+    const blocks = [...byDate.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1)); // oldest first: #0 = genesis
+
+    const box = el("details", "panel history");
+    box.open = true;
+    box.append(el("summary", "", "Historie nákupů"));
+    const list = el("ol", "blocks");
+    blocks
+      .map(([, items], i) => ({ date: items[0].date, items, no: i }))
+      .reverse() // newest on top, genesis at the bottom
+      .forEach(({ date, items, no }) => {
+        const li = el("li", `block${no === 0 ? " is-genesis" : ""}`);
+        const head = el("div", "block-head");
+        head.append(
+          el("span", "block-no", `Blok #${no}`),
+          el("span", "block-tag", no === 0 ? "Genesis" : "Dokoupeno"),
+          el("span", "block-date", formatDate(date)),
+        );
+        const lines = el("ul", "block-lines");
+        let sum = 0;
+        for (const l of items) {
+          const amount = l.qty * l.price;
+          sum += amount;
+          const line = el("li");
+          line.append(
+            el("span", "sym", l.h.symbol),
+            el("span", "q", `${formatQty(l.qty)} ks × ${formatUnitPrice(l.price)}`),
+            el("span", "amt", formatCzk(amount)),
+          );
+          lines.append(line);
+        }
+        const total = el("div", "block-total");
+        total.append(el("span", "", no === 0 ? "Startovní hodnota" : "Dokoupeno za"), el("strong", "", formatCzk(sum)));
+        li.append(head, lines, total);
+        list.append(li);
+      });
+    box.append(list);
+    $("content").append(box);
+  }
+
   function buildGlossary() {
     const box = el("details", "panel glossary pro-only");
     box.append(el("summary", "", "Slovníček investora"));
@@ -623,6 +679,7 @@
     $("total-bar").hidden = false;
     buildPerf();
     buildList();
+    buildHistory();
     buildGlossary();
 
     let lastRun = 0;

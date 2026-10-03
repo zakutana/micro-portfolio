@@ -1119,6 +1119,131 @@ body {
   }
 }
 
+/* purchase history */
+.history {
+  padding: 4px 16px 14px;
+}
+
+.history summary {
+  padding: 12px 0;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.blocks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.block {
+  padding: 10px 12px 10px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: calc(var(--panel-radius) * 0.55);
+}
+
+.block.is-genesis {
+  border-style: dashed;
+}
+
+.block-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+
+.block-no {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.block-tag {
+  padding: 1px 9px;
+  border-radius: 999px;
+  font-size: calc(var(--base-size) * 0.72);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--btn-active-text);
+  background: var(--btn-active-bg);
+}
+
+.is-genesis .block-tag {
+  color: #4a2f00;
+  background: linear-gradient(135deg, #fff0a8, #f6b73c);
+}
+
+.block-date {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: calc(var(--base-size) * 0.85);
+  font-variant-numeric: tabular-nums;
+}
+
+.block-lines {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.block-lines li {
+  display: grid;
+  grid-template-columns: minmax(3.2em, auto) minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 4px 10px;
+  font-size: calc(var(--base-size) * 0.92);
+  font-variant-numeric: tabular-nums;
+}
+
+.block-lines .sym {
+  font-weight: 700;
+}
+
+.block-lines .q {
+  color: var(--muted);
+}
+
+.block-lines .amt {
+  font-weight: 600;
+  text-align: right;
+}
+
+.block-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: calc(var(--base-size) * 0.9);
+  color: var(--muted);
+}
+
+.block-total strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+:root[data-theme="minecraft"] .block,
+:root[data-theme="minecraft"] .block-tag {
+  border-radius: 0;
+}
+
+:root[data-theme="trader"] .block {
+  border-color: #263044;
+}
+
+:root[data-theme="trader"] .block-total {
+  border-top-color: #263044;
+}
+
 [hidden] {
   display: none !important;
 }
