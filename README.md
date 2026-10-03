@@ -98,17 +98,17 @@ Motivy jsou sady CSS proměnných na začátku `assets/style.css` (barvy, ráme�
 
 ## Heslo jako hádanka
 
-Heslo je ukryté v **čísle na kartičce** a stránka při prvním otevření ukáže návod „Jak to rozluštit?“. Pak si heslo telefon pamatuje. Je to hra, ne bezpečnost: jméno je na kartičce i v QR odkazu a `config.json` je veřejný, takže kdo si otevře zdrojový kód, uvidí počty kusů. Pro dětské portfolio to stačí.
+Heslo je ukryté v **čísle na kartičce** a stránka při prvním otevření ukáže návod „Jak to rozluštit?“. Pak si heslo telefon pamatuje. Je to hra, ne bezpečnost: číslo je na kartičce a `config.json` je veřejný, takže kdo si otevře zdrojový kód, uvidí počty kusů. Pro dětské portfolio to stačí.
 
-Pravidlo (jméno musí mít 4 písmena, např. ANIA): číslo na kartě má čtyři čtveřice číslic, součet číslic každé čtveřice je pořadí jednoho písmene jména v abecedě (A = 1 … Z = 26), tedy ANIA → 1, 14, 9, 1. Heslo jsou ta čísla za sebou: `11491`. Číslice ve čtveřicích se vyrábějí z jména a id stránky, takže číslo na kartě je pokaždé stejné.
+Pravidlo: číslo na kartě má čtyři čtveřice číslic, součet číslic každé čtveřice je jedno náhodné číslo (5 až 30). Heslo jsou ta čtyři čísla za sebou, např. čtveřice se součty 7, 22, 12, 9 dají heslo `722129`. S jménem to nesouvisí. Číslo karty i heslo se uloží do `private/passwords.json`, takže vytištěná karta zůstává platná.
 
 ```sh
-node tools/password.mjs set p1      # nastaví heslo podle jména: private/passwords.json + hash v p1/config.json
+node tools/password.mjs set p1      # vyrobí náhodné heslo a číslo karty: private/passwords.json + hash v p1/config.json
 node tools/password.mjs card        # vypíše čísla karet a ověří, že se dají rozluštit
 node tools/password.mjs remove p1   # zruší heslo, stránka se otevře rovnou (bez `passHash` v config.json se zámek nezobrazí)
 ```
 
-Po změně hesla commitni a pushni `config.json` a vygeneruj znovu tiskové PDF (`npm run print`). Stránka (v `config.json` jako `passHash`) obsahuje jen pomalý hash hesla (PBKDF2-SHA256, 200 000 kol, sůl `micro-portfolio:<id>`). **iPhone:** Safari smaže data stránky, když ji člověk 7 dní v Safari neotevře; heslo se pak píše znovu (dá se zase rozluštit z karty). Pomůže „Přidat na plochu“.
+`set` odmítne přepsat heslo, které už existuje (je vytištěné na kartě); `--new` ho přepíše a karta pak přestane fungovat. Po změně commitni a pushni `config.json` a vygeneruj znovu tiskové PDF (`npm run print`). Stránka (v `config.json` jako `passHash`) obsahuje jen pomalý hash hesla (PBKDF2-SHA256, 200 000 kol, sůl `micro-portfolio:<id>`). **iPhone:** Safari smaže data stránky, když ji člověk 7 dní v Safari neotevře; heslo se pak píše znovu (dá se zase rozluštit z karty). Pomůže „Přidat na plochu“.
 
 ## Kartičky
 

@@ -146,7 +146,7 @@
     for (const text of [
       "Číslo na kartě má čtyři čtveřice číslic.",
       "V každé čtveřici sečti všechny čtyři číslice. Např. 0405 je 0 + 4 + 0 + 5 = 9.",
-      `Z každé čtveřice ti vyjde jedno číslo. Je to pořadí jednoho písmene tvého jména v abecedě (A = 1, B = 2, C = 3 … Z = 26)${name ? `: písmena jména ${name} v tom pořadí, jak jdou za sebou` : ""}.`,
+      "Z každé čtveřice ti vyjde jedno číslo, dohromady čtyři čísla.",
       "Heslo jsou ta čtyři čísla napsaná za sebou, bez mezer. Např. 3, 12, 5, 7 je 31257.",
     ]) steps.append(el("li", "", text));
     help.append(el("summary", "", "Jak to rozluštit?"), steps);

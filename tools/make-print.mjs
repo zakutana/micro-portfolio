@@ -13,7 +13,7 @@
  *
  * Needs: Ghostscript (gs), poppler-utils (pdftoppm, pdfinfo, pdffonts, pdfimages), Python 3 with pikepdf and opencv-python-headless
  * (tools/print-post.py), Chromium.
- * Names come from private/names.json (the card number hides the password, see tools/password.mjs).
+ * Names come from private/names.json, the card numbers (they hide the passwords) from private/passwords.json (tools/password.mjs).
  */
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
@@ -22,7 +22,6 @@ import vm from "node:vm";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import qrcode from "qrcode-generator";
 import { chromium } from "playwright";
-import { cardNumber } from "./password.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PRIVATE = path.join(ROOT, "private");
@@ -37,6 +36,7 @@ const PT = 72 / 25.4; // points per mm
 
 const people = JSON.parse(fs.readFileSync(path.join(ROOT, "tools/people.json"), "utf8"));
 const names = JSON.parse(fs.readFileSync(path.join(PRIVATE, "names.json"), "utf8"));
+const passwords = JSON.parse(fs.readFileSync(path.join(PRIVATE, "passwords.json"), "utf8"));
 const baseUrl = people.baseUrl.replace(/\/+$/, "");
 // the date of the first purchase, as shown on the page ("od 10. 10. 2026"); set "startDate" in tools/people.json
 const [sy, sm, sd] = people.startDate.split("-").map(Number);
@@ -158,7 +158,7 @@ const CHIP = `<svg viewBox="0 0 78 58" xmlns="http://www.w3.org/2000/svg"><rect 
 function frontPage(p, i) {
   const pal = PALETTES[p.palette];
   const hero = p.mascot === "waddle" ? "hero waddle" : "hero kirby";
-  const no = cardNumber(p.name, p.id); // the password is hidden in the number: the digit sums of the four groups (tools/password.mjs)
+  const no = passwords[p.id].number; // the password is hidden in the number: the digit sums of the four groups (tools/password.mjs)
   return `<section class="page front" style="background:${pal.front.stops[1][1]}">
     ${gradientSvg(PAGE_W, PAGE_H, pal.front)}
     ${guilloche(71, 67)}
@@ -243,7 +243,7 @@ const pages = [];
 const links = [];
 people.people.forEach((p, i) => {
   p.name = names[p.id];
-  if (!p.name) throw new Error(`Missing name for ${p.id} in private/names.json`);
+  if (!p.name || !passwords[p.id]?.number) throw new Error(`Missing name or password for ${p.id}: run node tools/password.mjs set ${p.id}`);
   const url = `${baseUrl}/${p.id}/?n=${encodeURIComponent(p.name)}`;
   const qr = qrTile(url);
   links.push(url);
