@@ -1,5 +1,5 @@
 {
-  "codeHash": "23f1e8281ab31dedc77aceaa4eec0194400d4bc8ec6a9b745198a43c4417d293",
+  "passHash": "512e8b844c0d12e9bb1aa922d4e1d8f3df999af2bb386ebcc1e2818c91e09c11",
   "startDate": "2026-10-10",
   "holdings": [
     {
@@ -101,7 +101,7 @@
     {
       "name": "Cymetica",
       "symbol": "ET10",
-      "note": "zat\u00edm se neobchoduje",
+      "note": "zatím se neobchoduje",
       "logo": "../assets/logos/cymetica.jpg",
       "url": "https://cymetica.com/",
       "qty": 100000,

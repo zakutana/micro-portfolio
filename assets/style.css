@@ -1306,6 +1306,71 @@ body {
   border-top-color: #263044;
 }
 
+/* password form on the lock screen */
+.pw-form {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.pw-input {
+  width: 100%;
+  max-width: 11em;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-align: center;
+  text-transform: lowercase;
+  color: var(--text);
+  background: var(--btn-bg);
+  border: var(--btn-border);
+  border-radius: var(--btn-radius);
+}
+
+:root[data-theme="minecraft"] .pw-input {
+  font-size: 1rem;
+  border-color: #555 #fff #fff #555;
+}
+
+.pw-input:focus-visible {
+  outline: 3px solid var(--btn-active-bg);
+  outline-offset: 2px;
+}
+
+.pw-btn {
+  appearance: none;
+  padding: 10px 24px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--btn-active-text);
+  background: var(--btn-active-bg);
+  border: var(--btn-border);
+  border-radius: var(--btn-radius);
+  box-shadow: var(--btn-shadow);
+  cursor: pointer;
+}
+
+.pw-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.pw-message {
+  min-height: 1.4em;
+  margin: 0;
+  font-size: calc(var(--base-size) * 0.95);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.pw-message.is-error {
+  color: var(--loss);
+}
+
 [hidden] {
   display: none !important;
 }

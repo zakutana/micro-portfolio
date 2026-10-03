@@ -6,7 +6,7 @@
   const root = document.documentElement;
   const PAGE_ID = root.dataset.id; // fixed per page, set in its index.html
   const DEFAULT_THEME = root.dataset.theme;
-  let cfg = null; // { codeHash, holdings } – loaded fresh from config.json on every visit
+  let cfg = null; // { passHash, holdings, ... } – loaded fresh from config.json on every visit
   let holdings = []; // the holdings that are actually owned (quantity > 0)
 
   const THEMES = [
@@ -88,28 +88,80 @@
     }
   }
 
-  /* ---------- Access code ---------- */
+  /* ---------- Password (typed once, then remembered on the phone) ---------- */
 
-  async function sha256Hex(text) {
-    const bytes = new TextEncoder().encode(text);
-    const digest = await crypto.subtle.digest("SHA-256", bytes);
-    return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("");
+  const PBKDF2_ITERATIONS = 200_000; // slow on purpose, so guessing a short password costs real time
+
+  async function deriveHash(password) {
+    const enc = new TextEncoder();
+    const key = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveBits"]);
+    const bits = await crypto.subtle.deriveBits(
+      { name: "PBKDF2", hash: "SHA-256", salt: enc.encode(`micro-portfolio:${PAGE_ID}`), iterations: PBKDF2_ITERATIONS },
+      key,
+      256,
+    );
+    return Array.from(new Uint8Array(bits), (b) => b.toString(16).padStart(2, "0")).join("");
   }
 
-  async function isUnlocked() {
-    const fromUrl = new URLSearchParams(location.search).get("k");
-    const candidates = [fromUrl, store.get("key")].filter(Boolean).map((c) => c.trim());
-    for (const code of candidates) {
+  /* What the phone remembers is the page's password hash itself: a changed password locks the page again. */
+  const isUnlocked = () => typeof cfg.passHash === "string" && store.get("auth") === cfg.passHash;
+
+  function showLock(onUnlock) {
+    const lock = $("lock");
+    lock.replaceChildren();
+    const name = (new URLSearchParams(location.search).get("n") || "").trim().slice(0, 30);
+
+    const icon = el("div", "lock-icon", "\u{1F512}");
+    icon.setAttribute("aria-hidden", "true");
+    const title = el("h2", "", name ? `Ahoj ${name}!` : "Tahle stránka je jen pro tebe");
+    const hint = el("p", "", "Napiš heslo z kartičky. Stačí jednou, příště se stránka otevře sama.");
+
+    const form = el("form", "pw-form");
+    const input = el("input", "pw-input");
+    input.id = "pw";
+    input.type = "text";
+    input.maxLength = 12;
+    input.autocomplete = "off";
+    input.autocapitalize = "none";
+    input.spellcheck = false;
+    input.setAttribute("autocorrect", "off");
+    input.setAttribute("aria-label", "Heslo");
+    input.placeholder = "•••••";
+    const button = el("button", "pw-btn", "Odemknout");
+    button.type = "submit";
+    const message = el("p", "pw-message");
+    message.setAttribute("aria-live", "polite");
+    form.append(input, button, message);
+    lock.append(icon, title, hint, form);
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const password = input.value.trim().toLowerCase();
+      if (!password) return;
+      button.disabled = true;
+      message.className = "pw-message";
+      message.textContent = "Kontroluju…";
       try {
-        if ((await sha256Hex(`${PAGE_ID}:${code}`)) === cfg.codeHash) {
-          store.set("key", code);
-          return true;
+        if (!(window.crypto && crypto.subtle)) throw new Error("no WebCrypto");
+        if ((await deriveHash(password)) === cfg.passHash) {
+          store.set("auth", cfg.passHash);
+          lock.hidden = true;
+          await onUnlock();
+          return;
         }
+        message.classList.add("is-error");
+        message.textContent = "Tohle heslo nesedí. Zkus to znovu.";
+        input.select();
       } catch {
-        return false;
+        message.classList.add("is-error");
+        message.textContent = "Něco se pokazilo. Obnov stránku a zkus to znovu.";
+      } finally {
+        button.disabled = false;
       }
-    }
-    return false;
+    });
+
+    lock.hidden = false;
+    input.focus();
   }
 
   /* The owner's name travels in the QR link (?n=...), so it never has to live in the repo. */
@@ -719,11 +771,15 @@
     buildThemePicker();
 
     cfg = await loadConfig();
-    if (!cfg || !(await isUnlocked())) {
-      $("lock").hidden = false;
+    if (!cfg) {
+      $("lock").hidden = false; // the config could not be loaded at all: show the generic lock text
       return;
     }
+    if (isUnlocked()) return openContent();
+    showLock(openContent);
+  }
 
+  async function openContent() {
     showOwner();
     holdings = (Array.isArray(cfg.holdings) ? cfg.holdings : []).filter((h) => h && h.source && position(h).qty > 0);
     buildProBar();

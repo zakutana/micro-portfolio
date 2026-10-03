@@ -1,14 +1,14 @@
 # Micro portfolio
 
-Dvě malé stránky (`p1`, `p2`) se seznamem „portfolia“ a **živými cenami v Kč**. Na každou vede QR kód z tištěné kartičky.
+Dvě malé stránky (`p1`, `p2`) se seznamem „portfolia“ a **živými cenami v Kč**. Na každou vede QR kód z tištěné kartičky, na které je i pětimístné heslo.
 Web nemá žádný build, jsou to čisté HTML/CSS/JS soubory.
 
 | Stránka | Adresa |
 | --- | --- |
-| `p1` | `https://zakutana.github.io/micro-portfolio/p1/?k=<kód>&n=<jméno>` |
-| `p2` | `https://zakutana.github.io/micro-portfolio/p2/?k=<kód>&n=<jméno>` |
+| `p1` | `https://zakutana.github.io/micro-portfolio/p1/?n=<jméno>` |
+| `p2` | `https://zakutana.github.io/micro-portfolio/p2/?n=<jméno>` |
 
-Jméno se na stránku dostane jen z odkazu v QR kódu (`n=`), v repu není nikde. Kódy a jména jsou v `private/` (git-ignorováno).
+Jméno se na stránku dostane jen z odkazu v QR kódu (`n=`), v repu není nikde. Hesla a jména jsou v `private/` (git-ignorováno).
 
 ## Nasazení (GitHub Pages)
 
@@ -92,22 +92,24 @@ Sekce „Historie nákupů“ na stránce ukazuje každý nákup jako blok: **Bl
 
 Minecraft, Kirby, Waddle Dee, Pokémon, Make-up, Fotbal, Trader. Volba se ukládá do telefonu (`localStorage`), takže zůstane i po zavření stránky. `p2` začíná s Kirby (růžová), `p1` s Waddle Dee (modrá s oranžovou). Výchozí motiv je atribut `data-theme` v `index.html` stránky. Motivy jsou sady CSS proměnných v `assets/style.css`.
 
-## Ochrana kódem
+## Ochrana heslem
 
-Každá stránka se odemkne jen s `?k=<kód>`, který je v QR kódu. Po prvním otevření si ho telefon zapamatuje. Stránka (v `config.json`) obsahuje jen SHA-256 hash `"<id>:<kód>"`, plný kód je pouze v QR a v `private/codes.json`.
-Je to „zámek na dveřích“, ne trezor: web je statický, takže kdo si otevře zdrojový kód, uvidí i počty kusů. Pro tenhle účel stačí.
+Každá stránka má **pětimístné heslo** (malá písmena a číslice, bez zaměnitelných znaků jako 0/o a 1/l/i). Je vytištěné na kartičce pod QR kódem. QR kód otevře jen stránku, ta se zeptá na heslo a **po prvním správném zadání si ho telefon zapamatuje** (v `localStorage`), takže další otevření je rovnou bez ptaní. Velká písmena a mezery při psaní nevadí.
+Stránka (v `config.json` jako `passHash`) obsahuje jen pomalý hash hesla (PBKDF2-SHA256, 200 000 kol, sůl `micro-portfolio:<id>`); heslo samo je jen v `private/passwords.json` a na kartičce. Telefon si pamatuje právě tenhle hash, takže po změně hesla (`--rotate`) se zeptá znovu.
+Je to „zámek na dveřích“, ne trezor: web je statický, takže kdo si otevře zdrojový kód, uvidí i počty kusů, a krátké heslo se při dost úsilí dá zkoušet offline. Pro tenhle účel stačí.
+**iPhone:** Safari smaže data stránky, když ji člověk 7 dní v Safari neotevře. Heslo se pak musí napsat znovu (je na kartičce). Pomůže „Přidat na plochu“, takové stránky se to netýká.
 
 ## Kartičky
 
 ```sh
 npm install                           # jednou (pro Chromium: npx playwright install chromium)
 # jednou: vytvoř private/names.json, např. {"p1": "Jméno1", "p2": "Jméno2"}
-npm run cards                         # vytvoří kódy, zapíše hashe do config.json a vyrenderuje karty
-npm run cards -- --rotate p2          # nový kód pro p2 (starý QR přestane fungovat)
+npm run cards                         # vytvoří hesla, zapíše hashe do config.json a vyrenderuje karty
+npm run cards -- --rotate p2          # nové heslo pro p2 (staré přestane fungovat, je potřeba vytisknout novou kartičku)
 npm run cards -- --base https://jina-adresa.cz/micro-portfolio   # jiná adresa v QR (jinak `baseUrl` z tools/people.json)
 ```
 
 `tools/people.json` určuje, které stránky se mají vyrobit, jejich barvu a maskota. Výstup je v `private/cards/` (necommituje se): `<id>-front.png`, `<id>-back.png`, `<id>-card.pdf` (85,6 × 54 mm, 2 strany) a `karticky-A4.pdf` pro domácí tisk.
-Po změně kódu je potřeba commitnout a pushnout aktualizovaný `config.json`.
+Po změně hesla je potřeba commitnout a pushnout aktualizovaný `config.json`.
 
-**QR kódy se nemění**, dokud sám nepoužiješ `--rotate`. Úpravy seznamu, cen i motivů je neovlivní. Nepřejmenovávej složky `p1/` a `p2/` (jsou v QR adrese). Nástroj odmítne vytvořit nový kód pro stránku, která už jeden má, a vypíše, jak ho obnovit.
+**QR kódy se nemění** (vedou jen na stránku, nejsou v nich žádné tajné údaje). Heslo se mění jen když sám použiješ `--rotate`. Úpravy seznamu, cen i motivů je neovlivní. Nepřejmenovávej složky `p1/` a `p2/` (jsou v QR adrese). Nástroj odmítne vytvořit nové heslo pro stránku, která už jedno má, a vypíše, jak ho obnovit (heslo je napsané na kartičce).

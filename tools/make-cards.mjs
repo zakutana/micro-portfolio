@@ -1,17 +1,19 @@
 #!/usr/bin/env node
 /*
- * Generates the access codes and the printable cards (front + back with QR code).
+ * Generates the passwords and the printable cards (front + back with QR code and the password).
  *
  *   npm install                      (once)
- *   npm run cards                    create codes if missing, update the hashes, render cards
- *   npm run cards -- --rotate p2     give page p2 a new code (the old QR STOPS working, only do this on purpose)
+ *   npm run cards                    create passwords if missing, update the hashes, render cards
+ *   npm run cards -- --rotate p2     give page p2 a new password (the old one STOPS working, only do this on purpose)
  *   npm run cards -- --base https://example.com/micro-portfolio
  *
- * The plain codes live ONLY in private/codes.json and in the QR codes (private/ is git-ignored).
+ * Each page has a 5-character password (lowercase letters + digits, without look-alikes such as 0/o or 1/l/i).
+ * It is typed once on the phone and then remembered there. The QR code only opens the page (with ?n=<name>).
+ * The plain passwords live ONLY in private/passwords.json and on the printed cards (private/ is git-ignored).
  * The people's names live ONLY in private/names.json, e.g. {"p1": "Name", "p2": "Other"}, and in the QR links.
- * The pages contain just a SHA-256 hash of "<id>:<code>".
+ * The pages contain just a slow PBKDF2-SHA256 hash ("passHash") of the password, salted with "micro-portfolio:<id>".
  */
-import { createHash, randomInt } from "node:crypto";
+import { pbkdf2Sync, randomInt } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
@@ -22,7 +24,7 @@ import { chromium } from "playwright";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PRIVATE = path.join(ROOT, "private");
 const OUT = path.join(PRIVATE, "cards");
-const CODES_FILE = path.join(PRIVATE, "codes.json");
+const PASSWORDS_FILE = path.join(PRIVATE, "passwords.json");
 
 const args = process.argv.slice(2);
 const argValue = (flag) => {
@@ -34,11 +36,13 @@ const people = JSON.parse(fs.readFileSync(path.join(ROOT, "tools/people.json"), 
 const baseUrl = (argValue("--base") ?? people.baseUrl).replace(/\/+$/, "");
 const rotate = new Set(args.flatMap((a, i) => (a === "--rotate" ? [args[i + 1]] : [])));
 
-/* ---------- Codes ---------- */
+/* ---------- Passwords ---------- */
 
-const ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"; // Crockford base32: no I, L, O, U
-const newCode = () => Array.from({ length: 12 }, () => ALPHABET[randomInt(ALPHABET.length)]).join("");
-const hashOf = (id, code) => createHash("sha256").update(`${id}:${code}`).digest("hex");
+const ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789"; // lowercase + digits, no 0/o, 1/l/i look-alikes
+const PBKDF2_ITERATIONS = 200_000; // must match assets/app.js
+const newPassword = () => Array.from({ length: 5 }, () => ALPHABET[randomInt(ALPHABET.length)]).join("");
+const hashOf = (id, password) =>
+  pbkdf2Sync(password, `micro-portfolio:${id}`, PBKDF2_ITERATIONS, 32, "sha256").toString("hex");
 
 fs.mkdirSync(OUT, { recursive: true });
 const NAMES_FILE = path.join(PRIVATE, "names.json");
@@ -48,35 +52,36 @@ for (const p of people.people) {
   p.name = names[p.id];
   if (!p.name) throw new Error(`No name for "${p.id}" in ${NAMES_FILE}`);
 }
-const codes = fs.existsSync(CODES_FILE) ? JSON.parse(fs.readFileSync(CODES_FILE, "utf8")) : {};
+const passwords = fs.existsSync(PASSWORDS_FILE) ? JSON.parse(fs.readFileSync(PASSWORDS_FILE, "utf8")) : {};
 
 for (const id of rotate) {
   if (!people.people.some((p) => p.id === id)) throw new Error(`--rotate "${id}": unknown page id`);
 }
 
-// First work everything out and validate it, then write: codes.json before the configs, so a failure half-way
-// can never leave a config pointing at a code that was not saved.
+// First work everything out and validate it, then write: passwords.json before the configs, so a failure half-way
+// can never leave a config pointing at a password that was not saved.
 const planned = [];
 for (const p of people.people) {
   const configPath = path.join(ROOT, p.id, "config.json");
-  const source = fs.readFileSync(configPath, "utf8");
-  const alreadyIssued = /"codeHash":\s*"[0-9a-f]{64}"/.test(source);
+  const cfg = JSON.parse(fs.readFileSync(configPath, "utf8"));
+  const alreadyIssued = /^[0-9a-f]{64}$/.test(cfg.passHash ?? "");
 
-  // Never silently replace a code that is already printed on a card: that would kill the QR.
-  if (!codes[p.id] && alreadyIssued && !rotate.has(p.id)) {
+  // Never silently replace a password that is already printed on a card.
+  if (!passwords[p.id] && alreadyIssued && !rotate.has(p.id)) {
     throw new Error(
-      `${p.id} already has a code in use, but it is missing from ${CODES_FILE}.\n` +
-        `The printed QR is still valid. Restore the code into ${CODES_FILE} (the QR link holds it as ?k=...),\n` +
-        `or run with --rotate ${p.id} if you really want a new code and new cards.`,
+      `${p.id} already has a password in use, but it is missing from ${PASSWORDS_FILE}.\n` +
+        `The printed card is still valid. Restore the password into ${PASSWORDS_FILE} (it is written on the card),\n` +
+        `or run with --rotate ${p.id} if you really want a new password and new cards.`,
     );
   }
-  if (!codes[p.id] || rotate.has(p.id)) codes[p.id] = newCode();
+  if (!passwords[p.id] || rotate.has(p.id)) passwords[p.id] = newPassword();
 
-  if (!/"codeHash":\s*"[0-9a-f]*"/.test(source)) throw new Error(`${configPath}: no codeHash field found`);
-  planned.push({ configPath, next: source.replace(/"codeHash":\s*"[0-9a-f]*"/, `"codeHash": "${hashOf(p.id, codes[p.id])}"`) });
+  const next = { passHash: hashOf(p.id, passwords[p.id]) };
+  for (const [key, value] of Object.entries(cfg)) if (key !== "passHash" && key !== "codeHash") next[key] = value;
+  planned.push({ configPath, text: JSON.stringify(next, null, 2) + "\n" });
 }
-fs.writeFileSync(CODES_FILE, JSON.stringify(codes, null, 2) + "\n");
-for (const { configPath, next } of planned) fs.writeFileSync(configPath, next);
+fs.writeFileSync(PASSWORDS_FILE, JSON.stringify(passwords, null, 2) + "\n");
+for (const { configPath, text } of planned) fs.writeFileSync(configPath, text);
 
 /* ---------- Cards ---------- */
 
@@ -134,14 +139,17 @@ function cardInner(person, side) {
       <div class="star s1"><svg viewBox="0 0 24 24"><polygon points="12,1.5 15,8.6 22.5,9.2 16.8,14.1 18.6,21.5 12,17.5 5.4,21.5 7.2,14.1 1.5,9.2 9,8.6" fill="#ffd84a" stroke="#f0a91c" stroke-width="1.2" stroke-linejoin="round"/></svg></div><div class="star s2"><svg viewBox="0 0 24 24"><polygon points="12,1.5 15,8.6 22.5,9.2 16.8,14.1 18.6,21.5 12,17.5 5.4,21.5 7.2,14.1 1.5,9.2 9,8.6" fill="#ffd84a" stroke="#f0a91c" stroke-width="1.2" stroke-linejoin="round"/></svg></div><div class="star s3"><svg viewBox="0 0 24 24"><polygon points="12,1.5 15,8.6 22.5,9.2 16.8,14.1 18.6,21.5 12,17.5 5.4,21.5 7.2,14.1 1.5,9.2 9,8.6" fill="#ffd84a" stroke="#f0a91c" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
     </div>`;
   }
-  const url = `${baseUrl}/${person.id}/?k=${codes[person.id]}&n=${encodeURIComponent(person.name)}`;
+  const url = `${baseUrl}/${person.id}/?n=${encodeURIComponent(person.name)}`;
   return `<div class="card back" style="${style}">
     <div class="b-left">
       <div class="b-mascot ${person.mascot}">${mascot}</div>
       <div class="b-scan">Naskenuj<br>kamerou<br>mobilu</div>
       <div class="b-foot">Micro portfolio<br><b>${person.name}</b></div>
     </div>
-    <div class="b-qr">${qrSvg(url)}</div>
+    <div class="b-right">
+      <div class="b-qr">${qrSvg(url)}</div>
+      <div class="b-pass"><span>heslo</span><b>${passwords[person.id]}</b></div>
+    </div>
   </div>`;
 }
 
@@ -165,12 +173,16 @@ const CSS = `
   .front .s3 { right: 12mm; top: 5mm; width: 4mm; height: 4mm; }
 
   .back { display: flex; align-items: center; justify-content: space-between; padding: 0 6mm 0 6.5mm; }
-  .back .b-left { display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; height: 42mm; width: 28mm; }
+  .back .b-left { display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; height: 40mm; width: 28mm; }
   .back .b-mascot { width: 13mm; height: 13mm; filter: drop-shadow(0 .6mm 0 rgba(0,0,0,.18)); }
   .back .b-scan { font-size: 4.3mm; font-weight: 700; line-height: 1.15; color: var(--title); text-shadow: var(--titleShadow); }
   .back .b-foot { font-size: 2.6mm; font-weight: 500; line-height: 1.25; color: var(--sub); }
   .back .b-foot b { font-size: 3.4mm; font-weight: 700; }
-  .back .b-qr { width: 42mm; height: 42mm; padding: 3.5mm; background: var(--panel); border: .8mm solid var(--panelBorder); border-radius: 3mm; box-shadow: 0 .8mm 0 rgba(0,0,0,.18); }
+  .back .b-right { display: flex; flex-direction: column; align-items: center; gap: 2mm; }
+  .back .b-qr { width: 36mm; height: 36mm; padding: 3mm; background: var(--panel); border: .8mm solid var(--panelBorder); border-radius: 3mm; box-shadow: 0 .8mm 0 rgba(0,0,0,.18); }
+  .back .b-pass { display: flex; align-items: baseline; gap: 2.2mm; padding: .9mm 3.6mm; background: var(--panel); border: .6mm solid var(--panelBorder); border-radius: 2.2mm; color: var(--ink); box-shadow: 0 .6mm 0 rgba(0,0,0,.18); }
+  .back .b-pass span { font-size: 2.6mm; font-weight: 600; text-transform: uppercase; letter-spacing: .25mm; }
+  .back .b-pass b { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; font-size: 5.6mm; font-weight: 800; letter-spacing: .9mm; }
 
   .sheet { width: 210mm; height: 297mm; padding: 18mm 0 0 17mm; display: flex; flex-direction: column; gap: 12mm; background: #fff; }
   .sheet .row { display: flex; gap: 10mm; align-items: center; }
