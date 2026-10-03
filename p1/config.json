@@ -37,7 +37,8 @@
           "price": 631.046191
         }
       ],
-      "qty": 1
+      "qty": 1,
+      "sharesOutstanding": 24400000
     },
     {
       "name": "Sui",
@@ -56,6 +57,46 @@
         }
       ],
       "qty": 10
+    },
+    {
+      "name": "Tesla",
+      "symbol": "TSLA",
+      "logo": "../assets/logos/tesla.png",
+      "url": "https://www.tesla.com",
+      "qty": 0.2,
+      "source": {
+        "type": "dexscreener",
+        "chain": "solana",
+        "address": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB"
+      },
+      "sharesOutstanding": 3237000000,
+      "lots": [
+        {
+          "date": "2026-10-03T09:33:34.666Z",
+          "qty": 0.2,
+          "price": 8054.679487
+        }
+      ]
+    },
+    {
+      "name": "SpaceX",
+      "symbol": "SPCX",
+      "logo": "../assets/logos/spacex.png",
+      "url": "https://www.spacex.com",
+      "qty": 0.2,
+      "source": {
+        "type": "dexscreener",
+        "chain": "solana",
+        "address": "Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8"
+      },
+      "sharesOutstanding": 13570000000,
+      "lots": [
+        {
+          "date": "2026-10-03T09:33:34.666Z",
+          "qty": 0.2,
+          "price": 3444.558204
+        }
+      ]
     }
   ]
 }

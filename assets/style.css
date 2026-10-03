@@ -918,6 +918,10 @@ body {
   min-width: 0;
 }
 
+.cell.wide {
+  grid-column: 1 / -1;
+}
+
 .cell .k {
   color: var(--muted);
   font-size: calc(var(--base-size) * 0.72);

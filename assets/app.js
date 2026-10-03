@@ -168,7 +168,7 @@
       return new Map(
         rows
           .filter((r) => isPrice(r.current_price))
-          .map((r) => [r.id, { price: r.current_price, change24: r.price_change_percentage_24h }]),
+          .map((r) => [r.id, { price: r.current_price, change24: r.price_change_percentage_24h, marketCap: r.market_cap }]),
       );
     } catch {
       return new Map();
@@ -219,23 +219,28 @@
       const key = sourceKey(h);
       let price = null;
       let change24 = null;
+      let marketCap = null;
       if (h.source.type === "coingecko") {
         const hit = cg.get(h.source.id);
         price = hit?.price ?? null;
         change24 = hit?.change24 ?? null;
+        marketCap = hit?.marketCap ?? null;
       } else {
         const hit = dexByKey.get(key);
         if (hit && isPrice(hit.usd) && isPrice(fx)) {
           price = hit.usd * fx;
           change24 = hit.change24 ?? null;
+          // a tokenised stock: market cap of the company = live price x shares outstanding (set in config.json)
+          if (isPrice(h.sharesOutstanding)) marketCap = price * h.sharesOutstanding;
         }
       }
+      const cap = isPrice(marketCap) ? marketCap : null;
       if (isPrice(price)) {
         fresh[key] = price;
-        return { holding: h, price, change24: Number.isFinite(change24) ? change24 : null, live: true };
+        return { holding: h, price, change24: Number.isFinite(change24) ? change24 : null, marketCap: cap, live: true };
       }
       const stale = cachedPrices[key];
-      return { holding: h, price: isPrice(stale) ? stale : null, change24: null, live: false };
+      return { holding: h, price: isPrice(stale) ? stale : null, change24: null, marketCap: null, live: false };
     });
 
     const gotSomething = Object.keys(fresh).length > 0;
@@ -256,6 +261,16 @@
   function formatUnitPrice(v) {
     const digits = v >= 1000 ? 0 : v >= 1 ? 2 : 4;
     return `${nf({ minimumFractionDigits: digits, maximumFractionDigits: digits }).format(v)} Kč`;
+  }
+  /* Czech short scale: mil. = million, mld. = billion, bil. = trillion */
+  function formatBig(v) {
+    for (const [n, label] of [[1e12, "bil."], [1e9, "mld."], [1e6, "mil."]]) {
+      if (v >= n) {
+        const x = v / n;
+        return `${nf({ maximumFractionDigits: x >= 100 ? 0 : 1 }).format(x)} ${label} Kč`;
+      }
+    }
+    return formatCzk(v);
   }
   const formatQty = (q) => nf({ maximumFractionDigits: 4 }).format(q);
 
@@ -338,12 +353,14 @@
     ["pl", "Zisk / ztráta"],
     ["today", "Za 24 hodin"],
     ["share", "Podíl"],
+    ["cap", "Tržní kapitalizace"],
   ];
   const GLOSSARY = [
     ["Cena za kus", "Kolik stojí jedna jednotka právě teď. Mění se každou chvíli."],
     ["Nákupní cena", "Průměrná cena, za kterou byly ty kusy koupené. Když nakoupíš ve dvou dnech za různé ceny, spočítá se průměr."],
     ["Zisk / ztráta", "Rozdíl mezi dnešní hodnotou a tím, co sis do toho vložila. Plus znamená, že to roste, minus, že je to teď míň. Dokud nic neprodáš, je to jen na papíře."],
     ["Za 24 hodin", "O kolik se cena změnila za poslední den. Jeden špatný den ještě nic neznamená."],
+    ["Tržní kapitalizace", "Kolik by stála všechna ta mince nebo všechny akcie firmy dohromady. Větší je obvykle stabilnější a menší může kolísat víc."],
     ["Podíl", "Kolik procent celého portfolia tvoří tahle položka. Když je peníze rozložené do víc věcí, jedna špatná zpráva nepokazí všechno."],
   ];
 
@@ -371,7 +388,7 @@
       const detail = el("div", "detail");
       const cells = {};
       for (const [key, label] of DETAIL_CELLS) {
-        const cell = el("div", "cell");
+        const cell = el("div", key === "cap" ? "cell wide" : "cell");
         const v = el("span", "v", "—");
         cell.append(el("span", "k", label), v);
         detail.append(cell);
@@ -516,6 +533,7 @@
       cells.qty.textContent = formatQty(pos.qty);
       cells.avg.textContent = pos.cost === null ? "—" : formatUnitPrice(pos.cost / pos.qty);
       cells.share.textContent = value === null || total <= 0 ? "—" : formatPct(value / total, { signed: false });
+      cells.cap.textContent = item.marketCap === null ? "—" : formatBig(item.marketCap);
 
       const today = cells.today;
       today.className = "v";
