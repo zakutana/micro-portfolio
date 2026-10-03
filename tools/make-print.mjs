@@ -157,7 +157,7 @@ const CHIP = `<svg viewBox="0 0 78 58" xmlns="http://www.w3.org/2000/svg"><rect 
 function frontPage(p, i) {
   const pal = PALETTES[p.palette];
   const hero = p.mascot === "waddle" ? "hero waddle" : "hero kirby";
-  const no = `1010 2026 0000 ${String(i + 1).padStart(4, "0")}`;
+  const no = "1010 2026 1010 2026"; // the same on both cards: nobody is "number two"
   return `<section class="page front" style="background:${pal.front.stops[1][1]}">
     ${gradientSvg(PAGE_W, PAGE_H, pal.front)}
     ${guilloche(71, 67)}
