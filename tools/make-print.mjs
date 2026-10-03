@@ -167,7 +167,7 @@ function frontPage(p, i) {
     <div class="chip">${CHIP}</div>
     <div class="num">${no}</div>
     <div class="own"><small>Majitel</small><b>${p.name.toUpperCase()}</b></div>
-    <div class="since">Start ${START}</div>
+    <div class="since">Investor od ${START}</div>
     <div class="${hero}">${MASCOT[p.mascot]}</div>
   </section>`;
 }
