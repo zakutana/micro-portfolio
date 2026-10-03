@@ -106,6 +106,26 @@
   /* What the phone remembers is the page's password hash itself: a changed password locks the page again. */
   const isUnlocked = () => typeof cfg.passHash === "string" && store.get("auth") === cfg.passHash;
 
+  /* The page data could not be loaded at all (no signal): say so and offer to try again. */
+  function showLoadError() {
+    const lock = $("lock");
+    lock.replaceChildren();
+    const icon = el("div", "lock-icon", "\u{1F4F6}");
+    icon.setAttribute("aria-hidden", "true");
+    const retry = el("button", "pw-btn", "Zkusit znovu");
+    retry.type = "button";
+    retry.addEventListener("click", () => location.reload());
+    const form = el("div", "pw-form");
+    form.append(retry);
+    lock.append(
+      icon,
+      el("h2", "", "Stránka se nenačetla"),
+      el("p", "", "Zkontroluj, jestli máš internet, a zkus to znovu."),
+      form,
+    );
+    lock.hidden = false;
+  }
+
   function showLock(onUnlock) {
     const lock = $("lock");
     lock.replaceChildren();
@@ -772,7 +792,7 @@
 
     cfg = await loadConfig();
     if (!cfg) {
-      $("lock").hidden = false; // the config could not be loaded at all: show the generic lock text
+      showLoadError();
       return;
     }
     if (isUnlocked()) return openContent();
