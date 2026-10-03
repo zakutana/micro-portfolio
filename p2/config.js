@@ -8,7 +8,7 @@
  */
 window.MICRO_PORTFOLIO = {
   id: "p2",
-  codeHash: "1f0331c86b66ce355766947ccab64a1359e3b2f2d7d45c3d37a82be98c163087",
+  codeHash: "d691e700744ea4779aab6fe3713e9c3a166cec894548794bf493dfb923149596",
   defaultTheme: "kirby",
   holdings: [
     {
