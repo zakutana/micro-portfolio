@@ -51,9 +51,9 @@ for (const p of people.people) {
 const codes = fs.existsSync(CODES_FILE) ? JSON.parse(fs.readFileSync(CODES_FILE, "utf8")) : {};
 
 for (const p of people.people) {
-  const configPath = path.join(ROOT, p.id, "config.js");
+  const configPath = path.join(ROOT, p.id, "config.json");
   const source = fs.readFileSync(configPath, "utf8");
-  const alreadyIssued = /codeHash:\s*"[0-9a-f]{64}"/.test(source);
+  const alreadyIssued = /"codeHash":\s*"[0-9a-f]{64}"/.test(source);
 
   // Never silently replace a code that is already printed on a card: that would kill the QR.
   if (!codes[p.id] && alreadyIssued && !rotate.has(p.id)) {
@@ -65,8 +65,8 @@ for (const p of people.people) {
   }
   if (!codes[p.id] || rotate.has(p.id)) codes[p.id] = newCode();
 
-  if (!/codeHash:\s*"[0-9a-f]*"/.test(source)) throw new Error(`${configPath}: no codeHash field found`);
-  fs.writeFileSync(configPath, source.replace(/codeHash:\s*"[0-9a-f]*"/, `codeHash: "${hashOf(p.id, codes[p.id])}"`));
+  if (!/"codeHash":\s*"[0-9a-f]*"/.test(source)) throw new Error(`${configPath}: no codeHash field found`);
+  fs.writeFileSync(configPath, source.replace(/"codeHash":\s*"[0-9a-f]*"/, `"codeHash": "${hashOf(p.id, codes[p.id])}"`));
 }
 fs.writeFileSync(CODES_FILE, JSON.stringify(codes, null, 2) + "\n");
 

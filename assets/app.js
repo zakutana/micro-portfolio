@@ -2,8 +2,11 @@
 (() => {
   "use strict";
 
-  const cfg = window.MICRO_PORTFOLIO;
   const icons = window.MICRO_ICONS;
+  const root = document.documentElement;
+  const PAGE_ID = root.dataset.id; // fixed per page, set in its index.html
+  const DEFAULT_THEME = root.dataset.theme;
+  let cfg = null; // { codeHash, holdings } – loaded fresh from config.json on every visit
 
   const THEMES = [
     { id: "minecraft", label: "Minecraft", color: "#7a5230" },
@@ -20,7 +23,7 @@
   ];
   const REFRESH_MS = 60_000;
 
-  const NS = `micro-portfolio:${cfg.id}`;
+  const NS = `micro-portfolio:${PAGE_ID}`;
   const store = {
     get(key) {
       try {
@@ -40,14 +43,12 @@
 
   /* ---------- Theme (applied immediately, before first paint) ---------- */
 
-  const root = document.documentElement;
-
   const themeById = (id) => THEMES.find((t) => t.id === id);
 
   function currentTheme() {
     const saved = store.get("theme");
     if (themeById(saved)) return saved;
-    return themeById(cfg.defaultTheme) ? cfg.defaultTheme : THEMES[0].id;
+    return themeById(DEFAULT_THEME) ? DEFAULT_THEME : THEMES[0].id;
   }
 
   function applyTheme(id) {
@@ -63,6 +64,24 @@
 
   applyTheme(currentTheme());
 
+  /* ---------- Config (never served from the browser cache) ---------- */
+
+  async function loadConfig() {
+    try {
+      const res = await fetch("config.json", { cache: "no-cache" }); // always revalidates with the server
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      store.set("config", JSON.stringify(data));
+      return data;
+    } catch {
+      try {
+        return JSON.parse(store.get("config")); // offline: last config we saw
+      } catch {
+        return null;
+      }
+    }
+  }
+
   /* ---------- Access code ---------- */
 
   async function sha256Hex(text) {
@@ -76,7 +95,7 @@
     const candidates = [fromUrl, store.get("key")].filter(Boolean).map((c) => c.trim());
     for (const code of candidates) {
       try {
-        if ((await sha256Hex(`${cfg.id}:${code}`)) === cfg.codeHash) {
+        if ((await sha256Hex(`${PAGE_ID}:${code}`)) === cfg.codeHash) {
           store.set("key", code);
           return true;
         }
@@ -103,7 +122,7 @@
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
     try {
-      const res = await fetch(url, { signal: controller.signal });
+      const res = await fetch(url, { signal: controller.signal, cache: "no-store" });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return await res.json();
     } finally {
@@ -319,7 +338,8 @@
   async function start() {
     buildThemePicker();
 
-    if (!(await isUnlocked())) {
+    cfg = await loadConfig();
+    if (!cfg || !(await isUnlocked())) {
       $("lock").hidden = false;
       return;
     }

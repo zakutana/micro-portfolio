@@ -18,35 +18,36 @@ Jméno se na stránku dostane jen z odkazu v QR kódu (`n=`), v repu není nikde
 
 ## Změna portfolia
 
-Před každým nasazením spusť `node tools/bump-version.mjs` (nová verze souborů, ať si telefon nespojí staré soubory z mezipaměti s novými).
+Před nasazením změny v `assets/` spusť `node tools/bump-version.mjs` (nová verze souborů, ať si telefon nespojí staré soubory z mezipaměti s novými). Změna jen v `config.json` to nepotřebuje.
 
-Otevři `p1/config.js` (nebo `p2/config.js`), uprav seznam `holdings`, commit a push. Každá položka:
+Otevři `p1/config.json` (nebo `p2/config.json`), uprav seznam `holdings`, commit a push. Seznam si stránka stahuje čerstvý při každém otevření, takže se změna ukáže hned, bez čekání na mezipaměť telefonu. Každá položka:
 
-```js
+```json
 {
-  name: "Sui",                       // název na stránce
-  symbol: "SUI",                     // malý popisek pod názvem
-  logo: "../assets/logos/sui.png",   // logo (soubor dej do assets/logos/); bez loga se ukáže písmeno
-  url: "https://sui.io",             // kam se otevře po kliknutí
-  qty: 10,                           // kolik kusů má (stránka ukáže jen hodnotu v Kč)
-  source: { type: "coingecko", id: "sui" },
+  "name": "Sui",                       // název na stránce
+  "symbol": "SUI",                     // malý popisek pod názvem
+  "logo": "../assets/logos/sui.png",   // logo (soubor dej do assets/logos/); bez loga se ukáže písmeno
+  "url": "https://sui.io",             // kam se otevře po kliknutí
+  "qty": 10,                           // kolik kusů má (stránka ukáže jen hodnotu v Kč)
+  "source": { "type": "coingecko", "id": "sui" }
 }
 ```
+(Komentáře `//` tu jsou jen pro vysvětlení, v souboru JSON být nesmí.)
 
 Zdroje živé ceny (obojí zdarma, bez API klíče):
 
-- `{ type: "coingecko", id: "<id mince>" }` – krypto, cena rovnou v Kč. Id je v URL na coingecko.com (`/coins/<id>`).
-- `{ type: "dexscreener", chain: "solana", address: "<adresa tokenu>" }` – tokenizované akcie (např. RoboStrategy **BOT**) a menší tokeny. Cena je v USD a převádí se na Kč aktuálním kurzem. Vybere se pár s největší likviditou. Tokenizované akcie se obchodují 24/7, takže cena se hýbe i o víkendu.
+- `{ "type": "coingecko", "id": "<id mince>" }` – krypto, cena rovnou v Kč. Id je v URL na coingecko.com (`/coins/<id>`).
+- `{ "type": "dexscreener", "chain": "solana", "address": "<adresa tokenu>" }` – tokenizované akcie (např. RoboStrategy **BOT**) a menší tokeny. Cena je v USD a převádí se na Kč aktuálním kurzem. Vybere se pár s největší likviditou. Tokenizované akcie se obchodují 24/7, takže cena se hýbe i o víkendu.
 
 Když se ceny nepodaří načíst, stránka ukáže poslední známé (uložené v telefonu) a upozorní na to.
 
 ## Motivy
 
-Minecraft, Kirby, Waddle Dee, Pokémon. Volba se ukládá do telefonu (`localStorage`), takže zůstane i po zavření stránky. `p2` začíná s Kirby (růžová), `p1` s Waddle Dee (modrá s oranžovou). Výchozí motiv je `defaultTheme` v configu. Motivy jsou sady CSS proměnných v `assets/style.css`.
+Minecraft, Kirby, Waddle Dee, Pokémon. Volba se ukládá do telefonu (`localStorage`), takže zůstane i po zavření stránky. `p2` začíná s Kirby (růžová), `p1` s Waddle Dee (modrá s oranžovou). Výchozí motiv je atribut `data-theme` v `index.html` stránky. Motivy jsou sady CSS proměnných v `assets/style.css`.
 
 ## Ochrana kódem
 
-Každá stránka se odemkne jen s `?k=<kód>`, který je v QR kódu. Po prvním otevření si ho telefon zapamatuje. Stránka obsahuje jen SHA-256 hash `"<id>:<kód>"`, plný kód je pouze v QR a v `private/codes.json`.
+Každá stránka se odemkne jen s `?k=<kód>`, který je v QR kódu. Po prvním otevření si ho telefon zapamatuje. Stránka (v `config.json`) obsahuje jen SHA-256 hash `"<id>:<kód>"`, plný kód je pouze v QR a v `private/codes.json`.
 Je to „zámek na dveřích“, ne trezor: web je statický, takže kdo si otevře zdrojový kód, uvidí i počty kusů. Pro tenhle účel stačí.
 
 ## Kartičky
@@ -54,11 +55,11 @@ Je to „zámek na dveřích“, ne trezor: web je statický, takže kdo si otev
 ```sh
 npm install                           # jednou (pro Chromium: npx playwright install chromium)
 # jednou: vytvoř private/names.json, např. {"p1": "Jméno1", "p2": "Jméno2"}
-npm run cards                         # vytvoří kódy, zapíše hashe do config.js a vyrenderuje karty
+npm run cards                         # vytvoří kódy, zapíše hashe do config.json a vyrenderuje karty
 npm run cards -- --rotate p2          # nový kód pro p2 (starý QR přestane fungovat)
 ```
 
 Výstup je v `private/cards/` (necommituje se): `<id>-front.png`, `<id>-back.png`, `<id>-card.pdf` (85,6 × 54 mm, 2 strany) a `karticky-A4.pdf` pro domácí tisk.
-Po změně kódu je potřeba commitnout a pushnout aktualizovaný `config.js`.
+Po změně kódu je potřeba commitnout a pushnout aktualizovaný `config.json`.
 
 **QR kódy se nemění**, dokud sám nepoužiješ `--rotate`. Úpravy seznamu, cen i motivů je neovlivní. Nepřejmenovávej složky `p1/` a `p2/` (jsou v QR adrese). Nástroj odmítne vytvořit nový kód pro stránku, která už jeden má, a vypíše, jak ho obnovit.

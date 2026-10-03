@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
- * Run before every deploy (after changing config.js, assets/*): gives the page a new "?v=" so phones
+ * Run before every deploy (after changing anything in assets/; config.json alone does not need it): gives the page a new "?v=" so phones
  * never combine cached old files with new ones.   node tools/bump-version.mjs
  */
 import fs from "node:fs";

@@ -1,0 +1,39 @@
+{
+  "codeHash": "23f1e8281ab31dedc77aceaa4eec0194400d4bc8ec6a9b745198a43c4417d293",
+  "holdings": [
+    {
+      "name": "Collector Crypt",
+      "symbol": "CARDS",
+      "logo": "../assets/logos/cards.png",
+      "url": "https://collectorcrypt.com",
+      "qty": 100,
+      "source": {
+        "type": "coingecko",
+        "id": "collector-crypt"
+      }
+    },
+    {
+      "name": "RoboStrategy",
+      "symbol": "BOT",
+      "logo": "../assets/logos/bot.png",
+      "url": "https://robostrategy.co",
+      "qty": 1,
+      "source": {
+        "type": "dexscreener",
+        "chain": "solana",
+        "address": "BoTx8y9ynfdxf5ZjWtCoBVkff52qKA82ysaLU8ZM6d8T"
+      }
+    },
+    {
+      "name": "Sui",
+      "symbol": "SUI",
+      "logo": "../assets/logos/sui.png",
+      "url": "https://sui.io",
+      "qty": 10,
+      "source": {
+        "type": "coingecko",
+        "id": "sui"
+      }
+    }
+  ]
+}
