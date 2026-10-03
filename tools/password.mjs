@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 /*
- * The puzzle password: the password is hidden in the card number, the key is the child's name.
+ * The puzzle password: it is hidden in the card number, the key is the child's name.
  *
- *   node tools/password.mjs set p1 bandy     set page p1's password (3-7 letters a-z); writes private/passwords.json
- *                                            and the hash (passHash) + its length (passLen) into p1/config.json
- *   node tools/password.mjs card             print the card numbers and check that they decode back
- *   node tools/password.mjs remove p1        take the password off the page again (the page opens directly)
+ *   node tools/password.mjs set p1        set page p1's password; writes private/passwords.json and the hash (passHash)
+ *                                         into p1/config.json
+ *   node tools/password.mjs card          print the card numbers and check them
+ *   node tools/password.mjs remove p1     take the password off the page again (the page opens directly)
  *
- * How the number is made: every letter of the password is a number (a=1 ... z=26). The letters of the name
- * (also a=1 ... z=26, repeated over and over) are added to it; if the result is above 26, take 26 away.
- * Every result is written as two digits. Those pairs come first in the 16-digit card number, the rest is the
- * start date as DDMMYY (it means nothing). The child subtracts the name letters again and turns the numbers into letters.
+ * How it works (the child's name has 4 letters, e.g. ANIA): the 16-digit card number has four groups of four digits.
+ * Adding up the digits of a group gives one number, and that number is the place of the letter in the alphabet
+ * (A = 1, B = 2 ... Z = 26): ANIA -> 1, 14, 9, 1. The password is those numbers written one after another: 11491.
+ * The digits of each group are made up from the name and the page id, so the number on the card is always the same.
  * This is a game, not security: the name is on the card and in the QR link, and config.json is public anyway.
  */
 import { pbkdf2Sync } from "node:crypto";
@@ -22,57 +22,61 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PRIVATE = path.join(ROOT, "private");
 const PASSWORDS_FILE = path.join(PRIVATE, "passwords.json");
 const PBKDF2_ITERATIONS = 200_000; // must match assets/app.js
-// the filler digits: the start date as DDMMYY, from tools/people.json
-export function startFiller() {
-  const f = path.join(ROOT, "tools/people.json");
-  const date = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, "utf8")).startDate : null;
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date ?? "")) return "101026";
-  const [y, m, d] = date.split("-");
-  return `${d}${m}${y.slice(2)}`;
-}
-const FILLER = "101026"; // default: the date DDMMYY (make-print.mjs passes the start date of the cards)
 
-const letters = (s) =>
-  s
+const nameLetters = (name) =>
+  name
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
     .replace(/[^a-z]/g, "");
-const val = (ch) => ch.charCodeAt(0) - 96; // a=1 ... z=26
+const place = (ch) => ch.charCodeAt(0) - 96; // a = 1 ... z = 26
 
-export function cardNumber(password, name, filler = startFiller()) {
-  const pw = letters(password);
-  const key = letters(name);
-  if (pw.length < 3 || pw.length > 7 || pw !== password) throw new Error("The password must be 3-7 letters a-z");
-  if (!key) throw new Error("The name has no letters to use as a key");
-  let digits = "";
-  for (let i = 0; i < pw.length; i++) {
-    const n = ((val(pw[i]) + val(key[i % key.length]) - 1) % 26) + 1;
-    digits += String(n).padStart(2, "0");
-  }
-  digits = (digits + filler.repeat(3)).slice(0, 16);
-  return digits.match(/.{4}/g).join(" ");
+export function positions(name) {
+  const letters = nameLetters(name);
+  if (letters.length !== 4) throw new Error(`The name must have exactly 4 letters (it has ${letters.length}: "${name}")`);
+  return [...letters].map(place);
 }
 
-export function decode(number, name, length) {
-  const key = letters(name);
-  const d = number.replace(/\s/g, "");
-  let out = "";
-  for (let i = 0; i < length; i++) {
-    const n = Number(d.slice(i * 2, i * 2 + 2));
-    out += String.fromCharCode(96 + ((n - val(key[i % key.length]) + 25) % 26) + 1);
-  }
-  return out;
+/* the same "random" digits every time: a tiny seeded generator */
+function seeded(seed) {
+  let h = 2166136261;
+  for (const c of seed) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
+  return () => {
+    h ^= h << 13;
+    h ^= h >>> 17;
+    h ^= h << 5;
+    return (h >>> 0) / 4294967296;
+  };
 }
+
+/* four digits whose sum is n: start from 0000 and add 1 to a random digit n times */
+function group(n, rnd) {
+  const d = [0, 0, 0, 0];
+  for (let i = 0; i < n; ) {
+    const k = Math.floor(rnd() * 4);
+    if (d[k] < 9) {
+      d[k]++;
+      i++;
+    }
+  }
+  return d.join("");
+}
+
+export function cardNumber(name, id) {
+  const rnd = seeded(`${id}:${nameLetters(name)}`);
+  return positions(name).map((n) => group(n, rnd)).join(" ");
+}
+
+export const passwordOf = (name) => positions(name).join("");
+export const solve = (number) => number.split(" ").map((g) => [...g].reduce((a, d) => a + Number(d), 0)).join("");
 
 export const hashOf = (id, password) => pbkdf2Sync(password, `micro-portfolio:${id}`, PBKDF2_ITERATIONS, 32, "sha256").toString("hex");
 
 const readJson = (f, fallback) => (fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, "utf8")) : fallback);
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const [cmd, id, password] = process.argv.slice(2);
+  const [cmd, id] = process.argv.slice(2);
   const names = readJson(path.join(PRIVATE, "names.json"), {});
-  const passwords = readJson(PASSWORDS_FILE, {});
   const configPath = (pid) => path.join(ROOT, pid, "config.json");
 
   if (cmd === "set" || cmd === "remove") {
@@ -80,26 +84,29 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     const cfg = JSON.parse(fs.readFileSync(configPath(id), "utf8"));
     delete cfg.passHash;
     delete cfg.passLen;
+    const passwords = readJson(PASSWORDS_FILE, {});
     if (cmd === "set") {
       if (!names[id]) throw new Error(`No name for ${id} in private/names.json`);
-      cardNumber(password ?? "", names[id]); // validates
+      const password = passwordOf(names[id]);
       passwords[id] = password;
       fs.mkdirSync(PRIVATE, { recursive: true });
       fs.writeFileSync(PASSWORDS_FILE, JSON.stringify(passwords, null, 2) + "\n");
-      const next = { passHash: hashOf(id, password), passLen: password.length };
+      const next = { passHash: hashOf(id, password) };
       for (const [k, v] of Object.entries(cfg)) next[k] = v;
       fs.writeFileSync(configPath(id), JSON.stringify(next, null, 2) + "\n");
-      console.log(`${id}: password set, card number ${cardNumber(password, names[id])}`);
+      console.log(`${id}: password set (${password}), card number ${cardNumber(names[id], id)}`);
     } else {
+      delete passwords[id];
+      fs.writeFileSync(PASSWORDS_FILE, JSON.stringify(passwords, null, 2) + "\n");
       fs.writeFileSync(configPath(id), JSON.stringify(cfg, null, 2) + "\n");
       console.log(`${id}: no password`);
     }
   } else if (cmd === "card") {
-    for (const [pid, pw] of Object.entries(passwords)) {
-      const n = cardNumber(pw, names[pid]);
-      console.log(`${pid}: ${n}  ->  ${decode(n, names[pid], pw.length)}`);
+    for (const [pid, name] of Object.entries(names)) {
+      const n = cardNumber(name, pid);
+      console.log(`${pid}: ${n}  ->  ${positions(name).join(", ")}  ->  ${solve(n)}`);
     }
   } else {
-    console.log("usage: node tools/password.mjs set <id> <password> | card | remove <id>");
+    console.log("usage: node tools/password.mjs set <id> | card | remove <id>");
   }
 }

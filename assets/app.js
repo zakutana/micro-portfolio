@@ -142,14 +142,12 @@
     const title = el("h2", "", name ? `Ahoj ${name}!` : "Tahle stránka je jen pro tebe");
     const hint = el("p", "", "Heslo je ukryté v čísle na tvé kartičce. Rozluštíš ho a napíšeš sem. Stačí jednou, příště se stránka otevře sama.");
     const help = el("details", "lock-help");
-    const digits = Number.isInteger(cfg.passLen) ? cfg.passLen * 2 : 10;
-    const pairs = digits / 2;
     const steps = el("ol");
     for (const text of [
-      `Vezmi prvních ${digits} číslic z čísla na kartě a rozděl je na ${pairs} dvojic.`,
-      `Klíčem je tvoje jméno${name ? ` (${name})` : ""}: každému písmenu přiřaď číslo, A = 1, B = 2, C = 3 … Z = 26. Písmena jména opakuj dokola, dokud je potřebuješ.`,
-      "Od každé dvojice odečti číslo písmene ze jména. Když vyjde nula nebo míň, přičti 26.",
-      "Z výsledných čísel udělej písmena (1 = A, 2 = B …). To je heslo.",
+      "Číslo na kartě má čtyři čtveřice číslic.",
+      "V každé čtveřici sečti všechny čtyři číslice. Např. 0405 je 0 + 4 + 0 + 5 = 9.",
+      `Z každé čtveřice ti vyjde jedno číslo. Je to pořadí jednoho písmene tvého jména v abecedě (A = 1, B = 2, C = 3 … Z = 26)${name ? `: písmena jména ${name} v tom pořadí, jak jdou za sebou` : ""}.`,
+      "Heslo jsou ta čtyři čísla napsaná za sebou, bez mezer. Např. 3, 12, 5, 7 je 31257.",
     ]) steps.append(el("li", "", text));
     help.append(el("summary", "", "Jak to rozluštit?"), steps);
 
