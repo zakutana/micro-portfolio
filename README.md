@@ -116,4 +116,8 @@ npm run cards -- --base https://jina-adresa.cz/micro-portfolio   # jiná adresa 
 `tools/people.json` určuje, které stránky se mají vyrobit, jejich barvu a maskota. Výstup je v `private/cards/` (necommituje se): `<id>-front.png`, `<id>-back.png`, `<id>-card.pdf` (85,6 × 54 mm, 2 strany) a `karticky-A4.pdf` pro domácí tisk.
 Po změně hesla je potřeba commitnout a pushnout aktualizovaný `config.json`.
 
+### Tiskové PDF pro výrobu plastových karet
+
+`npm run print` (potřebuje Ghostscript `gs`, poppler-utils, Python 3 s `pikepdf` a `opencv-python-headless`) vyrobí `private/cards/karticky-tisk-CMYK.pdf`: 4 stránky 91,5 × 60 mm se spadávkou 3 mm (hotová karta 85,5 × 54 mm, rohy bez zaoblení), pořadí karta 1 přední, zadní, karta 2 přední, zadní. Barvy jsou v CMYK, vše je vektor (žádný rastr, text převedený do křivek), QR kód je vektorový černý (K 100 %) na bílém s 3 mm okolo a nejméně 5 mm od ořezu, v PDF jsou nastavené TrimBox a BleedBox. Na konci nástroj QR kódy z hotového PDF naskenuje zpět a ověří, že vedou na správné stránky. Vedle PDF vzniknou náhledy `tisk-nahled-*.png`. Design karet je v `tools/make-print.mjs`. Konverzi do CMYK dělá Ghostscript se svým výchozím profilem; pokud tiskárna vyžaduje konkrétní profil (např. ISO Coated v2), řekni a přidám ho.
+
 **QR kódy se nemění** (vedou jen na stránku, nejsou v nich žádné tajné údaje). Heslo se mění jen když sám použiješ `--rotate`. Úpravy seznamu, cen i motivů je neovlivní. Nepřejmenovávej složky `p1/` a `p2/` (jsou v QR adrese). Nástroj odmítne vytvořit nové heslo pro stránku, která už jedno má, a vypíše, jak ho obnovit (heslo je napsané na kartičce).
