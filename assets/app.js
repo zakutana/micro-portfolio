@@ -2,7 +2,7 @@
 (() => {
   "use strict";
 
-  const icons = window.MICRO_ICONS;
+  const icons = window.MICRO_ICONS || {}; // decorative only: the page must still work if icons.js failed to load
   const root = document.documentElement;
   const PAGE_ID = root.dataset.id; // fixed per page, set in its index.html
   const DEFAULT_THEME = root.dataset.theme;
@@ -60,7 +60,7 @@
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.content = themeById(id).color;
     const mascot = document.getElementById("mascot");
-    if (mascot) mascot.innerHTML = icons[id];
+    if (mascot) mascot.innerHTML = icons[id] || "";
     const scene = document.getElementById("scene");
     if (scene) scene.innerHTML = (window.MICRO_SCENES || {})[id] || "";
     document.querySelectorAll(".theme-btn").forEach((btn) => {
@@ -650,7 +650,7 @@
       btn.type = "button";
       btn.className = "theme-btn";
       btn.dataset.theme = t.id;
-      btn.innerHTML = icons[t.id];
+      btn.innerHTML = icons[t.id] || "";
       btn.title = t.label;
       btn.setAttribute("aria-label", `Motiv ${t.label}`);
       btn.addEventListener("click", () => {
