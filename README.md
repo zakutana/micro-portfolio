@@ -100,7 +100,7 @@ Motivy jsou sady CSS proměnných na začátku `assets/style.css` (barvy, ráme�
 
 Heslo je ukryté v **čísle na kartičce** a stránka při prvním otevření ukáže návod „Jak to rozluštit?“. Pak si heslo telefon pamatuje. Je to hra, ne bezpečnost: číslo je na kartičce a `config.json` je veřejný, takže kdo si otevře zdrojový kód, uvidí počty kusů. Pro dětské portfolio to stačí.
 
-Pravidlo: číslo na kartě má čtyři čtveřice číslic, součet číslic každé čtveřice je jedno náhodné číslo (5 až 30). Heslo jsou ta čtyři čísla za sebou, např. čtveřice se součty 7, 22, 12, 9 dají heslo `722129`. S jménem to nesouvisí. Číslo karty i heslo se uloží do `private/passwords.json`, takže vytištěná karta zůstává platná.
+Pravidlo: číslo na kartě má čtyři čtveřice číslic, součet číslic každé čtveřice je jedno náhodné jednociferné číslo (3 až 9) a obě karty mají stejný celkový součet 24, aby to nikdo neměl těžší. Heslo jsou ta čtyři čísla za sebou, např. součty 7, 4, 6, 7 dají heslo `7467`. S jménem to nesouvisí. Číslo karty i heslo se uloží do `private/passwords.json`, takže vytištěná karta zůstává platná.
 
 ```sh
 node tools/password.mjs set p1      # vyrobí náhodné heslo a číslo karty: private/passwords.json + hash v p1/config.json

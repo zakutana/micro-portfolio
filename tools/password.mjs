@@ -9,7 +9,8 @@
  *   node tools/password.mjs remove p1     take the password off the page again (the page opens directly)
  *
  * How it works: the 16-digit card number has four groups of four digits. Adding up the digits of a group gives one
- * number (random, 5-30). The password is the four numbers written one after another, e.g. 7, 22, 12, 9 -> 722129.
+ * number (random, 3-9; every card adds up to the same total, so nobody has it harder). The password is the four numbers
+ * written one after another, e.g. 7, 4, 6, 7 -> 7467.
  * The numbers are random and have nothing to do with the name. The card number and the password are saved in
  * private/passwords.json, so the printed card stays valid.
  * This is a game, not security: the card number is on the card and config.json is public anyway.
@@ -24,12 +25,12 @@ const PRIVATE = path.join(ROOT, "private");
 const PASSWORDS_FILE = path.join(PRIVATE, "passwords.json");
 const PBKDF2_ITERATIONS = 200_000; // must match assets/app.js
 
-/* four digits whose sum is n: start from 0000 and add 1 to a random digit n times */
+/* four digits whose sum is n (no digit above 6, so a group never "gives itself away"): start from 0000 and add 1 to a random digit */
 function group(n) {
   const d = [0, 0, 0, 0];
   for (let i = 0; i < n; ) {
     const k = randomInt(4);
-    if (d[k] < 9) {
+    if (d[k] < 6) {
       d[k]++;
       i++;
     }
@@ -37,8 +38,13 @@ function group(n) {
   return d.join("");
 }
 
+/* Easy and fair: every number is a single digit (3-9) and every card has the same total (24), so both children
+   do about the same amount of adding. The password is the four digits one after another, e.g. 7469. */
+const TOTAL = 24;
 export function makePuzzle() {
-  const sums = Array.from({ length: 4 }, () => randomInt(5, 31));
+  let sums;
+  do sums = Array.from({ length: 4 }, () => randomInt(3, 10));
+  while (sums.reduce((a, b) => a + b, 0) !== TOTAL);
   return { number: sums.map(group).join(" "), password: sums.join("") };
 }
 
