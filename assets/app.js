@@ -59,6 +59,8 @@
     if (meta) meta.content = themeById(id).color;
     const mascot = document.getElementById("mascot");
     if (mascot) mascot.innerHTML = icons[id];
+    const scene = document.getElementById("scene");
+    if (scene) scene.innerHTML = (window.MICRO_SCENES || {})[id] || "";
     document.querySelectorAll(".theme-btn").forEach((btn) => {
       btn.setAttribute("aria-pressed", String(btn.dataset.theme === id));
     });
