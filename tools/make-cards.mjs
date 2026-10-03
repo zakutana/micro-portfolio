@@ -1,19 +1,15 @@
 #!/usr/bin/env node
 /*
- * Generates the passwords and the printable cards (front + back with QR code and the password).
+ * Generates the printable cards for home printing (front + back with the QR code).
  *
  *   npm install                      (once)
- *   npm run cards                    create passwords if missing, update the hashes, render cards
- *   npm run cards -- --rotate p2     give page p2 a new password (the old one STOPS working, only do this on purpose)
+ *   npm run cards                    render the cards
  *   npm run cards -- --base https://example.com/micro-portfolio
  *
- * Each page has a 5-character password (lowercase letters + digits, without look-alikes such as 0/o or 1/l/i).
- * It is typed once on the phone and then remembered there. The QR code only opens the page (with ?n=<name>).
- * The plain passwords live ONLY in private/passwords.json and on the printed cards (private/ is git-ignored).
+ * The QR code only opens the page (with ?n=<name>); the pages have no password.
  * The people's names live ONLY in private/names.json, e.g. {"p1": "Name", "p2": "Other"}, and in the QR links.
- * The pages contain just a slow PBKDF2-SHA256 hash ("passHash") of the password, salted with "micro-portfolio:<id>".
+ * (The print-shop PDF is made by tools/make-print.mjs.)
  */
-import { pbkdf2Sync, randomInt } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
@@ -24,7 +20,6 @@ import { chromium } from "playwright";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PRIVATE = path.join(ROOT, "private");
 const OUT = path.join(PRIVATE, "cards");
-const PASSWORDS_FILE = path.join(PRIVATE, "passwords.json");
 
 const args = process.argv.slice(2);
 const argValue = (flag) => {
@@ -34,15 +29,6 @@ const argValue = (flag) => {
 
 const people = JSON.parse(fs.readFileSync(path.join(ROOT, "tools/people.json"), "utf8"));
 const baseUrl = (argValue("--base") ?? people.baseUrl).replace(/\/+$/, "");
-const rotate = new Set(args.flatMap((a, i) => (a === "--rotate" ? [args[i + 1]] : [])));
-
-/* ---------- Passwords ---------- */
-
-const ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789"; // lowercase + digits, no 0/o, 1/l/i look-alikes
-const PBKDF2_ITERATIONS = 200_000; // must match assets/app.js
-const newPassword = () => Array.from({ length: 5 }, () => ALPHABET[randomInt(ALPHABET.length)]).join("");
-const hashOf = (id, password) =>
-  pbkdf2Sync(password, `micro-portfolio:${id}`, PBKDF2_ITERATIONS, 32, "sha256").toString("hex");
 
 fs.mkdirSync(OUT, { recursive: true });
 const NAMES_FILE = path.join(PRIVATE, "names.json");
@@ -52,36 +38,6 @@ for (const p of people.people) {
   p.name = names[p.id];
   if (!p.name) throw new Error(`No name for "${p.id}" in ${NAMES_FILE}`);
 }
-const passwords = fs.existsSync(PASSWORDS_FILE) ? JSON.parse(fs.readFileSync(PASSWORDS_FILE, "utf8")) : {};
-
-for (const id of rotate) {
-  if (!people.people.some((p) => p.id === id)) throw new Error(`--rotate "${id}": unknown page id`);
-}
-
-// First work everything out and validate it, then write: passwords.json before the configs, so a failure half-way
-// can never leave a config pointing at a password that was not saved.
-const planned = [];
-for (const p of people.people) {
-  const configPath = path.join(ROOT, p.id, "config.json");
-  const cfg = JSON.parse(fs.readFileSync(configPath, "utf8"));
-  const alreadyIssued = /^[0-9a-f]{64}$/.test(cfg.passHash ?? "");
-
-  // Never silently replace a password that is already printed on a card.
-  if (!passwords[p.id] && alreadyIssued && !rotate.has(p.id)) {
-    throw new Error(
-      `${p.id} already has a password in use, but it is missing from ${PASSWORDS_FILE}.\n` +
-        `The printed card is still valid. Restore the password into ${PASSWORDS_FILE} (it is written on the card),\n` +
-        `or run with --rotate ${p.id} if you really want a new password and new cards.`,
-    );
-  }
-  if (!passwords[p.id] || rotate.has(p.id)) passwords[p.id] = newPassword();
-
-  const next = { passHash: hashOf(p.id, passwords[p.id]) };
-  for (const [key, value] of Object.entries(cfg)) if (key !== "passHash" && key !== "codeHash") next[key] = value;
-  planned.push({ configPath, text: JSON.stringify(next, null, 2) + "\n" });
-}
-fs.writeFileSync(PASSWORDS_FILE, JSON.stringify(passwords, null, 2) + "\n");
-for (const { configPath, text } of planned) fs.writeFileSync(configPath, text);
 
 /* ---------- Cards ---------- */
 
@@ -148,7 +104,6 @@ function cardInner(person, side) {
     </div>
     <div class="b-right">
       <div class="b-qr">${qrSvg(url)}</div>
-      <div class="b-pass"><span>heslo</span><b>${passwords[person.id]}</b></div>
     </div>
   </div>`;
 }
@@ -180,9 +135,6 @@ const CSS = `
   .back .b-foot b { font-size: 3.4mm; font-weight: 700; }
   .back .b-right { display: flex; flex-direction: column; align-items: center; gap: 2mm; }
   .back .b-qr { width: 36mm; height: 36mm; padding: 3mm; background: var(--panel); border: .8mm solid var(--panelBorder); border-radius: 3mm; box-shadow: 0 .8mm 0 rgba(0,0,0,.18); }
-  .back .b-pass { display: flex; align-items: baseline; gap: 2.2mm; padding: .9mm 3.6mm; background: var(--panel); border: .6mm solid var(--panelBorder); border-radius: 2.2mm; color: var(--ink); box-shadow: 0 .6mm 0 rgba(0,0,0,.18); }
-  .back .b-pass span { font-size: 2.6mm; font-weight: 600; text-transform: uppercase; letter-spacing: .25mm; }
-  .back .b-pass b { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; font-size: 5.6mm; font-weight: 800; letter-spacing: .9mm; }
 
   .sheet { width: 210mm; height: 297mm; padding: 18mm 0 0 17mm; display: flex; flex-direction: column; gap: 12mm; background: #fff; }
   .sheet .row { display: flex; gap: 10mm; align-items: center; }

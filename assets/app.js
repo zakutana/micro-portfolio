@@ -852,7 +852,7 @@
       showLoadError();
       return;
     }
-    if (isUnlocked()) return openContent();
+    if (typeof cfg.passHash !== "string" || isUnlocked()) return openContent(); // no passHash in config.json = no password
     showLock(openContent);
   }
 

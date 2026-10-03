@@ -13,7 +13,7 @@
  *
  * Needs: Ghostscript (gs), poppler-utils (pdftoppm, pdfinfo, pdffonts, pdfimages), Python 3 with pikepdf and opencv-python-headless
  * (tools/print-post.py), Chromium.
- * Names and passwords come from private/names.json and private/passwords.json (see make-cards.mjs).
+ * Names come from private/names.json (see make-cards.mjs).
  */
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
@@ -36,7 +36,6 @@ const PT = 72 / 25.4; // points per mm
 
 const people = JSON.parse(fs.readFileSync(path.join(ROOT, "tools/people.json"), "utf8"));
 const names = JSON.parse(fs.readFileSync(path.join(PRIVATE, "names.json"), "utf8"));
-const passwords = JSON.parse(fs.readFileSync(path.join(PRIVATE, "passwords.json"), "utf8"));
 const baseUrl = people.baseUrl.replace(/\/+$/, "");
 
 const icons = {};
@@ -174,7 +173,6 @@ function backPage(p, url, qr) {
     <div class="stripe">${gradientSvg(PAGE_W, 10, { angle: 180, stops: [[0, "#1c1c26"], [0.6, "#06060a"], [1, "#191923"]] }, 40, "bg")}</div>
     <div class="qr">${qr.svg}</div>
     <div class="scan">Naskenuj kamerou mobilu.</div>
-    <div class="pass"><span>Heslo</span><b>${passwords[p.id]}</b></div>
     <div class="mini ${p.mascot}">${MASCOT[p.mascot]}</div>
   </section>`;
 }
@@ -219,11 +217,9 @@ html, body { width: ${PAGE_W}mm; background: #fff; -webkit-print-color-adjust: e
 .stripe { left: 0; right: 0; top: 8mm; height: 10mm }
 .qr { left: 8mm; bottom: 8mm; line-height: 0 }
 .qr svg { display: block }
-.scan { left: 42mm; top: 22.4mm; width: 35mm; font: 800 3.3mm/1.18 "Nunito", sans-serif }
-.mini { right: 6.5mm; top: 21.8mm; width: 7.6mm; height: 7.6mm }
-.pass { left: 42mm; right: 6.5mm; top: 34.4mm; height: 9.4mm; background: #fff; border-radius: 1.2mm; display: flex; align-items: center; justify-content: space-between; padding: 0 2.6mm; color: #1d1230 }
-.pass span { font: 800 1.7mm/1 "Nunito", sans-serif; letter-spacing: .2em; text-transform: uppercase; color: #6b5a80 }
-.pass b { font: 700 4.6mm/1 "JB Mono", monospace; letter-spacing: .18em }
+.scan { left: 42mm; top: 24mm; width: 43.5mm; font: 800 4.2mm/1.2 "Nunito", sans-serif }
+.mini { left: 42mm; bottom: 8mm; width: 16mm; height: 16mm }
+.mini.waddle { width: 17.5mm }
 `;
 
 function html(pages) {
@@ -239,7 +235,7 @@ const pages = [];
 const links = [];
 people.people.forEach((p, i) => {
   p.name = names[p.id];
-  if (!p.name || !passwords[p.id]) throw new Error(`Missing name or password for ${p.id} in private/`);
+  if (!p.name) throw new Error(`Missing name for ${p.id} in private/names.json`);
   const url = `${baseUrl}/${p.id}/?n=${encodeURIComponent(p.name)}`;
   const qr = qrTile(url);
   links.push(url);
