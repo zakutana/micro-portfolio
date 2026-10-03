@@ -4,6 +4,7 @@
  *
  *   node tools/portfolio.mjs genesis p1            freeze today's prices as the starting point ("genesis")
  *   node tools/portfolio.mjs genesis all --force   start over: re-baseline everything at today's prices
+ *   ... --start 2026-10-10                          also set the date shown as the start of tracking (startDate)
  *   node tools/portfolio.mjs add p1 SUI --czk 200  buy 200 CZK worth of SUI at today's price
  *   node tools/portfolio.mjs add p1 SUI --qty 5    buy 5 units of SUI at today's price
  *
@@ -100,6 +101,7 @@ async function genesis(id) {
     syncQty(h);
     console.log(`${id} ${h.symbol}: ${qty} units at ${round(price, 4)} CZK`);
   }
+  if (flag("--start")) cfg.startDate = flag("--start");
   save(file, cfg);
 }
 

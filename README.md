@@ -48,13 +48,15 @@ Stránka ukazuje, o kolik % portfolio vyrostlo nebo kleslo **od předání**, a 
 Výchozí cena a nákupy se zapisují do `config.json` jako „loty“ (`lots`: datum, počet kusů, cena v Kč za kus). Zapisuje je nástroj, ruční úpravy ne:
 
 ```sh
-# Při předání: zmrazí dnešní ceny jako výchozí bod (genesis). Napřed nastav v config.json správný počet kusů (qty).
+# V den startu (např. 10. 10. 2026): zmrazí dnešní ceny jako výchozí bod (genesis). Napřed nastav v config.json správný počet kusů (qty).
 node tools/portfolio.mjs genesis all --force
 
 # Později: nákup za částku nebo za počet kusů, za dnešní cenu
 node tools/portfolio.mjs add p1 SUI --czk 200
 node tools/portfolio.mjs add p2 BOT --qty 0.5
 ```
+
+Datum, které stránka ukazuje jako začátek sledování, je `startDate` v `config.json` (teď `2026-10-10`). Před tímto dnem stránka jen píše „Sledování růstu začne …“ a růst ani zisky nepočítá. Nastavit se dá i při zápisu snímku: `genesis all --force --start 2026-10-10`.
 
 Za proxy: `NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=<ca bundle> node tools/portfolio.mjs ...`.
 Bez zapsaných nákupů (starý formát `qty`) se růst nezobrazí, ale hodnoty ano.

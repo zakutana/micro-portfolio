@@ -272,6 +272,18 @@
   const trend = (ratio) => (ratio * 100 >= 0.005 ? "up" : ratio * 100 <= -0.005 ? "down" : "flat");
   const ARROW = { up: "▲", down: "▼", flat: "▬" };
 
+  /* "2026-10-10" or a full ISO timestamp -> "10. 10. 2026" */
+  const formatDate = (iso) =>
+    new Date(iso.length === 10 ? `${iso}T12:00:00` : iso).toLocaleDateString("cs-CZ", {
+      day: "numeric",
+      month: "numeric",
+      year: "numeric",
+    });
+  function todayIso() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  }
+
   const $ = (id) => document.getElementById(id);
   const el = (tag, className, text) => {
     const node = document.createElement(tag);
@@ -412,8 +424,12 @@
   }
 
   function showPrices({ items, allLive, cachedAt }) {
+    // Growth only counts from the start date in config.json (before that: just the plain values).
+    const startDate = typeof cfg.startDate === "string" ? cfg.startDate : null;
+    const tracking = !startDate || todayIso() >= startDate;
     const rows = items.map((item) => {
       const pos = position(item.holding);
+      if (!tracking) pos.cost = null;
       return { item, pos, value: item.price === null ? null : item.price * pos.qty };
     });
 
@@ -469,7 +485,7 @@
     });
 
     $("total").textContent = known ? formatCzk(total) : "—";
-    showPerformance({ costSum, valueSum, since, rows, total });
+    showPerformance({ costSum, valueSum, since: startDate ?? since, rows, total, waiting: !tracking });
 
     const status = $("status");
     status.classList.toggle("is-warn", !allLive);
@@ -485,25 +501,35 @@
     }
   }
 
-  function showPerformance({ costSum, valueSum, since, rows, total }) {
+  function showPerformance({ costSum, valueSum, since, rows, total, waiting }) {
     const p = perfRefs;
-    if (!(costSum > 0)) {
+    p.box.classList.remove("is-up", "is-down", "is-flat");
+    if (waiting && since) {
+      // before the start date: nothing is counted yet
+      p.box.hidden = false;
+      p.box.classList.add("is-flat");
+      p.icon.textContent = ARROW.flat;
+      p.title.textContent = "Sledování růstu začne";
+      p.sub.textContent = formatDate(since);
+      p.pct.textContent = "";
+      p.money.textContent = "";
+      p.invested.textContent = "";
+    } else if (!(costSum > 0)) {
       p.box.hidden = true; // no starting point recorded yet
       return;
+    } else {
+      p.box.hidden = false;
+      const ratio = valueSum / costSum - 1;
+      const diff = valueSum - costSum;
+      const t = trend(ratio);
+      p.box.classList.add(`is-${t}`);
+      p.icon.textContent = ARROW[t];
+      p.title.textContent = t === "up" ? "Portfolio roste" : t === "down" ? "Portfolio klesá" : "Zatím beze změny";
+      p.sub.textContent = since ? `od ${formatDate(since)}` : "";
+      p.pct.textContent = formatPct(ratio);
+      p.money.textContent = formatSignedCzk(diff);
+      p.invested.textContent = `Vloženo ${formatCzk(costSum)} → dnes ${formatCzk(valueSum)}`;
     }
-    p.box.hidden = false;
-    const ratio = valueSum / costSum - 1;
-    const diff = valueSum - costSum;
-    const t = trend(ratio);
-    p.box.classList.remove("is-up", "is-down", "is-flat");
-    p.box.classList.add(`is-${t}`);
-    p.icon.textContent = ARROW[t];
-    p.title.textContent = t === "up" ? "Portfolio roste" : t === "down" ? "Portfolio klesá" : "Zatím beze změny";
-    const date = since ? new Date(since).toLocaleDateString("cs-CZ", { day: "numeric", month: "numeric" }) : "";
-    p.sub.textContent = date ? `od předání ${date}` : "od předání";
-    p.pct.textContent = formatPct(ratio);
-    p.money.textContent = formatSignedCzk(diff);
-    p.invested.textContent = `Vloženo ${formatCzk(costSum)} → dnes ${formatCzk(valueSum)}`;
 
     p.bar.replaceChildren();
     p.legend.replaceChildren();
