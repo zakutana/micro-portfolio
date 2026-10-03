@@ -118,7 +118,7 @@
 
   /* ---------- Prices (all converted to CZK) ---------- */
 
-  async function getJson(url, timeoutMs = 10_000) {
+  async function getJsonOnce(url, timeoutMs) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
     try {
@@ -127,6 +127,16 @@
       return await res.json();
     } finally {
       clearTimeout(timer);
+    }
+  }
+
+  /* The free price APIs occasionally hiccup (rate limits, flaky network): try once more before giving up. */
+  async function getJson(url, timeoutMs = 10_000) {
+    try {
+      return await getJsonOnce(url, timeoutMs);
+    } catch {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      return getJsonOnce(url, timeoutMs);
     }
   }
 
