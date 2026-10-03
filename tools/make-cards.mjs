@@ -50,6 +50,13 @@ for (const p of people.people) {
 }
 const codes = fs.existsSync(CODES_FILE) ? JSON.parse(fs.readFileSync(CODES_FILE, "utf8")) : {};
 
+for (const id of rotate) {
+  if (!people.people.some((p) => p.id === id)) throw new Error(`--rotate "${id}": unknown page id`);
+}
+
+// First work everything out and validate it, then write: codes.json before the configs, so a failure half-way
+// can never leave a config pointing at a code that was not saved.
+const planned = [];
 for (const p of people.people) {
   const configPath = path.join(ROOT, p.id, "config.json");
   const source = fs.readFileSync(configPath, "utf8");
@@ -66,9 +73,10 @@ for (const p of people.people) {
   if (!codes[p.id] || rotate.has(p.id)) codes[p.id] = newCode();
 
   if (!/"codeHash":\s*"[0-9a-f]*"/.test(source)) throw new Error(`${configPath}: no codeHash field found`);
-  fs.writeFileSync(configPath, source.replace(/"codeHash":\s*"[0-9a-f]*"/, `"codeHash": "${hashOf(p.id, codes[p.id])}"`));
+  planned.push({ configPath, next: source.replace(/"codeHash":\s*"[0-9a-f]*"/, `"codeHash": "${hashOf(p.id, codes[p.id])}"`) });
 }
 fs.writeFileSync(CODES_FILE, JSON.stringify(codes, null, 2) + "\n");
+for (const { configPath, next } of planned) fs.writeFileSync(configPath, next);
 
 /* ---------- Cards ---------- */
 

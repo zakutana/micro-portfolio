@@ -40,7 +40,7 @@
     radial-gradient(circle at 80% 24%, rgba(255, 255, 255, 0.6) 0 22px, transparent 23px),
     linear-gradient(180deg, #ffd9ec 0%, #ffa8d1 100%);
   --text: #6b2450;
-  --muted: #b0618f;
+  --muted: #9c4a7b;
   --title: #ffffff;
   --title-shadow: 0 2px 0 #e05a9c, 0 4px 10px rgba(224, 90, 156, 0.35);
   --panel: #ffffff;
@@ -48,9 +48,9 @@
   --panel-radius: 22px;
   --panel-shadow: 0 6px 0 #f06aaa, 0 10px 18px rgba(176, 52, 118, 0.2);
   --row-hover: #fff0f8;
-  --total-bg: linear-gradient(180deg, #ff8cc3, #ff5fa2);
+  --total-bg: linear-gradient(180deg, #dc4584, #c92d73);
   --total-text: #ffffff;
-  --total-label: #ffe3f1;
+  --total-label: #ffffff;
   --btn-bg: #ffffff;
   --btn-border: 3px solid #ff8cc3;
   --btn-radius: 999px;
@@ -110,7 +110,7 @@
     linear-gradient(180deg, #4a68ea 0%, #2c3fb4 100%);
   --bg-size: 26px 26px, auto;
   --text: #4a2a14;
-  --muted: #9a6a3d;
+  --muted: #7d5128;
   --title: #ffffff;
   --title-shadow: 0 3px 0 #c4401a, 0 5px 10px rgba(20, 20, 90, 0.35);
   --panel: #fdf0d2;
@@ -118,9 +118,9 @@
   --panel-radius: 20px;
   --panel-shadow: 0 5px 0 #c4401a, 0 10px 18px rgba(10, 15, 70, 0.3);
   --row-hover: #ffe5b0;
-  --total-bg: linear-gradient(180deg, #f9a53c 0%, #f05a28 100%);
+  --total-bg: linear-gradient(180deg, #cf5a14 0%, #b8360f 100%);
   --total-text: #ffffff;
-  --total-label: #ffe9cf;
+  --total-label: #ffffff;
   --btn-bg: #fdf0d2;
   --btn-border: 3px solid #f05a28;
   --btn-radius: 14px;
@@ -146,7 +146,7 @@
     linear-gradient(165deg, #ffc9e0 0%, #ff86bb 52%, #f2509c 100%);
   --bg-size: 220px 220px, auto;
   --text: #5a1d45;
-  --muted: #b8639a;
+  --muted: #9a427d;
   --title: #ffffff;
   --title-shadow: 0 2px 0 #d23a86, 0 4px 12px rgba(170, 30, 110, 0.35);
   --panel: #ffffff;
@@ -154,9 +154,9 @@
   --panel-radius: 28px;
   --panel-shadow: 0 6px 0 #ee5ea4, 0 12px 22px rgba(170, 30, 110, 0.28);
   --row-hover: #fff0f7;
-  --total-bg: linear-gradient(180deg, #ff74b5 0%, #e33c8f 100%);
+  --total-bg: linear-gradient(180deg, #d63f90 0%, #b82a7a 100%);
   --total-text: #ffffff;
-  --total-label: #ffe3f1;
+  --total-label: #ffffff;
   --btn-bg: #ffffff;
   --btn-border: 3px solid #ffb3d6;
   --btn-radius: 999px;
@@ -325,7 +325,7 @@
   --bg-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' shape-rendering='crispEdges'%3E%3Crect width='64' height='64' fill='%238a5e37'/%3E%3Cg fill='%23704a2a'%3E%3Crect x='0' y='8' width='8' height='8'/%3E%3Crect x='24' y='0' width='8' height='8'/%3E%3Crect x='40' y='16' width='8' height='8'/%3E%3Crect x='8' y='32' width='8' height='8'/%3E%3Crect x='48' y='40' width='8' height='8'/%3E%3Crect x='24' y='48' width='8' height='8'/%3E%3Crect x='56' y='56' width='8' height='8'/%3E%3C/g%3E%3Cg fill='%239c6d42'%3E%3Crect x='16' y='16' width='8' height='8'/%3E%3Crect x='56' y='8' width='8' height='8'/%3E%3Crect x='32' y='32' width='8' height='8'/%3E%3Crect x='0' y='48' width='8' height='8'/%3E%3Crect x='40' y='56' width='8' height='8'/%3E%3C/g%3E%3Cg fill='%2358391f'%3E%3Crect x='48' y='24' width='8' height='8'/%3E%3Crect x='16' y='56' width='8' height='8'/%3E%3Crect x='8' y='0' width='8' height='8'/%3E%3C/g%3E%3C/svg%3E");
   --text: #3a3a3a;
-  --muted: #6c6c6c;
+  --muted: #4d4d4d;
   --title: #ffffff;
   --title-shadow: 3px 3px 0 #3f3f3f;
   --panel: #c6c6c6;
@@ -333,7 +333,7 @@
   --panel-radius: 0;
   --panel-shadow: 0 0 0 4px #000;
   --row-hover: #d8d8d8;
-  --total-bg: #5fa83a;
+  --total-bg: #3f7d27;
   --total-text: #ffffff;
   --total-label: #e2f5d3;
   --btn-bg: #8b8b8b;
@@ -350,6 +350,9 @@
   --total-size: 1.05rem;
   --base-size: 0.6rem;
   --letter: 0;
+  --gain: #0b5a22;
+  --loss: #a3180e;
+  --flat: #505050;
 }
 
 /* ---------- Base ---------- */
@@ -1281,4 +1284,11 @@ body {
   .theme-btn {
     height: 38px;
   }
+}
+
+/* Minecraft: the pixel font is wide, so the small captions get a little more size */
+:root[data-theme="minecraft"] .cell .k,
+:root[data-theme="minecraft"] .alloc-title,
+:root[data-theme="minecraft"] .block-tag {
+  font-size: 0.52rem;
 }

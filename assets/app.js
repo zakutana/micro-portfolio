@@ -180,6 +180,7 @@
     try {
       const pairs = await getJson(`${DEXSCREENER}/${chain}/${address}`);
       const best = pairs
+        .filter((p) => p.baseToken?.address?.toLowerCase() === address.toLowerCase())
         .filter((p) => isPrice(Number(p.priceUsd)))
         .sort((a, b) => (b.liquidity?.usd ?? 0) - (a.liquidity?.usd ?? 0))[0];
       return best ? { usd: Number(best.priceUsd), change24: best.priceChange?.h24 } : null;
@@ -237,17 +238,16 @@
       return { holding: h, price: isPrice(stale) ? stale : null, change24: null, live: false };
     });
 
-    store.set(
-      "prices",
-      JSON.stringify({ prices: { ...cachedPrices, ...fresh }, fx: fx ?? null, ts: Date.now() }),
-    );
-    return { items, allLive: items.every((i) => i.live), cachedAt: cache.ts ?? null };
+    const gotSomething = Object.keys(fresh).length > 0;
+    const ts = gotSomething ? Date.now() : cache.ts ?? null; // time of the last SUCCESSFUL fetch, not the last attempt
+    store.set("prices", JSON.stringify({ prices: { ...cachedPrices, ...fresh }, fx: fx ?? null, ts }));
+    return { items, allLive: items.every((i) => i.live), cachedAt: gotSomething ? null : ts };
   }
 
   /* ---------- Formatting ---------- */
 
   const nf = (opts) => new Intl.NumberFormat("cs-CZ", opts);
-  const czk0 = nf({ style: "currency", currency: "CZK", maximumFractionDigits: 0 });
+  const czk0 = nf({ style: "currency", currency: "CZK", minimumFractionDigits: 0, maximumFractionDigits: 0 });
   const czk2 = nf({ style: "currency", currency: "CZK", maximumFractionDigits: 2 });
   const formatCzk = (v) => (v < 100 ? czk2 : czk0).format(v);
   const MINUS = "−";
@@ -418,9 +418,9 @@
      The holdings, the cost and the growth are all calculated from these same records. */
   function buildHistory() {
     const lots = [];
-    for (const h of cfg.holdings) {
-      if (!Array.isArray(h.lots)) continue;
-      for (const l of h.lots) if (l.qty > 0 && l.price > 0 && l.date) lots.push({ h, ...l });
+    for (const h of Array.isArray(cfg.holdings) ? cfg.holdings : []) {
+      if (!h || !Array.isArray(h.lots)) continue;
+      for (const l of h.lots) if (l.qty > 0 && l.price > 0 && typeof l.date === "string") lots.push({ h, ...l });
     }
     if (!lots.length) return;
 
@@ -482,7 +482,7 @@
 
   function showPrices({ items, allLive, cachedAt }) {
     // Growth only counts from the start date in config.json (before that: just the plain values).
-    const startDate = typeof cfg.startDate === "string" ? cfg.startDate : null;
+    const startDate = /^\d{4}-\d{2}-\d{2}/.test(cfg.startDate ?? "") ? cfg.startDate.slice(0, 10) : null;
     const tracking = !startDate || todayIso() >= startDate;
     const rows = items.map((item) => {
       const pos = position(item.holding);
@@ -546,7 +546,13 @@
 
     const status = $("status");
     status.classList.toggle("is-warn", !allLive);
-    const time = (ts) => new Date(ts).toLocaleTimeString("cs-CZ", { hour: "2-digit", minute: "2-digit" });
+    const time = (ts) => {
+      const d = new Date(ts);
+      const clock = d.toLocaleTimeString("cs-CZ", { hour: "2-digit", minute: "2-digit" });
+      return d.toDateString() === new Date().toDateString()
+        ? clock
+        : `${d.toLocaleDateString("cs-CZ", { day: "numeric", month: "numeric" })} ${clock}`;
+    };
     const dot = '<span class="dot"></span>';
     if (allLive) {
       status.textContent = "";
@@ -663,6 +669,16 @@
   }
 
   async function start() {
+    try {
+      await boot();
+    } catch (err) {
+      console.error(err);
+      const status = $("status");
+      if (status) status.textContent = "Něco se pokazilo. Zkus stránku obnovit.";
+    }
+  }
+
+  async function boot() {
     buildThemePicker();
 
     cfg = await loadConfig();
@@ -672,7 +688,7 @@
     }
 
     showOwner();
-    holdings = cfg.holdings.filter((h) => position(h).qty > 0);
+    holdings = (Array.isArray(cfg.holdings) ? cfg.holdings : []).filter((h) => h && h.source && position(h).qty > 0);
     buildProBar();
 
     $("content").hidden = false;

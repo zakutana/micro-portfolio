@@ -3,7 +3,7 @@
  * Records what was bought and at which price, so the pages can show growth since the hand-over.
  *
  *   node tools/portfolio.mjs genesis p1            freeze today's prices as the starting point ("genesis")
- *   node tools/portfolio.mjs genesis all --force   start over: re-baseline everything at today's prices
+ *   node tools/portfolio.mjs genesis all --force   start over at today's prices, from each holding's "qty" (edit it first)
  *   ... --start 2026-10-10                          also set the date shown as the start of tracking (startDate)
  *   node tools/portfolio.mjs add p1 SUI --czk 200  buy 200 CZK worth of SUI at today's price
  *   node tools/portfolio.mjs add p1 SUI --qty 5    buy 5 units of SUI at today's price
@@ -56,6 +56,7 @@ async function currentPrices(holdings) {
       const { chain, address } = h.source;
       const pairs = await getJson(`https://api.dexscreener.com/tokens/v1/${chain}/${address}`);
       const best = pairs
+        .filter((p) => p.baseToken?.address?.toLowerCase() === address.toLowerCase())
         .filter((p) => isPrice(Number(p.priceUsd)))
         .sort((a, b) => (b.liquidity?.usd ?? 0) - (a.liquidity?.usd ?? 0))[0];
       if (best) out.set(`dex:${chain}:${address}`, Number(best.priceUsd) * fx);
@@ -83,13 +84,15 @@ function save(file, cfg) {
 }
 const pages = () => fs.readdirSync(ROOT).filter((d) => /^p\d+$/.test(d));
 
-async function genesis(id) {
+/* Works out the new config for one page without writing anything (so "genesis all" is all-or-nothing). */
+async function planGenesis(id) {
   const { file, cfg } = load(id);
   const force = args.includes("--force");
   const prices = await currentPrices(cfg.holdings);
   const now = new Date().toISOString();
   for (const h of cfg.holdings) {
-    const qty = totalQty(h);
+    // With --force the "qty" field is the quantity to start from (edit it first); otherwise the existing lots.
+    const qty = force && h.qty > 0 ? h.qty : totalQty(h);
     if (!qty) continue;
     if (Array.isArray(h.lots) && h.lots.length && !force) {
       console.log(`${id} ${h.symbol}: already has a starting point (use --force to start over)`);
@@ -102,7 +105,7 @@ async function genesis(id) {
     console.log(`${id} ${h.symbol}: ${qty} units at ${round(price, 4)} CZK`);
   }
   if (flag("--start")) cfg.startDate = flag("--start");
-  save(file, cfg);
+  return { file, cfg };
 }
 
 async function add(id, sym) {
@@ -127,7 +130,13 @@ async function add(id, sym) {
 
 try {
   if (command === "genesis") {
-    for (const id of target === "all" ? pages() : [target]) await genesis(id);
+    const start = flag("--start");
+    if (start !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(start)) {
+      throw new Error(`--start must look like 2026-10-10 (got "${start}")`);
+    }
+    const plans = [];
+    for (const id of target === "all" ? pages() : [target]) plans.push(await planGenesis(id));
+    for (const { file, cfg } of plans) save(file, cfg); // only now, after every page succeeded
   } else if (command === "add") {
     await add(target, symbol);
   } else {
