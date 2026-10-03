@@ -85,6 +85,26 @@ function qrTile(url) {
   };
 }
 
+/* ---------- Symbols of the holdings, scattered over the back ---------- */
+
+// pixel sizes of the logo files limit how big they may be printed at 300 dpi (checked at the end)
+const LOGO_DIR = path.join(OUT, "tisk-logos");
+const SPACEX = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50" fill="#050505"/><path d="M14 33 H36 L86 69 H64 Z" fill="#fff"/><path d="M62 33 H86 L62 51 L52 44 Z" fill="#fff"/><path d="M14 69 H36 L46 61 L38 55 Z" fill="#fff"/></svg>`;
+// left, top, size (mm), rotation (deg); the safe zone and the QR code + text on the left stay free
+const COINS = [
+  { logo: "tesla", pad: 0.55, x: 46, y: 7.2, size: 7.2, rot: -10 },
+  { logo: "bot", pad: 0, x: 61, y: 6.8, size: 6.6, rot: 8 },
+  { logo: "cards", pad: 0.55, x: 75.5, y: 8, size: 7.4, rot: -6 },
+  { vector: SPACEX, x: 70, y: 31.5, size: 8.2, rot: 9 },
+  { logo: "sui", pad: 0.55, x: 62.5, y: 45.2, size: 7, rot: -8 },
+  { logo: "cymetica", pad: 0, x: 76, y: 43.5, size: 7.4, rot: 6 },
+];
+const coinsHtml = () =>
+  COINS.map((c) => {
+    const inner = c.vector ?? `<img src="${pathToFileURL(path.join(LOGO_DIR, c.logo + ".png")).href}" style="padding:${c.pad}mm" alt="">`;
+    return `<div class="coin" style="left:${c.x}mm;top:${c.y}mm;width:${c.size}mm;height:${c.size}mm;transform:rotate(${c.rot}deg)">${inner}</div>`;
+  }).join("\n    ");
+
 /* ---------- Card artwork (everything in mm; the page is 91.5 x 60 mm, the card starts 3 mm inside) ---------- */
 
 const PALETTES = {
@@ -180,6 +200,7 @@ function backPage(p, url, qr) {
   return `<section class="page back" style="background:${pal.back.stops[0][1]}">
     ${gradientSvg(PAGE_W, PAGE_H, pal.back)}
     ${guilloche(71, 67)}
+    ${coinsHtml()}
     <div class="qr">${qr.svg}</div>
     <div class="scan">Naskenuj kamerou mobilu.</div>
     <div class="mini ${p.mascot}">${MASCOT[p.mascot]}</div>
@@ -233,6 +254,8 @@ html, body { width: ${SW}mm; background: #fff; -webkit-print-color-adjust: exact
 .scan { left: 42mm; top: 15.8mm; width: 43.5mm; font: 800 4.2mm/1.2 "Nunito", sans-serif }
 .mini { left: 42mm; top: 30mm; width: 16mm; height: 16mm }
 .mini.waddle { width: 17.5mm }
+.coin { background: #fff; border-radius: 50%; overflow: hidden; border: .25mm solid #fff }
+.coin img, .coin svg { width: 100%; height: 100%; display: block; object-fit: cover; border-radius: 50% }
 `;
 };
 
@@ -272,6 +295,8 @@ people.people.forEach((p, i) => {
   links.push(url);
   pages.push(frontPage(p, i), backPage(p, url, qr));
 });
+execFileSync("python3", [path.join(ROOT, "tools/print-post.py"), "logos", path.join(ROOT, "assets/logos"), LOGO_DIR]);
+
 async function build(slug, final) {
   fs.rmSync(TMP, { recursive: true, force: true });
   fs.mkdirSync(TMP, { recursive: true });
@@ -321,6 +346,8 @@ async function build(slug, final) {
   console.log("Fonts:\n" + execFileSync("pdffonts", [FINAL]).toString().trim());
   const images = execFileSync("pdfimages", ["-list", FINAL]).toString().trim().split("\n").slice(2);
   console.log(images.length ? `Raster images:\n${images.join("\n")}` : "Raster images: none (everything is vector)");
+  const lowPpi = images.map((l) => l.trim().split(/\s+/)).filter((c) => Math.min(Number(c[12]), Number(c[13])) < 300);
+  if (lowPpi.length) throw new Error(`Raster images below 300 ppi: ${lowPpi.map((c) => `${c[12]}x${c[13]} ppi`).join(", ")}`);
 
   fs.writeFileSync(path.join(TMP, "links.json"), JSON.stringify(links));
   execFileSync("python3", [path.join(ROOT, "tools/print-post.py"), "check", final, TMP], { stdio: "inherit" });

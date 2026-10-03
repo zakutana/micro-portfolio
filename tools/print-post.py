@@ -5,6 +5,7 @@
   print-post.py finish <in.pdf> <out.pdf> <w_pt> <h_pt> <bleed_pt> <rich-black> [slug_pt]
                                                                exact page boxes, K-only black, gray -> K
   print-post.py check  <final.pdf> <tmp-dir>                   colour check + scan of the QR codes (links.json)
+  print-post.py logos  <logos-dir> <out-dir>                   logos without transparency (flattened on white), same pixels
 """
 import json
 import re
@@ -66,6 +67,20 @@ def finish(src, dst, w, h, bleed, rich, slug=0.0):
     pdf.save(dst, min_version="1.6", compress_streams=True)
 
 
+def logos(src, dst):
+    import os
+    from PIL import Image
+
+    os.makedirs(dst, exist_ok=True)
+    for name in sorted(os.listdir(src)):
+        if not name.lower().endswith((".png", ".jpg", ".jpeg")):
+            continue
+        im = Image.open(os.path.join(src, name)).convert("RGBA")
+        flat = Image.new("RGB", im.size, (255, 255, 255))
+        flat.paste(im, mask=im.split()[3])
+        flat.save(os.path.join(dst, os.path.splitext(name)[0] + ".png"))
+
+
 def check(final, tmp):
     import cv2
 
@@ -114,4 +129,4 @@ def check(final, tmp):
 
 if __name__ == "__main__":
     cmd, *a = sys.argv[1:]
-    {"probe": probe, "finish": lambda s, d, w, h, b, r, sl="0": finish(s, d, float(w), float(h), float(b), r, float(sl)), "check": check}[cmd](*a)
+    {"probe": probe, "finish": lambda s, d, w, h, b, r, sl="0": finish(s, d, float(w), float(h), float(b), r, float(sl)), "check": check, "logos": logos}[cmd](*a)
