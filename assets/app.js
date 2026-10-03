@@ -272,9 +272,9 @@
     const digits = v >= 1000 ? 0 : v >= 1 ? 2 : 4;
     return `${nf({ minimumFractionDigits: digits, maximumFractionDigits: digits }).format(v)} Kč`;
   }
-  /* Czech short scale: mil. = million, mld. = billion, bil. = trillion */
+  /* Always millions or billions (mil. / mld.), never "bil.": it is easy to misread as "billion". */
   function formatBig(v) {
-    for (const [n, label] of [[1e12, "bil."], [1e9, "mld."], [1e6, "mil."]]) {
+    for (const [n, label] of [[1e9, "mld."], [1e6, "mil."]]) {
       if (v >= n) {
         const x = v / n;
         return `${nf({ maximumFractionDigits: x >= 100 ? 0 : 1 }).format(x)} ${label} Kč`;
