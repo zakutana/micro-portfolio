@@ -41,6 +41,25 @@ Zdroje živé ceny (obojí zdarma, bez API klíče):
 
 Když se ceny nepodaří načíst, stránka ukáže poslední známé (uložené v telefonu) a upozorní na to.
 
+## Růst portfolia a Pro režim
+
+Stránka ukazuje, o kolik % portfolio vyrostlo nebo kleslo **od předání**, a v Pro režimu (přepínač nahoře) cenu, zisk/ztrátu v Kč i %, změnu za 24 hodin a podíl každé položky, rozložení portfolia a slovníček investora.
+
+Výchozí cena a nákupy se zapisují do `config.json` jako „loty“ (`lots`: datum, počet kusů, cena v Kč za kus). Zapisuje je nástroj, ruční úpravy ne:
+
+```sh
+# Při předání: zmrazí dnešní ceny jako výchozí bod (genesis). Napřed nastav v config.json správný počet kusů (qty).
+node tools/portfolio.mjs genesis all --force
+
+# Později: nákup za částku nebo za počet kusů, za dnešní cenu
+node tools/portfolio.mjs add p1 SUI --czk 200
+node tools/portfolio.mjs add p2 BOT --qty 0.5
+```
+
+Za proxy: `NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=<ca bundle> node tools/portfolio.mjs ...`.
+Bez zapsaných nákupů (starý formát `qty`) se růst nezobrazí, ale hodnoty ano.
+Nová položka: přidej ji do `config.json` s `"qty": 0` a pak ji koupí příkaz `add`.
+
 ## Motivy
 
 Minecraft, Kirby, Waddle Dee, Pokémon, Make-up, Fotbal. Volba se ukládá do telefonu (`localStorage`), takže zůstane i po zavření stránky. `p2` začíná s Kirby (růžová), `p1` s Waddle Dee (modrá s oranžovou). Výchozí motiv je atribut `data-theme` v `index.html` stránky. Motivy jsou sady CSS proměnných v `assets/style.css`.

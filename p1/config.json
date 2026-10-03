@@ -6,34 +6,55 @@
       "symbol": "CARDS",
       "logo": "../assets/logos/cards.png",
       "url": "https://collectorcrypt.com",
-      "qty": 100,
       "source": {
         "type": "coingecko",
         "id": "collector-crypt"
-      }
+      },
+      "lots": [
+        {
+          "date": "2026-10-03T08:43:19.794Z",
+          "qty": 100,
+          "price": 6.05
+        }
+      ],
+      "qty": 100
     },
     {
       "name": "RoboStrategy",
       "symbol": "BOT",
       "logo": "../assets/logos/bot.png",
       "url": "https://robostrategy.co",
-      "qty": 1,
       "source": {
         "type": "dexscreener",
         "chain": "solana",
         "address": "BoTx8y9ynfdxf5ZjWtCoBVkff52qKA82ysaLU8ZM6d8T"
-      }
+      },
+      "lots": [
+        {
+          "date": "2026-10-03T08:43:19.794Z",
+          "qty": 1,
+          "price": 631.046191
+        }
+      ],
+      "qty": 1
     },
     {
       "name": "Sui",
       "symbol": "SUI",
       "logo": "../assets/logos/sui.png",
       "url": "https://sui.io",
-      "qty": 10,
       "source": {
         "type": "coingecko",
         "id": "sui"
-      }
+      },
+      "lots": [
+        {
+          "date": "2026-10-03T08:43:19.794Z",
+          "qty": 10,
+          "price": 25.15
+        }
+      ],
+      "qty": 10
     }
   ]
 }

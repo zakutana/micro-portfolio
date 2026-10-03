@@ -7,6 +7,7 @@
   const PAGE_ID = root.dataset.id; // fixed per page, set in its index.html
   const DEFAULT_THEME = root.dataset.theme;
   let cfg = null; // { codeHash, holdings } – loaded fresh from config.json on every visit
+  let holdings = []; // the holdings that are actually owned (quantity > 0)
 
   const THEMES = [
     { id: "minecraft", label: "Minecraft", color: "#7a5230" },
@@ -163,20 +164,24 @@
     const url = `${COINGECKO}/coins/markets?vs_currency=czk&per_page=250&ids=${encodeURIComponent(ids.join(","))}`;
     try {
       const rows = await getJson(url);
-      return new Map(rows.filter((r) => isPrice(r.current_price)).map((r) => [r.id, r.current_price]));
+      return new Map(
+        rows
+          .filter((r) => isPrice(r.current_price))
+          .map((r) => [r.id, { price: r.current_price, change24: r.price_change_percentage_24h }]),
+      );
     } catch {
       return new Map();
     }
   }
 
   /* Tokenised stocks (e.g. RoboStrategy BOT) and other on-chain tokens, priced in USD. */
-  async function fetchDexUsd({ chain, address }) {
+  async function fetchDex({ chain, address }) {
     try {
       const pairs = await getJson(`${DEXSCREENER}/${chain}/${address}`);
       const best = pairs
         .filter((p) => isPrice(Number(p.priceUsd)))
         .sort((a, b) => (b.liquidity?.usd ?? 0) - (a.liquidity?.usd ?? 0))[0];
-      return best ? Number(best.priceUsd) : null;
+      return best ? { usd: Number(best.priceUsd), change24: best.priceChange?.h24 } : null;
     } catch {
       return null;
     }
@@ -196,33 +201,39 @@
   async function loadPrices() {
     const cache = readCache();
     const cachedPrices = cache.prices ?? {};
-    const holdings = cfg.holdings;
     const dexHoldings = holdings.filter((h) => h.source.type === "dexscreener");
     const cgIds = [...new Set(holdings.filter((h) => h.source.type === "coingecko").map((h) => h.source.id))];
 
-    const [cg, fxLive, ...dexUsd] = await Promise.all([
+    const [cg, fxLive, ...dex] = await Promise.all([
       fetchCoinGecko(cgIds),
       dexHoldings.length ? fetchUsdCzk() : null,
-      ...dexHoldings.map((h) => fetchDexUsd(h.source)),
+      ...dexHoldings.map((h) => fetchDex(h.source)),
     ]);
     const fx = fxLive ?? cache.fx ?? null;
-    const dexByKey = new Map(dexHoldings.map((h, i) => [sourceKey(h), dexUsd[i]]));
+    const dexByKey = new Map(dexHoldings.map((h, i) => [sourceKey(h), dex[i]]));
 
     const fresh = {};
     const items = holdings.map((h) => {
       const key = sourceKey(h);
       let price = null;
+      let change24 = null;
       if (h.source.type === "coingecko") {
-        price = cg.get(h.source.id) ?? null;
-      } else if (isPrice(dexByKey.get(key)) && isPrice(fx)) {
-        price = dexByKey.get(key) * fx;
+        const hit = cg.get(h.source.id);
+        price = hit?.price ?? null;
+        change24 = hit?.change24 ?? null;
+      } else {
+        const hit = dexByKey.get(key);
+        if (hit && isPrice(hit.usd) && isPrice(fx)) {
+          price = hit.usd * fx;
+          change24 = hit.change24 ?? null;
+        }
       }
       if (isPrice(price)) {
         fresh[key] = price;
-        return { holding: h, price, live: true };
+        return { holding: h, price, change24: Number.isFinite(change24) ? change24 : null, live: true };
       }
       const stale = cachedPrices[key];
-      return { holding: h, price: isPrice(stale) ? stale : null, live: false };
+      return { holding: h, price: isPrice(stale) ? stale : null, change24: null, live: false };
     });
 
     store.set(
@@ -232,17 +243,60 @@
     return { items, allLive: items.every((i) => i.live), cachedAt: cache.ts ?? null };
   }
 
-  /* ---------- Rendering ---------- */
+  /* ---------- Formatting ---------- */
 
-  const czk = new Intl.NumberFormat("cs-CZ", { style: "currency", currency: "CZK", maximumFractionDigits: 0 });
-  const czkSmall = new Intl.NumberFormat("cs-CZ", { style: "currency", currency: "CZK", maximumFractionDigits: 2 });
-  const formatCzk = (v) => (v < 100 ? czkSmall : czk).format(v);
+  const nf = (opts) => new Intl.NumberFormat("cs-CZ", opts);
+  const czk0 = nf({ style: "currency", currency: "CZK", maximumFractionDigits: 0 });
+  const czk2 = nf({ style: "currency", currency: "CZK", maximumFractionDigits: 2 });
+  const formatCzk = (v) => (v < 100 ? czk2 : czk0).format(v);
+  const MINUS = "−";
+
+  /* Price of one unit: more decimals for cheap things. */
+  function formatUnitPrice(v) {
+    const digits = v >= 1000 ? 0 : v >= 1 ? 2 : 4;
+    return `${nf({ minimumFractionDigits: digits, maximumFractionDigits: digits }).format(v)} Kč`;
+  }
+  const formatQty = (q) => nf({ maximumFractionDigits: 4 }).format(q);
+
+  function formatPct(ratio, { signed = true } = {}) {
+    const abs = Math.abs(ratio * 100);
+    const digits = abs < 1 ? 2 : 1;
+    const text = nf({ minimumFractionDigits: digits, maximumFractionDigits: digits }).format(abs);
+    const sign = !signed ? "" : ratio * 100 >= 0.005 ? "+" : ratio * 100 <= -0.005 ? MINUS : "";
+    return `${sign}${text} %`;
+  }
+  function formatSignedCzk(v) {
+    const sign = v >= 0.005 ? "+" : v <= -0.005 ? MINUS : "";
+    return `${sign}${formatCzk(Math.abs(v))}`;
+  }
+  const trend = (ratio) => (ratio * 100 >= 0.005 ? "up" : ratio * 100 <= -0.005 ? "down" : "flat");
+  const ARROW = { up: "▲", down: "▼", flat: "▬" };
 
   const $ = (id) => document.getElementById(id);
+  const el = (tag, className, text) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  };
+
+  /* ---------- Purchases: quantity, cost and start date of each holding ---------- */
+
+  function position(h) {
+    if (Array.isArray(h.lots)) {
+      const lots = h.lots.filter((l) => l.qty > 0 && l.price > 0);
+      const qty = lots.reduce((a, l) => a + l.qty, 0);
+      const cost = lots.reduce((a, l) => a + l.qty * l.price, 0);
+      const since = lots.map((l) => l.date).filter(Boolean).sort()[0] ?? null;
+      return { qty, cost: qty ? cost : null, since };
+    }
+    return { qty: h.qty ?? 0, cost: null, since: null };
+  }
+
+  /* ---------- Rendering ---------- */
 
   function logoNode(h) {
-    const box = document.createElement("span");
-    box.className = "logo";
+    const box = el("span", "logo");
     const initial = () => {
       box.textContent = h.name.trim().charAt(0).toUpperCase();
     };
@@ -263,56 +317,159 @@
     return box;
   }
 
+  const ALLOC_COLORS = ["#ff6b9a", "#4dabf7", "#ffd43b", "#69db7c", "#b197fc", "#ff922b", "#38d9a9", "#e599f7"];
+  const DETAIL_CELLS = [
+    ["price", "Cena za kus"],
+    ["qty", "Kusů"],
+    ["avg", "Nákupní cena"],
+    ["pl", "Zisk / ztráta"],
+    ["today", "Za 24 hodin"],
+    ["share", "Podíl"],
+  ];
+  const GLOSSARY = [
+    ["Cena za kus", "Kolik stojí jedna jednotka právě teď. Mění se každou chvíli."],
+    ["Nákupní cena", "Průměrná cena, za kterou byly ty kusy koupené. Když nakoupíš ve dvou dnech za různé ceny, spočítá se průměr."],
+    ["Zisk / ztráta", "Rozdíl mezi dnešní hodnotou a tím, co sis do toho vložila. Plus znamená, že to roste, minus, že je to teď míň. Dokud nic neprodáš, je to jen na papíře."],
+    ["Za 24 hodin", "O kolik se cena změnila za poslední den. Jeden špatný den ještě nic neznamená."],
+    ["Podíl", "Kolik procent celého portfolia tvoří tahle položka. Když je peníze rozložené do víc věcí, jedna špatná zpráva nepokazí všechno."],
+  ];
+
+  let rowRefs = [];
+  let perfRefs = null;
+
   function buildList() {
     const list = $("list");
     list.replaceChildren();
-    for (const h of cfg.holdings) {
-      const li = document.createElement("li");
-      const a = document.createElement("a");
-      a.className = "row";
+    rowRefs = [];
+    for (const h of holdings) {
+      const li = el("li");
+      const a = el("a", "row");
       a.href = h.url;
       a.target = "_blank";
       a.rel = "noopener noreferrer";
       a.setAttribute("aria-label", `${h.name} – otevřít web`);
 
-      const name = document.createElement("span");
-      name.className = "name";
-      const strong = document.createElement("strong");
-      strong.textContent = h.name;
-      const small = document.createElement("small");
-      small.textContent = h.symbol;
-      name.append(strong, small);
+      const name = el("span", "name");
+      name.append(el("strong", "", h.name), el("small", "", h.symbol));
 
-      const value = document.createElement("span");
-      value.className = "value is-loading";
-      value.textContent = "…";
-
+      const value = el("span", "value is-loading", "…");
       a.append(logoNode(h), name, value);
-      li.append(a);
+
+      const detail = el("div", "detail");
+      const cells = {};
+      for (const [key, label] of DETAIL_CELLS) {
+        const cell = el("div", "cell");
+        const v = el("span", "v", "—");
+        cell.append(el("span", "k", label), v);
+        detail.append(cell);
+        cells[key] = v;
+      }
+      cells.plMoney = el("span", "money");
+      cells.plChip = el("span", "chip");
+      cells.pl.replaceChildren(cells.plMoney, cells.plChip);
+
+      li.append(a, detail);
       list.append(li);
+      rowRefs.push({ value, cells });
     }
   }
 
+  function buildPerf() {
+    const box = el("section", "panel perf");
+    box.hidden = true;
+    const top = el("div", "perf-top");
+    const icon = el("div", "perf-icon");
+    const text = el("div", "perf-text");
+    const title = el("div", "perf-title");
+    const sub = el("div", "perf-sub");
+    text.append(title, sub);
+    const side = el("div", "perf-side");
+    const pct = el("div", "perf-pct");
+    const money = el("div", "perf-money");
+    side.append(pct, money);
+    top.append(icon, text, side);
+
+    const pro = el("div", "pro-only perf-pro");
+    const allocTitle = el("div", "alloc-title", "Z čeho se portfolio skládá");
+    const bar = el("div", "alloc-bar");
+    const legend = el("div", "alloc-legend");
+    const invested = el("div", "perf-invested");
+    pro.append(invested, allocTitle, bar, legend);
+
+    box.append(top, pro);
+    $("content").prepend(box);
+    perfRefs = { box, icon, title, sub, pct, money, bar, legend, invested };
+  }
+
+  function buildGlossary() {
+    const box = el("details", "panel glossary pro-only");
+    box.append(el("summary", "", "Slovníček investora"));
+    const dl = el("dl");
+    for (const [term, def] of GLOSSARY) dl.append(el("dt", "", term), el("dd", "", def));
+    dl.append(el("dt", "", "Pozor"), el("dd", "", "Ceny kolísají nahoru i dolů. Že to dnes roste, neznamená, že poroste i zítra."));
+    box.append(dl);
+    $("content").append(box);
+  }
+
   function showPrices({ items, allLive, cachedAt }) {
-    const values = document.querySelectorAll("#list .value");
+    const rows = items.map((item) => {
+      const pos = position(item.holding);
+      return { item, pos, value: item.price === null ? null : item.price * pos.qty };
+    });
+
     let total = 0;
     let known = 0;
-
-    items.forEach((item, i) => {
-      const el = values[i];
-      el.classList.remove("is-loading");
-      el.classList.toggle("is-stale", !item.live);
-      if (item.price === null) {
-        el.textContent = "—";
-        return;
-      }
-      const value = item.price * item.holding.qty;
+    let costSum = 0;
+    let valueSum = 0;
+    let since = null;
+    for (const { pos, value } of rows) {
+      if (pos.since && (!since || pos.since < since)) since = pos.since;
+      if (value === null) continue;
       total += value;
       known += 1;
-      el.textContent = formatCzk(value);
+      if (pos.cost !== null) {
+        costSum += pos.cost;
+        valueSum += value;
+      }
+    }
+
+    rows.forEach(({ item, pos, value }, i) => {
+      const { value: valueEl, cells } = rowRefs[i];
+      valueEl.classList.remove("is-loading");
+      valueEl.classList.toggle("is-stale", !item.live);
+      valueEl.textContent = value === null ? "—" : formatCzk(value);
+
+      cells.price.textContent = item.price === null ? "—" : formatUnitPrice(item.price);
+      cells.qty.textContent = formatQty(pos.qty);
+      cells.avg.textContent = pos.cost === null ? "—" : formatUnitPrice(pos.cost / pos.qty);
+      cells.share.textContent = value === null || total <= 0 ? "—" : formatPct(value / total, { signed: false });
+
+      const today = cells.today;
+      today.className = "v";
+      if (item.change24 === null) {
+        today.textContent = "—";
+      } else {
+        const r = item.change24 / 100;
+        today.textContent = `${ARROW[trend(r)]} ${formatPct(r)}`;
+        today.classList.add(`is-${trend(r)}`);
+      }
+
+      cells.plMoney.textContent = "";
+      cells.plChip.textContent = "";
+      cells.plChip.className = "chip";
+      if (value !== null && pos.cost !== null) {
+        const pl = value - pos.cost;
+        const r = pl / pos.cost;
+        cells.plMoney.textContent = formatSignedCzk(pl);
+        cells.plChip.textContent = formatPct(r);
+        cells.plChip.classList.add(`is-${trend(r)}`);
+      } else {
+        cells.plMoney.textContent = "—";
+      }
     });
 
     $("total").textContent = known ? formatCzk(total) : "—";
+    showPerformance({ costSum, valueSum, since, rows, total });
 
     const status = $("status");
     status.classList.toggle("is-warn", !allLive);
@@ -326,6 +483,79 @@
     } else {
       status.innerHTML = `${dot}Ceny se teď nepodařilo načíst. Zkus to za chvíli.`;
     }
+  }
+
+  function showPerformance({ costSum, valueSum, since, rows, total }) {
+    const p = perfRefs;
+    if (!(costSum > 0)) {
+      p.box.hidden = true; // no starting point recorded yet
+      return;
+    }
+    p.box.hidden = false;
+    const ratio = valueSum / costSum - 1;
+    const diff = valueSum - costSum;
+    const t = trend(ratio);
+    p.box.classList.remove("is-up", "is-down", "is-flat");
+    p.box.classList.add(`is-${t}`);
+    p.icon.textContent = ARROW[t];
+    p.title.textContent = t === "up" ? "Portfolio roste" : t === "down" ? "Portfolio klesá" : "Zatím beze změny";
+    const date = since ? new Date(since).toLocaleDateString("cs-CZ", { day: "numeric", month: "numeric" }) : "";
+    p.sub.textContent = date ? `od předání ${date}` : "od předání";
+    p.pct.textContent = formatPct(ratio);
+    p.money.textContent = formatSignedCzk(diff);
+    p.invested.textContent = `Vloženo ${formatCzk(costSum)} → dnes ${formatCzk(valueSum)}`;
+
+    p.bar.replaceChildren();
+    p.legend.replaceChildren();
+    rows
+      .filter((r) => r.value !== null)
+      .sort((a, b) => b.value - a.value)
+      .forEach((r, i) => {
+        const color = ALLOC_COLORS[i % ALLOC_COLORS.length];
+        const share = r.value / total;
+        const seg = el("span", "alloc-seg");
+        seg.style.flexGrow = String(Math.max(share, 0.0001));
+        seg.style.background = color;
+        seg.title = `${r.item.holding.symbol} ${formatPct(share, { signed: false })}`;
+        p.bar.append(seg);
+        const li = el("span", "alloc-item");
+        const dot = el("i");
+        dot.style.background = color;
+        li.append(dot, document.createTextNode(`${r.item.holding.symbol} ${formatPct(share, { signed: false })}`));
+        p.legend.append(li);
+      });
+  }
+
+  /* ---------- Pro mode ---------- */
+
+  function applyPro(on) {
+    root.dataset.pro = on ? "1" : "0";
+    const sw = document.getElementById("pro-switch");
+    if (sw) sw.setAttribute("aria-checked", String(on));
+  }
+
+  function buildProBar() {
+    const bar = el("div", "pro-bar");
+    const label = el("label", "pro-label", "Pro režim");
+    label.htmlFor = "pro-switch";
+    const sw = el("button", "switch");
+    sw.type = "button";
+    sw.id = "pro-switch";
+    sw.setAttribute("role", "switch");
+    sw.append(el("span", "knob"));
+    sw.title = "Ukáže cenu a růst každé položky";
+    bar.append(label, sw);
+    $("themes").after(bar);
+
+    const pill = el("span", "pro-pill", "PRO");
+    document.querySelector(".title").append(pill);
+
+    sw.addEventListener("click", () => {
+      const on = root.dataset.pro !== "1";
+      store.set("pro", on ? "1" : "0");
+      applyPro(on);
+    });
+    applyPro(store.get("pro") === "1");
   }
 
   /* ---------- Boot ---------- */
@@ -359,10 +589,14 @@
     }
 
     showOwner();
+    holdings = cfg.holdings.filter((h) => position(h).qty > 0);
+    buildProBar();
 
     $("content").hidden = false;
     $("total-bar").hidden = false;
+    buildPerf();
     buildList();
+    buildGlossary();
 
     let lastRun = 0;
     const refresh = async () => {
