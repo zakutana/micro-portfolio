@@ -233,8 +233,8 @@ html, body { width: ${SW}mm; background: #fff; -webkit-print-color-adjust: exact
 .own small { font: 700 1.55mm/1 "Nunito", sans-serif; letter-spacing: .24em; text-transform: uppercase; opacity: .9 }
 .own b { font: 600 4.8mm/1 "Fredoka", "Nunito", sans-serif; letter-spacing: .2em }
 .since { left: 27mm; bottom: 8.4mm; font: 700 1.7mm/1 "Nunito", sans-serif; letter-spacing: .14em; text-transform: uppercase; opacity: .92 }
-.hero { right: -1.4mm; bottom: -2.8mm; width: 30mm; height: 30mm }
-.hero.waddle { width: 33mm; height: 30mm; right: -2.4mm; bottom: -2.4mm }
+.hero { right: 6mm; bottom: 6mm; width: 26mm; height: 26mm }
+.hero.waddle { width: 28.6mm; height: 26mm; right: 6mm; bottom: 6mm }
 .hero svg, .mini svg { width: 100%; height: 100%; display: block }
 
 /* back */
