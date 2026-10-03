@@ -918,6 +918,29 @@ body {
   min-width: 0;
 }
 
+/* a holding that is not traded yet: visible, but clearly "outside" the portfolio */
+.list li.is-excluded {
+  opacity: 0.55;
+  filter: grayscale(1);
+}
+
+.list li.is-excluded .value {
+  color: var(--muted);
+}
+
+.value .excl {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.62em;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: right;
+}
+
+.block-lines li.is-excluded {
+  opacity: 0.55;
+}
+
 .cell.wide {
   grid-column: 1 / -1;
 }

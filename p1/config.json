@@ -101,7 +101,7 @@
     {
       "name": "Cymetica",
       "symbol": "ET10",
-      "note": "zatím se neobchoduje",
+      "note": "zat\u00edm se neobchoduje",
       "logo": "../assets/logos/cymetica.jpg",
       "url": "https://cymetica.com/",
       "qty": 100000,
@@ -115,7 +115,8 @@
           "qty": 100000,
           "price": 0.0217
         }
-      ]
+      ],
+      "notTraded": true
     }
   ]
 }

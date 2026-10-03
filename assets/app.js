@@ -410,7 +410,7 @@
 
       li.append(a, detail);
       list.append(li);
-      rowRefs.push({ value, cells });
+      rowRefs.push({ li, value, cells });
     }
   }
 
@@ -479,12 +479,13 @@
         let sum = 0;
         for (const l of items) {
           const amount = l.qty * l.price;
-          sum += amount;
-          const line = el("li");
+          const excluded = l.h.notTraded === true;
+          if (!excluded) sum += amount;
+          const line = el("li", excluded ? "is-excluded" : "");
           line.append(
             el("span", "sym", l.h.symbol),
             el("span", "q", `${formatQty(l.qty)} ks × ${formatUnitPrice(l.price)}`),
-            el("span", "amt", formatCzk(amount)),
+            el("span", "amt", excluded ? `${formatCzk(amount)} · mimo součet` : formatCzk(amount)),
           );
           lines.append(line);
         }
@@ -514,7 +515,8 @@
     const rows = items.map((item) => {
       const pos = position(item.holding);
       if (!tracking) pos.cost = null;
-      return { item, pos, value: item.price === null ? null : item.price * pos.qty };
+      // "notTraded": shown (dimmed) but not part of the total, the growth, the shares or the allocation
+      return { item, pos, value: item.price === null ? null : item.price * pos.qty, excluded: item.holding.notTraded === true };
     });
 
     let total = 0;
@@ -522,9 +524,9 @@
     let costSum = 0;
     let valueSum = 0;
     let since = null;
-    for (const { pos, value } of rows) {
+    for (const { pos, value, excluded } of rows) {
       if (pos.since && (!since || pos.since < since)) since = pos.since;
-      if (value === null) continue;
+      if (value === null || excluded) continue;
       total += value;
       known += 1;
       if (pos.cost !== null) {
@@ -533,16 +535,18 @@
       }
     }
 
-    rows.forEach(({ item, pos, value }, i) => {
-      const { value: valueEl, cells } = rowRefs[i];
+    rows.forEach(({ item, pos, value, excluded }, i) => {
+      const { li, value: valueEl, cells } = rowRefs[i];
+      li.classList.toggle("is-excluded", excluded);
       valueEl.classList.remove("is-loading");
       valueEl.classList.toggle("is-stale", !item.live);
       valueEl.textContent = value === null ? "—" : formatCzk(value);
+      if (excluded) valueEl.append(el("small", "excl", "mimo součet"));
 
       cells.price.textContent = item.price === null ? "—" : formatUnitPrice(item.price);
       cells.qty.textContent = formatQty(pos.qty);
       cells.avg.textContent = pos.cost === null ? "—" : formatUnitPrice(pos.cost / pos.qty);
-      cells.share.textContent = value === null || total <= 0 ? "—" : formatPct(value / total, { signed: false });
+      cells.share.textContent = excluded || value === null || total <= 0 ? "—" : formatPct(value / total, { signed: false });
       cells.cap.textContent = item.marketCap === null ? "—" : formatBig(item.marketCap);
 
       const today = cells.today;
@@ -558,7 +562,7 @@
       cells.plMoney.textContent = "";
       cells.plChip.textContent = "";
       cells.plChip.className = "chip";
-      if (value !== null && pos.cost !== null) {
+      if (!excluded && value !== null && pos.cost !== null) {
         const pl = value - pos.cost;
         const r = pl / pos.cost;
         cells.plMoney.textContent = formatSignedCzk(pl);
@@ -625,7 +629,7 @@
     p.bar.replaceChildren();
     p.legend.replaceChildren();
     rows
-      .filter((r) => r.value !== null)
+      .filter((r) => r.value !== null && !r.excluded)
       .sort((a, b) => b.value - a.value)
       .forEach((r, i) => {
         const color = ALLOC_COLORS[i % ALLOC_COLORS.length];
