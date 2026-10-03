@@ -51,6 +51,8 @@ Když se ceny nepodaří načíst, stránka ukáže poslední známé (uložené
 
 ## Růst portfolia a Pro režim
 
+Od data startu se u každé položky v seznamu ukáže i malé procento (zelené plus nebo červené mínus) jejího vlastního růstu. Před startem se neukazuje.
+
 Stránka ukazuje, o kolik % portfolio vyrostlo nebo kleslo **od předání**, a v Pro režimu (přepínač nahoře) cenu, zisk/ztrátu v Kč i %, změnu za 24 hodin a podíl každé položky, rozložení portfolia a slovníček investora.
 
 Výchozí cena a nákupy se zapisují do `config.json` jako „loty“ (`lots`: datum, počet kusů, cena v Kč za kus). Zapisuje je nástroj, ruční úpravy ne:

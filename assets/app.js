@@ -542,6 +542,11 @@
       valueEl.classList.toggle("is-stale", !item.live);
       valueEl.textContent = value === null ? "—" : formatCzk(value);
       if (excluded) valueEl.append(el("small", "excl", "mimo součet"));
+      // growth of this single investment, once tracking has started (next to its value, also without Pro mode)
+      if (!excluded && value !== null && pos.cost !== null) {
+        const r = value / pos.cost - 1;
+        valueEl.append(el("small", `micro is-${trend(r)}`, `${ARROW[trend(r)]} ${formatPct(r)}`));
+      }
 
       cells.price.textContent = item.price === null ? "—" : formatUnitPrice(item.price);
       cells.qty.textContent = formatQty(pos.qty);
