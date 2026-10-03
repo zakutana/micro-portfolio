@@ -9,7 +9,7 @@
 window.MICRO_PORTFOLIO = {
   id: "p1",
   codeHash: "ea70d89804e535204a038946acc37f65f91bac8125ebbf8adfd1ebecd1b39006",
-  defaultTheme: "pokemon",
+  defaultTheme: "waddle",
   holdings: [
     {
       name: "Collector Crypt",

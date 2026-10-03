@@ -8,6 +8,7 @@
   const THEMES = [
     { id: "minecraft", label: "Minecraft", color: "#7a5230" },
     { id: "kirby", label: "Kirby", color: "#ff9ccf" },
+    { id: "waddle", label: "Waddle Dee", color: "#3f5ee0" },
     { id: "pokemon", label: "Pokémon", color: "#2a75bb" },
   ];
 

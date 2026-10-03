@@ -40,7 +40,7 @@ Když se ceny nepodaří načíst, stránka ukáže poslední známé (uložené
 
 ## Motivy
 
-Minecraft, Kirby, Pokémon. Volba se ukládá do telefonu (`localStorage`), takže zůstane i po zavření stránky. `p2` začíná s Kirby (růžová), `p1` s Pokémonem (modrá). Výchozí motiv je `defaultTheme` v configu. Motivy jsou sady CSS proměnných v `assets/style.css`.
+Minecraft, Kirby, Waddle Dee, Pokémon. Volba se ukládá do telefonu (`localStorage`), takže zůstane i po zavření stránky. `p2` začíná s Kirby (růžová), `p1` s Waddle Dee (modrá s oranžovou). Výchozí motiv je `defaultTheme` v configu. Motivy jsou sady CSS proměnných v `assets/style.css`.
 
 ## Ochrana kódem
 

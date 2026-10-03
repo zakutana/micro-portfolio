@@ -102,6 +102,41 @@
   --letter: 0;
 }
 
+:root[data-theme="waddle"] {
+  --font: "Fredoka", system-ui, sans-serif;
+  --bg: #3a56d8;
+  --bg-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.16) 0 2.5px, transparent 3px),
+    linear-gradient(180deg, #4a68ea 0%, #2c3fb4 100%);
+  --bg-size: 26px 26px, auto;
+  --text: #4a2a14;
+  --muted: #9a6a3d;
+  --title: #ffffff;
+  --title-shadow: 0 3px 0 #c4401a, 0 5px 10px rgba(20, 20, 90, 0.35);
+  --panel: #fdf0d2;
+  --panel-border: 3px solid #f05a28;
+  --panel-radius: 20px;
+  --panel-shadow: 0 5px 0 #c4401a, 0 10px 18px rgba(10, 15, 70, 0.3);
+  --row-hover: #ffe5b0;
+  --total-bg: linear-gradient(180deg, #f9a53c 0%, #f05a28 100%);
+  --total-text: #ffffff;
+  --total-label: #ffe9cf;
+  --btn-bg: #fdf0d2;
+  --btn-border: 3px solid #f05a28;
+  --btn-radius: 14px;
+  --btn-active-bg: #f8d73c;
+  --btn-active-text: #4a2a14;
+  --btn-shadow: 0 3px 0 #c4401a;
+  --status-ok: #1d8a4c;
+  --status-warn: #c2570c;
+  --badge-bg: #fbe0a6;
+  --title-size: 1.9rem;
+  --value-size: 1.15rem;
+  --total-size: 2rem;
+  --base-size: 1rem;
+  --letter: 0;
+}
+
 :root[data-theme="minecraft"] {
   --font: "Press Start 2P", "Courier New", monospace;
   --bg: #7a5230;
@@ -155,6 +190,7 @@ body {
   color: var(--text);
   background-color: var(--bg);
   background-image: var(--bg-image);
+  background-size: var(--bg-size, auto);
   background-attachment: fixed;
   image-rendering: auto;
 }
