@@ -140,16 +140,7 @@
     const icon = el("div", "lock-icon", "\u{1F512}");
     icon.setAttribute("aria-hidden", "true");
     const title = el("h2", "", name ? `Ahoj ${name}!` : "Tahle stránka je jen pro tebe");
-    const hint = el("p", "", "Heslo je ukryté v čísle na tvé kartičce. Rozluštíš ho a napíšeš sem. Stačí jednou, příště se stránka otevře sama.");
-    const help = el("details", "lock-help");
-    const steps = el("ol");
-    for (const text of [
-      "Číslo na kartě má čtyři čtveřice číslic.",
-      "V každé čtveřici sečti všechny čtyři číslice. Např. 0405 je 0 + 4 + 0 + 5 = 9.",
-      "Z každé čtveřice ti vyjde jedno číslo (jedna číslice), dohromady čtyři.",
-      "Heslo jsou ta čtyři čísla napsaná za sebou, bez mezer. Např. 3, 7, 5, 8 je 3758.",
-    ]) steps.append(el("li", "", text));
-    help.append(el("summary", "", "Jak to rozluštit?"), steps);
+    const hint = el("p", "", "Napiš heslo z kartičky. Stačí jednou, příště se stránka otevře sama.");
 
     const form = el("form", "pw-form");
     const input = el("input", "pw-input");
@@ -167,7 +158,7 @@
     const message = el("p", "pw-message");
     message.setAttribute("aria-live", "polite");
     form.append(input, button, message);
-    lock.append(icon, title, hint, help, form);
+    lock.append(icon, title, hint, form);
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
