@@ -10,7 +10,7 @@
  * How the number is made: every letter of the password is a number (a=1 ... z=26). The letters of the name
  * (also a=1 ... z=26, repeated over and over) are added to it; if the result is above 26, take 26 away.
  * Every result is written as two digits. Those pairs come first in the 16-digit card number, the rest is the
- * date 101026 (it means nothing). The child subtracts the name letters again and turns the numbers into letters.
+ * start date as DDMMYY (it means nothing). The child subtracts the name letters again and turns the numbers into letters.
  * This is a game, not security: the name is on the card and in the QR link, and config.json is public anyway.
  */
 import { pbkdf2Sync } from "node:crypto";
@@ -22,7 +22,15 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PRIVATE = path.join(ROOT, "private");
 const PASSWORDS_FILE = path.join(PRIVATE, "passwords.json");
 const PBKDF2_ITERATIONS = 200_000; // must match assets/app.js
-const FILLER = "101026";
+// the filler digits: the start date as DDMMYY, from tools/people.json
+export function startFiller() {
+  const f = path.join(ROOT, "tools/people.json");
+  const date = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, "utf8")).startDate : null;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date ?? "")) return "101026";
+  const [y, m, d] = date.split("-");
+  return `${d}${m}${y.slice(2)}`;
+}
+const FILLER = "101026"; // default: the date DDMMYY (make-print.mjs passes the start date of the cards)
 
 const letters = (s) =>
   s
@@ -32,7 +40,7 @@ const letters = (s) =>
     .replace(/[^a-z]/g, "");
 const val = (ch) => ch.charCodeAt(0) - 96; // a=1 ... z=26
 
-export function cardNumber(password, name) {
+export function cardNumber(password, name, filler = startFiller()) {
   const pw = letters(password);
   const key = letters(name);
   if (pw.length < 3 || pw.length > 7 || pw !== password) throw new Error("The password must be 3-7 letters a-z");
@@ -42,7 +50,7 @@ export function cardNumber(password, name) {
     const n = ((val(pw[i]) + val(key[i % key.length]) - 1) % 26) + 1;
     digits += String(n).padStart(2, "0");
   }
-  digits = (digits + FILLER.repeat(3)).slice(0, 16);
+  digits = (digits + filler.repeat(3)).slice(0, 16);
   return digits.match(/.{4}/g).join(" ");
 }
 
@@ -61,7 +69,7 @@ export const hashOf = (id, password) => pbkdf2Sync(password, `micro-portfolio:${
 
 const readJson = (f, fallback) => (fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, "utf8")) : fallback);
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const [cmd, id, password] = process.argv.slice(2);
   const names = readJson(path.join(PRIVATE, "names.json"), {});
   const passwords = readJson(PASSWORDS_FILE, {});

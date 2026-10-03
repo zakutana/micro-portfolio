@@ -100,7 +100,7 @@ Motivy jsou sady CSS proměnných na začátku `assets/style.css` (barvy, ráme�
 
 Heslo je zašifrované v **čísle na kartičce** a klíčem je **jméno** dítěte. Stránka si ho při prvním otevření řekne, ukáže návod „Jak to rozluštit?“ a pak si ho telefon pamatuje. Je to hra, ne bezpečnost: jméno je na kartičce i v QR odkazu a `config.json` je veřejný, takže kdo si otevře zdrojový kód, uvidí počty kusů. Pro tenhle účel (dětské portfolio) to stačí.
 
-Šifra: každé písmeno hesla je číslo (a = 1 … z = 26), přičte se číslo písmene ze jména (dokola) a když vyjde víc než 26, odečte se 26. Každý výsledek jsou dvě číslice. Tyto dvojice jsou na začátku šestnáctimístného čísla karty, zbytek je datum `101026`.
+Šifra: každé písmeno hesla je číslo (a = 1 … z = 26), přičte se číslo písmene ze jména (dokola) a když vyjde víc než 26, odečte se 26. Každý výsledek jsou dvě číslice. Tyto dvojice jsou na začátku šestnáctimístného čísla karty, zbytek je datum startu jako DDMMYY (např. `071026`; nic neznamená).
 
 ```sh
 node tools/password.mjs set p2 kirby     # nastaví heslo (3-7 písmen a-z): private/passwords.json + hash a délka v p2/config.json
