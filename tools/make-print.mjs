@@ -37,6 +37,13 @@ const PT = 72 / 25.4; // points per mm
 const people = JSON.parse(fs.readFileSync(path.join(ROOT, "tools/people.json"), "utf8"));
 const names = JSON.parse(fs.readFileSync(path.join(PRIVATE, "names.json"), "utf8"));
 const baseUrl = people.baseUrl.replace(/\/+$/, "");
+// the date of the first purchase, as shown on the page ("od 10. 10. 2026"); set "startDate" in tools/people.json
+const [sy, sm, sd] = people.startDate.split("-").map(Number);
+const START = `${sd}. ${sm}. ${sy}`;
+for (const person of people.people) {
+  const cfgStart = JSON.parse(fs.readFileSync(path.join(ROOT, person.id, "config.json"), "utf8")).startDate;
+  if (cfgStart !== people.startDate) console.warn(`Note: ${person.id}/config.json has startDate ${cfgStart}, the card says ${people.startDate}.`);
+}
 
 const icons = {};
 vm.runInNewContext(fs.readFileSync(path.join(ROOT, "assets/icons.js"), "utf8"), { window: icons });
@@ -160,7 +167,7 @@ function frontPage(p, i) {
     <div class="chip">${CHIP}</div>
     <div class="num">${no}</div>
     <div class="own"><small>Majitel</small><b>${p.name.toUpperCase()}</b></div>
-    <div class="since">Členem od 10/26</div>
+    <div class="since">Start ${START}</div>
     <div class="${hero}">${MASCOT[p.mascot]}</div>
   </section>`;
 }
@@ -208,7 +215,7 @@ html, body { width: ${PAGE_W}mm; background: #fff; -webkit-print-color-adjust: e
 .own { left: 6.5mm; bottom: 6.6mm; display: flex; flex-direction: column; gap: .8mm }
 .own small { font: 700 1.55mm/1 "Nunito", sans-serif; letter-spacing: .24em; text-transform: uppercase; opacity: .9 }
 .own b { font: 600 4.8mm/1 "Fredoka", "Nunito", sans-serif; letter-spacing: .2em }
-.since { left: 29mm; bottom: 6.8mm; font: 700 1.7mm/1 "Nunito", sans-serif; letter-spacing: .14em; text-transform: uppercase; opacity: .92 }
+.since { left: 27mm; bottom: 6.8mm; font: 700 1.7mm/1 "Nunito", sans-serif; letter-spacing: .14em; text-transform: uppercase; opacity: .92 }
 .hero { right: -1.4mm; bottom: -2.8mm; width: 30mm; height: 30mm }
 .hero.waddle { width: 33mm; height: 30mm; right: -2.4mm; bottom: -2.4mm }
 .hero svg, .mini svg { width: 100%; height: 100%; display: block }
