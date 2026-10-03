@@ -92,12 +92,12 @@ const LOGO_DIR = path.join(OUT, "tisk-logos");
 const SPACEX = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50" fill="#050505"/><path d="M14 33 H36 L86 69 H64 Z" fill="#fff"/><path d="M62 33 H86 L62 51 L52 44 Z" fill="#fff"/><path d="M14 69 H36 L46 61 L38 55 Z" fill="#fff"/></svg>`;
 // left, top, size (mm), rotation (deg); the safe zone and the QR code + text on the left stay free
 const COINS = [
-  { logo: "tesla", pad: 0.55, x: 46, y: 7.2, size: 7.2, rot: -10 },
-  { logo: "bot", pad: 0, x: 61, y: 6.8, size: 6.6, rot: 8 },
-  { logo: "cards", pad: 0.55, x: 75.5, y: 8, size: 7.4, rot: -6 },
-  { vector: SPACEX, x: 70, y: 31.5, size: 8.2, rot: 9 },
-  { logo: "sui", pad: 0.55, x: 62.5, y: 45.2, size: 7, rot: -8 },
-  { logo: "cymetica", pad: 0, x: 76, y: 43.5, size: 7.4, rot: 6 },
+  { logo: "tesla", pad: 0.55, x: 42, y: 44.2, size: 6.2, rot: -9 },
+  { logo: "bot", pad: 0, x: 49.5, y: 46.6, size: 6.2, rot: 7 },
+  { logo: "cards", pad: 0.55, x: 57, y: 43.6, size: 6.2, rot: -5 },
+  { vector: SPACEX, x: 64.5, y: 46.4, size: 6.2, rot: 10 },
+  { logo: "sui", pad: 0.55, x: 72, y: 44, size: 6.2, rot: -8 },
+  { logo: "cymetica", pad: 0, x: 79.3, y: 46.2, size: 6.2, rot: 6 },
 ];
 const coinsHtml = () =>
   COINS.map((c) => {
@@ -195,15 +195,24 @@ function frontPage(p, i) {
   </section>`;
 }
 
+function hatch() {
+  const w = 43.5;
+  const h = 8.5;
+  let d = "";
+  for (let x = -h; x < w; x += 3.2) d += `<path d="M${x} ${h}H${x + 1.6}L${x + 1.6 + h} 0H${x + h}Z"/>`;
+  return `<svg class="hatch" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"><g fill="#e9e1f3">${d}</g></svg>`;
+}
+
 function backPage(p, url, qr) {
   const pal = PALETTES[p.palette];
   return `<section class="page back" style="background:${pal.back.stops[0][1]}">
     ${gradientSvg(PAGE_W, PAGE_H, pal.back)}
     ${guilloche(71, 67)}
+    <div class="stripe">${gradientSvg(PAGE_W, 8, { angle: 180, stops: [[0, "#1c1c26"], [0.6, "#06060a"], [1, "#191923"]] }, 40, "bg")}</div>
+    <div class="sig">${hatch()}<span>Micro portfolio</span></div>
     ${coinsHtml()}
     <div class="qr">${qr.svg}</div>
     <div class="scan">Naskenuj kamerou mobilu.</div>
-    <div class="mini ${p.mascot}">${MASCOT[p.mascot]}</div>
   </section>`;
 }
 
@@ -249,11 +258,13 @@ html, body { width: ${SW}mm; background: #fff; -webkit-print-color-adjust: exact
 .hero svg, .mini svg { width: 100%; height: 100%; display: block }
 
 /* back */
-.qr { left: 8mm; top: 50%; transform: translateY(-50%); line-height: 0 }
+.stripe { left: 0; right: 0; top: 8mm; height: 8mm }
+.sig { left: 42mm; top: 19.8mm; width: 43.5mm; height: 8.5mm; background: #f7f2fb; border-radius: 1.2mm; overflow: hidden }
+.sig .hatch { position: absolute; inset: 0; width: 100%; height: 100% }
+.sig span { position: absolute; left: 3mm; top: 0; bottom: 0; display: flex; align-items: center; font: 700 1.9mm/1 "Nunito", sans-serif; letter-spacing: .3em; text-transform: uppercase; color: #7b6a90 }
+.qr { left: 8mm; top: 19.5mm; line-height: 0 }
 .qr svg { display: block }
-.scan { left: 42mm; top: 15.8mm; width: 43.5mm; font: 800 4.2mm/1.2 "Nunito", sans-serif }
-.mini { left: 42mm; top: 30mm; width: 16mm; height: 16mm }
-.mini.waddle { width: 17.5mm }
+.scan { left: 42mm; top: 31.2mm; width: 43.5mm; font: 800 4.2mm/1.2 "Nunito", sans-serif }
 .coin { background: #fff; border-radius: 50%; overflow: hidden; border: .25mm solid #fff }
 .coin img, .coin svg { width: 100%; height: 100%; display: block; object-fit: cover; border-radius: 50% }
 `;
