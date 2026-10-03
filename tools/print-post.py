@@ -2,7 +2,7 @@
 """Post-processing of the print PDF (called by make-print.mjs).
 
   print-post.py probe  <probe-cmyk.pdf>                       print what pure #000 became after the CMYK conversion
-  print-post.py finish <in.pdf> <out.pdf> <w_pt> <h_pt> <bleed_pt> <rich-black>
+  print-post.py finish <in.pdf> <out.pdf> <w_pt> <h_pt> <bleed_pt> <rich-black> [slug_pt]
                                                                exact page boxes, K-only black, gray -> K
   print-post.py check  <final.pdf> <tmp-dir>                   colour check + scan of the QR codes (links.json)
 """
@@ -25,7 +25,7 @@ def probe(path):
     print(m.group(1).decode() if m else "")
 
 
-def finish(src, dst, w, h, bleed, rich):
+def finish(src, dst, w, h, bleed, rich, slug=0.0):
     pdf = pikepdf.open(src)
     rich = rich.encode()
 
@@ -59,8 +59,9 @@ def finish(src, dst, w, h, bleed, rich):
         box = [0, top - h, w, top]
         pg.MediaBox = pikepdf.Array(box)
         pg.CropBox = pikepdf.Array(box)
-        pg.BleedBox = pikepdf.Array(box)
-        pg.TrimBox = pikepdf.Array([bleed, top - h + bleed, w - bleed, top - bleed])
+        pg.BleedBox = pikepdf.Array([slug, top - h + slug, w - slug, top - slug])
+        t = slug + bleed
+        pg.TrimBox = pikepdf.Array([t, top - h + t, w - t, top - t])
     pdf.docinfo["/Title"] = "Micro portfolio - tiskove karty (CMYK, 4 strany)"
     pdf.save(dst, min_version="1.6", compress_streams=True)
 
@@ -113,4 +114,4 @@ def check(final, tmp):
 
 if __name__ == "__main__":
     cmd, *a = sys.argv[1:]
-    {"probe": probe, "finish": lambda s, d, w, h, b, r: finish(s, d, float(w), float(h), float(b), r), "check": check}[cmd](*a)
+    {"probe": probe, "finish": lambda s, d, w, h, b, r, sl="0": finish(s, d, float(w), float(h), float(b), r, float(sl)), "check": check}[cmd](*a)

@@ -27,7 +27,9 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PRIVATE = path.join(ROOT, "private");
 const OUT = path.join(PRIVATE, "cards");
 const TMP = path.join(OUT, "tisk-tmp");
-const FINAL = path.join(OUT, "karticky-tisk-CMYK.pdf");
+const FINAL = path.join(OUT, "karticky-tisk-CMYK.pdf"); // no marks (BlackCard)
+const FINAL_MARKS = path.join(OUT, "karticky-tisk-CMYK-se-znackami.pdf"); // with crop marks (M CARD asks for them)
+const SLUG = 8; // mm of white margin around the bleed on the version with crop marks
 
 const PAGE_W = 91.5; // mm, with bleed
 const PAGE_H = 60;
@@ -189,18 +191,23 @@ const FONT = (name, file, weight = "400") =>
   `@font-face{font-family:"${name}";font-weight:${weight};src:url("${pathToFileURL(file).href}") format("woff2")}`;
 const F = (f) => path.join(ROOT, "assets/fonts", f);
 
-const CSS = `
+const css = (slug) => {
+  const SW = PAGE_W + 2 * slug;
+  const SH = PAGE_H + 2 * slug;
+  return `
 ${FONT("Fredoka", F("fredoka-latin.woff2"), "400 700")}
 ${FONT("Fredoka", F("fredoka-latin-ext.woff2"), "400 700")}
 ${FONT("Nunito", F("nunito-latin.woff2"), "600 800")}
 ${FONT("Nunito", F("nunito-latin-ext.woff2"), "600 800")}
 ${FONT("JB Mono", path.join(ROOT, "tools/fonts/jetbrainsmono-700-latin.woff2"), "700")}
-@page { size: ${PAGE_W + 1}mm ${PAGE_H + 1}mm; margin: 0 }
+@page { size: ${SW + 1}mm ${SH + 1}mm; margin: 0 }
 * { box-sizing: border-box; margin: 0; padding: 0 }
-html, body { width: ${PAGE_W}mm; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact }
-.page { position: relative; width: ${PAGE_W}mm; height: ${PAGE_H}mm; overflow: hidden; break-after: page; color: #fff;
+html, body { width: ${SW}mm; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact }
+.sheet { position: relative; width: ${SW}mm; height: ${SH}mm; overflow: hidden; break-after: page; background: #fff }
+.sheet:last-child { break-after: auto }
+.marks { position: absolute; inset: 0; width: 100%; height: 100% }
+.page { position: absolute; left: ${slug}mm; top: ${slug}mm; width: ${PAGE_W}mm; height: ${PAGE_H}mm; overflow: hidden; color: #fff;
   font-family: "Nunito", "Fredoka", sans-serif }
-.page:last-child { break-after: auto }
 .pattern, .bg { position: absolute; inset: 0; width: 100%; height: 100%; display: block }
 .page > * { position: absolute }
 
@@ -229,16 +236,34 @@ html, body { width: ${PAGE_W}mm; background: #fff; -webkit-print-color-adjust: e
 .mini { left: 42mm; bottom: 8mm; width: 16mm; height: 16mm }
 .mini.waddle { width: 17.5mm }
 `;
+};
 
-function html(pages) {
-  return `<!doctype html><html lang="cs"><head><meta charset="utf-8"><title>Micro portfolio – karty</title><style>${CSS}</style></head><body>
-${pages.join("\n")}</body></html>`;
+/* crop marks: short lines at the corners of the trimmed card, starting 3 mm (the bleed) away from it */
+function marksSvg(slug) {
+  const SW = PAGE_W + 2 * slug;
+  const SH = PAGE_H + 2 * slug;
+  const t = slug + BLEED; // the trim corner offset
+  const o = BLEED;
+  const l = 4;
+  const xs = [t, SW - t];
+  const ys = [t, SH - t];
+  let d = "";
+  for (const x of xs) for (const y of ys) {
+    const sx = x === xs[0] ? -1 : 1;
+    const sy = y === ys[0] ? -1 : 1;
+    d += `M${x + sx * o} ${y}h${sx * l}M${x} ${y + sy * o}v${sy * l}`;
+  }
+  return `<svg class="marks" viewBox="0 0 ${SW} ${SH}" xmlns="http://www.w3.org/2000/svg"><path d="${d}" fill="none" stroke="#000" stroke-width=".09"/></svg>`;
+}
+
+function html(pages, slug) {
+  const sheets = pages.map((pg) => `<div class="sheet">${pg}${slug ? marksSvg(slug) : ""}</div>`);
+  return `<!doctype html><html lang="cs"><head><meta charset="utf-8"><title>Micro portfolio – karty</title><style>${css(slug)}</style></head><body>
+${sheets.join("\n")}</body></html>`;
 }
 
 /* ---------- Build ---------- */
 
-fs.rmSync(TMP, { recursive: true, force: true });
-fs.mkdirSync(TMP, { recursive: true });
 const pages = [];
 const links = [];
 people.people.forEach((p, i) => {
@@ -249,58 +274,64 @@ people.people.forEach((p, i) => {
   links.push(url);
   pages.push(frontPage(p, i), backPage(p, url, qr));
 });
-const htmlFile = path.join(TMP, "karty.html");
-fs.writeFileSync(htmlFile, html(pages));
+async function build(slug, final) {
+  fs.rmSync(TMP, { recursive: true, force: true });
+  fs.mkdirSync(TMP, { recursive: true });
+  const htmlFile = path.join(TMP, "karty.html");
+  fs.writeFileSync(htmlFile, html(pages, slug));
 
-const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
-const page = await browser.newPage();
-await page.goto(pathToFileURL(htmlFile).href);
-await page.evaluate(() => document.fonts.ready);
-const rawPdf = path.join(TMP, "rgb.pdf");
-await page.pdf({ path: rawPdf, width: `${PAGE_W + 1}mm`, height: `${PAGE_H + 1}mm`, printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 }, preferCSSPageSize: true });
-await browser.close();
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
+  const page = await browser.newPage();
+  await page.goto(pathToFileURL(htmlFile).href);
+  await page.evaluate(() => document.fonts.ready);
+  const rawPdf = path.join(TMP, "rgb.pdf");
+  await page.pdf({ path: rawPdf, width: `${PAGE_W + 2 * slug + 1}mm`, height: `${PAGE_H + 2 * slug + 1}mm`, printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 }, preferCSSPageSize: true });
+  await browser.close();
 
-// RGB -> CMYK, fonts embedded, no downsampling
-const cmykPdf = path.join(TMP, "cmyk.pdf");
-execFileSync("gs", [
-  "-q", "-dSAFER", "-dBATCH", "-dNOPAUSE", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.6",
-  "-dPDFSETTINGS=/prepress", "-sColorConversionStrategy=CMYK", "-sProcessColorModel=DeviceCMYK",
-  "-dNoOutputFonts",
-  "-dDownsampleColorImages=false", "-dDownsampleGrayImages=false", "-dDownsampleMonoImages=false",
-  "-dAutoRotatePages=/None", `-sOutputFile=${cmykPdf}`, rawPdf,
-]);
+  // RGB -> CMYK, fonts embedded, no downsampling
+  const cmykPdf = path.join(TMP, "cmyk.pdf");
+  execFileSync("gs", [
+    "-q", "-dSAFER", "-dBATCH", "-dNOPAUSE", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.6",
+    "-dPDFSETTINGS=/prepress", "-sColorConversionStrategy=CMYK", "-sProcessColorModel=DeviceCMYK",
+    "-dNoOutputFonts",
+    "-dDownsampleColorImages=false", "-dDownsampleGrayImages=false", "-dDownsampleMonoImages=false",
+    "-dAutoRotatePages=/None", `-sOutputFile=${cmykPdf}`, rawPdf,
+  ]);
 
-// Pure black (#000, used by the QR code) must end up as K only, not as a "rich" CMYK mixture: find out what the
-// conversion made of #000 and replace exactly that colour with 0 0 0 100 below.
-const probeHtml = path.join(TMP, "probe.html");
-fs.writeFileSync(probeHtml, '<!doctype html><style>@page{size:20mm 20mm;margin:0}html,body{margin:0;width:20mm;height:20mm;background:#000}</style><body>.</body>');
-const probePage = await (await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined })).newPage();
-await probePage.goto(pathToFileURL(probeHtml).href);
-await probePage.pdf({ path: path.join(TMP, "probe-rgb.pdf"), width: "20mm", height: "20mm", printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
-await probePage.context().browser().close();
-execFileSync("gs", ["-q", "-dSAFER", "-dBATCH", "-dNOPAUSE", "-sDEVICE=pdfwrite", "-dPDFSETTINGS=/prepress", "-sColorConversionStrategy=CMYK", "-sProcessColorModel=DeviceCMYK", `-sOutputFile=${path.join(TMP, "probe-cmyk.pdf")}`, path.join(TMP, "probe-rgb.pdf")]);
-const richBlack = execFileSync("python3", [path.join(ROOT, "tools/print-post.py"), "probe", path.join(TMP, "probe-cmyk.pdf")]).toString().trim();
-console.log("Black #000 converts to:", richBlack || "(K only already)");
+  // Pure black (#000, used by the QR code) must end up as K only, not as a "rich" CMYK mixture: find out what the
+  // conversion made of #000 and replace exactly that colour with 0 0 0 100 below.
+  const probeHtml = path.join(TMP, "probe.html");
+  fs.writeFileSync(probeHtml, '<!doctype html><style>@page{size:20mm 20mm;margin:0}html,body{margin:0;width:20mm;height:20mm;background:#000}</style><body>.</body>');
+  const probePage = await (await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined })).newPage();
+  await probePage.goto(pathToFileURL(probeHtml).href);
+  await probePage.pdf({ path: path.join(TMP, "probe-rgb.pdf"), width: "20mm", height: "20mm", printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
+  await probePage.context().browser().close();
+  execFileSync("gs", ["-q", "-dSAFER", "-dBATCH", "-dNOPAUSE", "-sDEVICE=pdfwrite", "-dPDFSETTINGS=/prepress", "-sColorConversionStrategy=CMYK", "-sProcessColorModel=DeviceCMYK", `-sOutputFile=${path.join(TMP, "probe-cmyk.pdf")}`, path.join(TMP, "probe-rgb.pdf")]);
+  const richBlack = execFileSync("python3", [path.join(ROOT, "tools/print-post.py"), "probe", path.join(TMP, "probe-cmyk.pdf")]).toString().trim();
+  console.log("Black #000 converts to:", richBlack || "(K only already)");
 
-// exact page boxes (TrimBox / BleedBox), K-only black, final file
-execFileSync("python3", [path.join(ROOT, "tools/print-post.py"), "finish", cmykPdf, FINAL, String(PAGE_W * PT), String(PAGE_H * PT), String(BLEED * PT), richBlack]);
+  // exact page boxes (TrimBox / BleedBox), K-only black, final file
+  execFileSync("python3", [path.join(ROOT, "tools/print-post.py"), "finish", cmykPdf, final, String((PAGE_W + 2 * slug) * PT), String((PAGE_H + 2 * slug) * PT), String(BLEED * PT), richBlack, String(slug * PT)]);
 
-/* ---------- Checks ---------- */
+  /* ---------- Checks ---------- */
 
-const info = execFileSync("pdfinfo", ["-box", FINAL]).toString();
-const sizeLine = /Page size:\s+([\d.]+) x ([\d.]+) pts/.exec(info);
-const pagesLine = /Pages:\s+(\d+)/.exec(info);
-console.log(`Pages: ${pagesLine?.[1]}, page size: ${(sizeLine[1] / PT).toFixed(2)} x ${(sizeLine[2] / PT).toFixed(2)} mm`);
-if (pagesLine?.[1] !== String(people.people.length * 2)) throw new Error(`Expected ${people.people.length * 2} pages`);
-console.log("Fonts:\n" + execFileSync("pdffonts", [FINAL]).toString().trim());
-const images = execFileSync("pdfimages", ["-list", FINAL]).toString().trim().split("\n").slice(2);
-console.log(images.length ? `Raster images:\n${images.join("\n")}` : "Raster images: none (everything is vector)");
+  const info = execFileSync("pdfinfo", ["-box", final]).toString();
+  const sizeLine = /Page size:\s+([\d.]+) x ([\d.]+) pts/.exec(info);
+  const pagesLine = /Pages:\s+(\d+)/.exec(info);
+  console.log(`\n=== ${path.basename(final)} ===\nPages: ${pagesLine?.[1]}, page size: ${(sizeLine[1] / PT).toFixed(2)} x ${(sizeLine[2] / PT).toFixed(2)} mm`);
+  if (pagesLine?.[1] !== String(people.people.length * 2)) throw new Error(`Expected ${people.people.length * 2} pages`);
+  console.log("Fonts:\n" + execFileSync("pdffonts", [FINAL]).toString().trim());
+  const images = execFileSync("pdfimages", ["-list", FINAL]).toString().trim().split("\n").slice(2);
+  console.log(images.length ? `Raster images:\n${images.join("\n")}` : "Raster images: none (everything is vector)");
 
-fs.writeFileSync(path.join(TMP, "links.json"), JSON.stringify(links));
-execFileSync("python3", [path.join(ROOT, "tools/print-post.py"), "check", FINAL, TMP], { stdio: "inherit" });
+  fs.writeFileSync(path.join(TMP, "links.json"), JSON.stringify(links));
+  execFileSync("python3", [path.join(ROOT, "tools/print-post.py"), "check", final, TMP], { stdio: "inherit" });
 
-// previews (what the PDF looks like, converted back to RGB for the screen)
-for (let k = 1; k <= people.people.length * 2; k++) {
-  execFileSync("pdftoppm", ["-r", "300", "-f", String(k), "-l", String(k), "-png", "-singlefile", FINAL, path.join(OUT, `tisk-nahled-${k}`)]);
+  // previews (what the PDF looks like, converted back to RGB for the screen)
+  for (let k = 1; k <= people.people.length * 2; k++) {
+    execFileSync("pdftoppm", ["-r", "300", "-f", String(k), "-l", String(k), "-png", "-singlefile", final, path.join(OUT, `${slug ? "tisk-nahled-znacky" : "tisk-nahled"}-${k}`)]);
+  }
+  console.log(`\nDone: ${path.relative(ROOT, final)}`);
 }
-console.log(`\nDone: ${path.relative(ROOT, FINAL)}`);
+
+for (const [slug, final] of [[0, FINAL], [SLUG, FINAL_MARKS]]) await build(slug, final);
