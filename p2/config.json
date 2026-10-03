@@ -1,6 +1,6 @@
 {
   "passHash": "8a32cf619b407d7f9c8e6827956248f877e6e5c220626b553edd3c9952ee90f5",
-  "startDate": "2026-10-10",
+  "startDate": "2026-10-02",
   "holdings": [
     {
       "name": "Collector Crypt",
@@ -13,12 +13,12 @@
       },
       "lots": [
         {
-          "date": "2026-10-03T09:45:38.167Z",
-          "qty": 33.167496,
-          "price": 6.03
+          "date": "2026-10-02T12:00:00.000Z",
+          "qty": 36.514556,
+          "price": 5.477268
         }
       ],
-      "qty": 33.167496
+      "qty": 36.514556
     },
     {
       "name": "RoboStrategy",
@@ -32,12 +32,12 @@
       },
       "lots": [
         {
-          "date": "2026-10-03T09:45:38.167Z",
-          "qty": 0.316989,
-          "price": 630.937584
+          "date": "2026-10-02T12:00:00.000Z",
+          "qty": 0.315322,
+          "price": 634.27141
         }
       ],
-      "qty": 0.316989,
+      "qty": 0.315322,
       "sharesOutstanding": 24400000
     },
     {
@@ -51,19 +51,19 @@
       },
       "lots": [
         {
-          "date": "2026-10-03T09:45:38.167Z",
-          "qty": 7.833921,
-          "price": 25.53
+          "date": "2026-10-02T12:00:00.000Z",
+          "qty": 8.194649,
+          "price": 24.406171
         }
       ],
-      "qty": 7.833921
+      "qty": 8.194649
     },
     {
       "name": "Tesla",
       "symbol": "TSLA",
       "logo": "../assets/logos/tesla.png",
       "url": "https://www.tesla.com",
-      "qty": 0.012415,
+      "qty": 0.012312,
       "source": {
         "type": "dexscreener",
         "chain": "solana",
@@ -72,9 +72,9 @@
       "sharesOutstanding": 3237000000,
       "lots": [
         {
-          "date": "2026-10-03T09:45:38.167Z",
-          "qty": 0.012415,
-          "price": 8054.679487
+          "date": "2026-10-02T12:00:00.000Z",
+          "qty": 0.012312,
+          "price": 8122.245419
         }
       ]
     },
@@ -83,7 +83,7 @@
       "symbol": "SPCX",
       "logo": "../assets/logos/spacex.png",
       "url": "https://www.spacex.com",
-      "qty": 0.029031,
+      "qty": 0.029076,
       "source": {
         "type": "dexscreener",
         "chain": "solana",
@@ -92,9 +92,9 @@
       "sharesOutstanding": 13570000000,
       "lots": [
         {
-          "date": "2026-10-03T09:45:38.167Z",
-          "qty": 0.029031,
-          "price": 3444.558204
+          "date": "2026-10-02T12:00:00.000Z",
+          "qty": 0.029076,
+          "price": 3439.27258
         }
       ]
     },
@@ -111,7 +111,7 @@
       },
       "lots": [
         {
-          "date": "2026-10-03T09:45:38.167Z",
+          "date": "2026-10-02T12:00:00.000Z",
           "qty": 100000,
           "price": 0.0217
         }
