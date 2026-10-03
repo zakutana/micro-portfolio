@@ -18,6 +18,8 @@ Jméno se na stránku dostane jen z odkazu v QR kódu (`n=`), v repu není nikde
 
 ## Změna portfolia
 
+Před každým nasazením spusť `node tools/bump-version.mjs` (nová verze souborů, ať si telefon nespojí staré soubory z mezipaměti s novými).
+
 Otevři `p1/config.js` (nebo `p2/config.js`), uprav seznam `holdings`, commit a push. Každá položka:
 
 ```js

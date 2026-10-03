@@ -42,15 +42,18 @@
 
   const root = document.documentElement;
 
+  const themeById = (id) => THEMES.find((t) => t.id === id);
+
   function currentTheme() {
     const saved = store.get("theme");
-    return THEMES.some((t) => t.id === saved) ? saved : cfg.defaultTheme;
+    if (themeById(saved)) return saved;
+    return themeById(cfg.defaultTheme) ? cfg.defaultTheme : THEMES[0].id;
   }
 
   function applyTheme(id) {
     root.dataset.theme = id;
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.content = THEMES.find((t) => t.id === id).color;
+    if (meta) meta.content = themeById(id).color;
     const mascot = document.getElementById("mascot");
     if (mascot) mascot.innerHTML = icons[id];
     document.querySelectorAll(".theme-btn").forEach((btn) => {
