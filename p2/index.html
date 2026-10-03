@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="cs" data-theme="kirby">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#ff9ccf">
+  <title>Micro portfolio</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="config.js"></script>
+  <script src="../assets/icons.js"></script>
+  <script src="../assets/app.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="mascot" id="mascot"></div>
+      <div class="titles">
+        <h1 class="title">Micro portfolio</h1>
+        <p class="owner" id="owner"></p>
+      </div>
+    </header>
+
+    <nav class="themes" id="themes" aria-label="Motiv stránky">
+      <span class="themes-label">Motiv</span>
+    </nav>
+
+    <section class="panel lock" id="lock" hidden>
+      <div class="lock-icon" aria-hidden="true">🔒</div>
+      <h2>Tahle stránka je jen pro tebe</h2>
+      <p>Otevři ji naskenováním QR kódu na své kartičce.</p>
+    </section>
+
+    <main id="content" hidden>
+      <div class="panel">
+        <ul class="list" id="list"></ul>
+      </div>
+    </main>
+
+    <div class="spacer"></div>
+    <p class="status" id="status" aria-live="polite"></p>
+
+    <footer class="total" id="total-bar" aria-live="polite" hidden>
+      <span class="total-label">Celkem</span>
+      <span class="total-value" id="total">…</span>
+    </footer>
+  </div>
+</body>
+</html>

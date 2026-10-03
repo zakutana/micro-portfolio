@@ -1,0 +1,15 @@
+{
+  "baseUrl": "https://zakutana.github.io/micro-portfolio",
+  "people": [
+    {
+      "id": "p1",
+      "palette": "blue",
+      "mascot": "waddle"
+    },
+    {
+      "id": "p2",
+      "palette": "pink",
+      "mascot": "kirby"
+    }
+  ]
+}
