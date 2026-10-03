@@ -283,7 +283,7 @@
     const time = (ts) => new Date(ts).toLocaleTimeString("cs-CZ", { hour: "2-digit", minute: "2-digit" });
     const dot = '<span class="dot"></span>';
     if (allLive) {
-      status.innerHTML = `${dot}Živé ceny · ${time(Date.now())}`;
+      status.textContent = "";
     } else if (known) {
       const when = cachedAt ? ` (naposledy ${time(cachedAt)})` : "";
       status.innerHTML = `${dot}Ceny se nepodařilo načíst, ukazuju poslední známé${when}`;
