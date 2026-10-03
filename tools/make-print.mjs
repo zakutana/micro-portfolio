@@ -85,26 +85,6 @@ function qrTile(url) {
   };
 }
 
-/* ---------- Symbols of the holdings, scattered over the back ---------- */
-
-// pixel sizes of the logo files limit how big they may be printed at 300 dpi (checked at the end)
-const LOGO_DIR = path.join(OUT, "tisk-logos");
-const SPACEX = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50" fill="#050505"/><path d="M14 33 H36 L86 69 H64 Z" fill="#fff"/><path d="M62 33 H86 L62 51 L52 44 Z" fill="#fff"/><path d="M14 69 H36 L46 61 L38 55 Z" fill="#fff"/></svg>`;
-// left, top, size (mm), rotation (deg); the safe zone and the QR code + text on the left stay free
-const COINS = [
-  { logo: "tesla", pad: 0.55, x: 42, y: 44.2, size: 6.2, rot: -9 },
-  { logo: "bot", pad: 0, x: 49.5, y: 46.6, size: 6.2, rot: 7 },
-  { logo: "cards", pad: 0.55, x: 57, y: 43.6, size: 6.2, rot: -5 },
-  { vector: SPACEX, x: 64.5, y: 46.4, size: 6.2, rot: 10 },
-  { logo: "sui", pad: 0.55, x: 72, y: 44, size: 6.2, rot: -8 },
-  { logo: "cymetica", pad: 0, x: 79.3, y: 46.2, size: 6.2, rot: 6 },
-];
-const coinsHtml = () =>
-  COINS.map((c) => {
-    const inner = c.vector ?? `<img src="${pathToFileURL(path.join(LOGO_DIR, c.logo + ".png")).href}" style="padding:${c.pad}mm" alt="">`;
-    return `<div class="coin" style="left:${c.x}mm;top:${c.y}mm;width:${c.size}mm;height:${c.size}mm;transform:rotate(${c.rot}deg)">${inner}</div>`;
-  }).join("\n    ");
-
 /* ---------- Card artwork (everything in mm; the page is 91.5 x 60 mm, the card starts 3 mm inside) ---------- */
 
 const PALETTES = {
@@ -210,9 +190,9 @@ function backPage(p, url, qr) {
     ${guilloche(71, 67)}
     <div class="stripe">${gradientSvg(PAGE_W, 8, { angle: 180, stops: [[0, "#1c1c26"], [0.6, "#06060a"], [1, "#191923"]] }, 40, "bg")}</div>
     <div class="sig">${hatch()}<span>Micro portfolio</span></div>
-    ${coinsHtml()}
     <div class="qr">${qr.svg}</div>
     <div class="scan">Naskenuj kamerou mobilu.</div>
+    <div class="mini ${p.mascot}">${MASCOT[p.mascot]}</div>
   </section>`;
 }
 
@@ -263,10 +243,10 @@ html, body { width: ${SW}mm; background: #fff; -webkit-print-color-adjust: exact
 .sig .hatch { position: absolute; inset: 0; width: 100%; height: 100% }
 .sig span { position: absolute; left: 3mm; top: 0; bottom: 0; display: flex; align-items: center; font: 700 1.9mm/1 "Nunito", sans-serif; letter-spacing: .3em; text-transform: uppercase; color: #7b6a90 }
 .qr { left: 8mm; top: 19.5mm; line-height: 0 }
+.mini { right: 6.5mm; top: 38mm; width: 14mm; height: 14mm }
+.mini.waddle { width: 15.4mm; right: 6mm }
 .qr svg { display: block }
 .scan { left: 42mm; top: 31.2mm; width: 43.5mm; font: 800 4.2mm/1.2 "Nunito", sans-serif }
-.coin { background: #fff; border-radius: 50%; overflow: hidden; border: .25mm solid #fff }
-.coin img, .coin svg { width: 100%; height: 100%; display: block; object-fit: cover; border-radius: 50% }
 `;
 };
 
@@ -306,8 +286,6 @@ people.people.forEach((p, i) => {
   links.push(url);
   pages.push(frontPage(p, i), backPage(p, url, qr));
 });
-execFileSync("python3", [path.join(ROOT, "tools/print-post.py"), "logos", path.join(ROOT, "assets/logos"), LOGO_DIR]);
-
 async function build(slug, final) {
   fs.rmSync(TMP, { recursive: true, force: true });
   fs.mkdirSync(TMP, { recursive: true });
