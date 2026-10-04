@@ -789,8 +789,8 @@
     } else {
       const when = known && cachedAt ? ` (${time(cachedAt)})` : "";
       status.innerHTML = known
-        ? `${dot}Ukazuju poslední známé ceny${when}. Stáhni stránku dolů.`
-        : `${dot}Ceny se nepodařilo načíst. Stáhni stránku dolů.`;
+        ? `${dot}Ukazuju poslední známé ceny${when}. Refreshni stránku.`
+        : `${dot}Ceny se nepodařilo načíst. Refreshni stránku.`;
     }
   }
 
