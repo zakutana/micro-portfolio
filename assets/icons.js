@@ -100,9 +100,9 @@ window.MICRO_ICONS = {
 
   piano:
     '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-    '<rect x="3" y="5" width="26" height="22" rx="3" fill="#fff6e2" stroke="#3a2012" stroke-width="1.6"/>' +
-    '<path d="M9.5 18 V27 M16 18 V27 M22.5 18 V27" stroke="#3a2012" stroke-width="1.2"/>' +
-    '<rect x="7" y="5.8" width="5" height="13" rx="1.2" fill="#3a2012"/><rect x="13.5" y="5.8" width="5" height="13" rx="1.2" fill="#3a2012"/><rect x="20" y="5.8" width="5" height="13" rx="1.2" fill="#3a2012"/>' +
+    '<rect x="3" y="5" width="26" height="22" rx="3" fill="#fbf8f1" stroke="#1b1b1f" stroke-width="1.6"/>' +
+    '<path d="M9.5 18 V27 M16 18 V27 M22.5 18 V27" stroke="#1b1b1f" stroke-width="1.2"/>' +
+    '<rect x="7" y="5.8" width="5" height="13" rx="1.2" fill="#1b1b1f"/><rect x="13.5" y="5.8" width="5" height="13" rx="1.2" fill="#1b1b1f"/><rect x="20" y="5.8" width="5" height="13" rx="1.2" fill="#1b1b1f"/>' +
     '<rect x="8.2" y="7" width="1.2" height="7" rx=".6" fill="#fff" opacity=".35"/><rect x="14.7" y="7" width="1.2" height="7" rx=".6" fill="#fff" opacity=".35"/><rect x="21.2" y="7" width="1.2" height="7" rx=".6" fill="#fff" opacity=".35"/>' +
     "</svg>",
 
@@ -229,13 +229,13 @@ window.MICRO_PEEK = {
 
   piano:
     '<svg viewBox="0 0 70 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-    '<g fill="#3a2012" stroke="#3a2012" stroke-width="2.2" stroke-linejoin="round">' +
+    '<g fill="#1b1b1f" stroke="#1b1b1f" stroke-width="2.2" stroke-linejoin="round">' +
     '<rect x="22" y="10" width="4.6" height="38"/><rect x="54" y="4" width="4.6" height="36"/>' +
     '<polygon points="22,8 58.6,1.5 58.6,11 22,17.5"/><polygon points="22,22 58.6,15.5 58.6,25 22,31.5"/>' +
     '<ellipse cx="15" cy="49" rx="10" ry="7.5" transform="rotate(-22 15 49)"/><ellipse cx="47" cy="42" rx="10" ry="7.5" transform="rotate(-22 47 42)"/>' +
     '</g>' +
     '<g fill="#fff"><circle cx="11.5" cy="48" r="2.4"/><circle cx="18.5" cy="46" r="2.4"/><circle cx="43.5" cy="41" r="2.4"/><circle cx="50.5" cy="39" r="2.4"/></g>' +
-    '<g fill="#3a2012"><circle cx="11.9" cy="48.3" r="1.1"/><circle cx="18.9" cy="46.3" r="1.1"/><circle cx="43.9" cy="41.3" r="1.1"/><circle cx="50.9" cy="39.3" r="1.1"/></g>' +
+    '<g fill="#1b1b1f"><circle cx="11.9" cy="48.3" r="1.1"/><circle cx="18.9" cy="46.3" r="1.1"/><circle cx="43.9" cy="41.3" r="1.1"/><circle cx="50.9" cy="39.3" r="1.1"/></g>' +
     '<path d="M12 53 Q15 56 18.5 52.5" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>' +
     "</svg>",
 
