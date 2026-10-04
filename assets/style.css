@@ -1084,11 +1084,11 @@
   --a7: #2a6f6f;
   --a8: #c9a24b;
 
-  --peek-w: 92px;
-  --peek-h: 92px;
-  --peek-hide: 16px;
+  --peek-w: 100px;
+  --peek-h: 100px;
+  --peek-hide: 20px;
   --peek-right: 26px;
-  --peek-rot: -4deg;
+  --peek-rot: -3deg;
 }
 
 /* ---------- 6 7: loud neon, thick outlines, hands up and down ---------- */
