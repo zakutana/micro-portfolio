@@ -5,16 +5,14 @@
       "name": "S&P 500",
       "symbol": "SPYx",
       "note": "500 největších firem USA v jednom balíčku",
-      "logo": "../assets/logos/discover/sp500.png",
-      "hidePrice": true
+      "logo": "../assets/logos/discover/sp500.png"
     },
     {
       "id": "nasdaq-xstock",
       "name": "Nasdaq 100",
       "symbol": "QQQx",
       "note": "100 největších technologických firem USA",
-      "logo": "../assets/logos/discover/nasdaq.png",
-      "hidePrice": true
+      "logo": "../assets/logos/discover/nasdaq.png"
     },
     {
       "id": "bitcoin",
@@ -49,40 +47,35 @@
       "name": "NVIDIA",
       "symbol": "NVDAx",
       "note": "čipy pro umělou inteligenci a hry",
-      "logo": "../assets/logos/discover/nvidia.png",
-      "hidePrice": true
+      "logo": "../assets/logos/discover/nvidia.png"
     },
     {
       "id": "apple-xstock",
       "name": "Apple",
       "symbol": "AAPLx",
       "note": "iPhone, Mac a spol.",
-      "logo": "../assets/logos/discover/apple.png",
-      "hidePrice": true
+      "logo": "../assets/logos/discover/apple.png"
     },
     {
       "id": "amazon-xstock",
       "name": "Amazon",
       "symbol": "AMZNx",
       "note": "internetový obchod a cloud (AWS)",
-      "logo": "../assets/logos/discover/amazon.png",
-      "hidePrice": true
+      "logo": "../assets/logos/discover/amazon.png"
     },
     {
       "id": "meta-xstock",
       "name": "Meta",
       "symbol": "METAx",
       "note": "Facebook, Instagram a WhatsApp",
-      "logo": "../assets/logos/discover/meta.png",
-      "hidePrice": true
+      "logo": "../assets/logos/discover/meta.png"
     },
     {
       "id": "alphabet-xstock",
       "name": "Google",
       "symbol": "GOOGLx",
       "note": "vyhledávač, YouTube a Android",
-      "logo": "../assets/logos/discover/google.png",
-      "hidePrice": true
+      "logo": "../assets/logos/discover/google.png"
     }
   ]
 }

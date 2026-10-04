@@ -92,7 +92,7 @@ Sekce „Historie nákupů“ na stránce ukazuje každý nákup jako blok: **Bl
 
 Dole na obrazovce je (jako v aplikaci) lišta se třemi záložkami: **Portfolio**, **Historie** (všechny nákupy jako bloky) a **Objevuj** (věci, které by se mohly hodit: S&P 500, Nasdaq 100, Bitcoin, Ethereum, Solana, zlato, NVIDIA, Apple). Mezi záložkami se dá přepínat i tažením prstu doleva a doprava. Součet dole je vidět jen na záložce Portfolio.
 
-Seznam v Objevuj je v `assets/discover.json` (stejný pro obě stránky): `id` je CoinGecko id, `name`, `symbol` a `note` (jedna věta česky), `hidePrice: true` u akcií a fondů (ukáže se jen změna za 24 hodin, ne cena jednoho tokenu), `logo` je soubor v `assets/logos/discover/`. Ceny se stahují (v korunách z CoinGecka) až po otevření záložky a obnovují se jednou za minutu, dokud je otevřená. Indexy jsou tokenizované fondy (xStocks), takže cena je za jeden díl fondu, ne za bod indexu.
+Seznam v Objevuj je v `assets/discover.json` (stejný pro obě stránky): `id` je CoinGecko id, `name`, `symbol` a `note` (jedna věta česky), `logo` je soubor v `assets/logos/discover/`. V Objevuj nejsou žádné ceny ani růst, jen název, jedna věta o tom, co to je, a šipka (klepnutí otevře stránku na CoinGecku). Nic se tu nestahuje. Indexy jsou tokenizované fondy (xStocks).
 
 Slavnostní úvodní obrazovka (dárek, konfety, „Všechno nejlepší“) se ukáže jen v motivech Kirby a Waddle Dee, tedy v těch, ve kterých se stránky předávají. V ostatních motivech je obyčejné „Zadej heslo“.
 

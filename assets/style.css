@@ -3186,7 +3186,10 @@ body {
   }
 }
 
-/* Objevuj: a stock shows only its change, so the pill is the whole value */
-#discover-list .value .micro:only-child {
-  margin-top: 0;
+/* Objevuj: no prices, just a small arrow that the row opens something */
+.disc-go {
+  font-size: 1.8rem;
+  line-height: 1;
+  font-weight: 700;
+  color: var(--muted);
 }

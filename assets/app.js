@@ -871,7 +871,6 @@
     $("app").dataset.tab = id;
     setHero(id === "portfolio");
     if (!instant) window.scrollTo({ top: 0 });
-    if (id === "discover") refreshDiscover();
   }
 
   function buildTabs() {
@@ -929,12 +928,9 @@
     showTab("portfolio", { instant: true });
   }
 
-  /* ---------- Discover: things worth a look (prices only, nothing to buy here) ---------- */
+  /* ---------- Discover: things worth a look (a short description of each, no prices, nothing to buy here) ---------- */
 
   let discoverItems = null;
-  let discoverRows = [];
-  let discoverTimer = null;
-  let discoverReady = null;
 
   async function buildDiscover() {
     const list = $("discover-list");
@@ -945,7 +941,6 @@
       discoverItems = [];
     }
     list.replaceChildren();
-    discoverRows = [];
     for (const d of discoverItems) {
       const li = el("li");
       const a = el("a", "row");
@@ -957,47 +952,10 @@
       const sub = el("small", "", d.symbol);
       sub.append(el("span", "disc-note", ` · ${d.note}`));
       name.append(el("strong", "", d.name), sub);
-      const value = el("span", "value is-loading", "…");
-      a.append(logoNode(d), name, value);
+      a.append(logoNode(d), name, el("span", "disc-go", "›"));
       li.append(a);
       list.append(li);
-      discoverRows.push({ d, value });
     }
-  }
-
-  async function refreshDiscover() {
-    await discoverReady;
-    if (!discoverItems?.length) return;
-    clearTimeout(discoverTimer);
-    const prices = await fetchCoinGecko(discoverItems.map((d) => d.id));
-    let cache = {};
-    try {
-      cache = JSON.parse(store.get("discover")) ?? {};
-    } catch {
-      /* no cache yet */
-    }
-    for (const { d, value } of discoverRows) {
-      const hit = prices.get(d.id);
-      const price = hit?.price ?? cache[d.id]?.price ?? null;
-      const change = hit ? hit.change24 : null;
-      if (hit) cache[d.id] = { price: hit.price };
-      value.classList.remove("is-loading");
-      value.classList.toggle("is-stale", !hit);
-      // stocks and funds: the price of one token is just confusing, so only the change is shown
-      value.replaceChildren(d.hidePrice ? document.createTextNode("") : price === null ? document.createTextNode("—") : moneyNode(formatUnitPrice(price)));
-      if (d.hidePrice && !Number.isFinite(change)) value.textContent = "—";
-      if (Number.isFinite(change)) {
-        const r = change / 100;
-        const micro = el("small", `micro is-${trend(r)}`);
-        micro.append(el("i", "arr", ARROW[trend(r)]), document.createTextNode(formatPct(r)));
-        value.append(micro);
-      }
-    }
-    store.set("discover", JSON.stringify(cache));
-    // keep it fresh only while somebody is looking at it
-    discoverTimer = setTimeout(() => {
-      if (activeTab === "discover" && !document.hidden) refreshDiscover();
-    }, REFRESH_MS);
   }
 
   /* ---------- Pro mode ---------- */
@@ -1105,7 +1063,7 @@
     buildHistory();
     buildGlossary();
     buildTabs();
-    discoverReady = buildDiscover(); // the prices are fetched when the tab is first opened
+    buildDiscover();
 
     let lastRun = 0;
     const refresh = async () => {
