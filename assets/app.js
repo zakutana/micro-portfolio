@@ -17,6 +17,8 @@
     { id: "makeup", label: "Make-up", color: "#ffc9e0" },
     { id: "football", label: "Fotbal", color: "#2f9440" },
     { id: "trader", label: "Trader", color: "#0d1118" },
+    { id: "piano", label: "Klavír", color: "#14161c" },
+    { id: "guitar", label: "Kytara", color: "#a8683a" },
   ];
 
   const COINGECKO = "https://api.coingecko.com/api/v3";

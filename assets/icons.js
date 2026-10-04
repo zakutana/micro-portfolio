@@ -98,6 +98,24 @@ window.MICRO_ICONS = {
     '<circle cx="16" cy="16" r="13.2" fill="none" stroke="#222" stroke-width="1.6"/>' +
     "</svg>",
 
+  piano:
+    '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<rect x="3" y="5" width="26" height="22" rx="3" fill="#fbf8f1" stroke="#1b1b1f" stroke-width="1.6"/>' +
+    '<path d="M9.5 18 V27 M16 18 V27 M22.5 18 V27" stroke="#1b1b1f" stroke-width="1.2"/>' +
+    '<rect x="7" y="5.8" width="5" height="13" rx="1.2" fill="#1b1b1f"/><rect x="13.5" y="5.8" width="5" height="13" rx="1.2" fill="#1b1b1f"/><rect x="20" y="5.8" width="5" height="13" rx="1.2" fill="#1b1b1f"/>' +
+    '<rect x="8.2" y="7" width="1.2" height="7" rx=".6" fill="#fff" opacity=".35"/><rect x="14.7" y="7" width="1.2" height="7" rx=".6" fill="#fff" opacity=".35"/><rect x="21.2" y="7" width="1.2" height="7" rx=".6" fill="#fff" opacity=".35"/>' +
+    "</svg>",
+
+  guitar:
+    '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g transform="rotate(38 16 16)">' +
+    '<ellipse cx="16" cy="24" rx="8.2" ry="7" fill="#c7792f" stroke="#6b3a14" stroke-width="1"/>' +
+    '<ellipse cx="16" cy="15.8" rx="6" ry="5.4" fill="#c7792f" stroke="#6b3a14" stroke-width="1"/>' +
+    '<ellipse cx="16" cy="19.5" rx="5.2" ry="4" fill="#c7792f"/>' +
+    '<circle cx="16" cy="21" r="2.5" fill="#2b160a"/><rect x="12.6" y="25.6" width="6.8" height="1.4" rx=".7" fill="#3b2412"/>' +
+    '<rect x="14.7" y="3.2" width="2.6" height="11" fill="#5a3416"/><rect x="13.6" y="0.6" width="4.8" height="4.2" rx="1" fill="#3b2412"/>' +
+    '<path d="M16 4 V24" stroke="#e8dcc0" stroke-width=".5"/>' +
+    "</g></svg>",
+
   trader:
     '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
     '<rect x="2" y="2" width="28" height="28" rx="5" fill="#0f1420"/>' +
@@ -159,6 +177,29 @@ window.MICRO_PEEK = {
     '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g transform="rotate(-14 16 16)">' +
     window.MICRO_ICONS.football.replace(/^<svg[^>]*>/, "").replace(/<\/svg>$/, "") +
     "</g></svg>",
+
+  piano:
+    '<svg viewBox="0 0 70 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<g fill="#fbf8f1" stroke="#1b1b1f" stroke-width="2.2" stroke-linejoin="round">' +
+    '<rect x="22" y="10" width="4.6" height="38"/><rect x="54" y="4" width="4.6" height="36"/>' +
+    '<polygon points="22,8 58.6,1.5 58.6,11 22,17.5"/><polygon points="22,22 58.6,15.5 58.6,25 22,31.5"/>' +
+    '<ellipse cx="15" cy="49" rx="10" ry="7.5" transform="rotate(-22 15 49)"/><ellipse cx="47" cy="42" rx="10" ry="7.5" transform="rotate(-22 47 42)"/>' +
+    '</g>' +
+    '<g fill="#1b1b1f"><circle cx="11.5" cy="48" r="1.9"/><circle cx="18.5" cy="46" r="1.9"/><circle cx="43.5" cy="41" r="1.9"/><circle cx="50.5" cy="39" r="1.9"/></g>' +
+    '<path d="M12 53 Q15 56 18.5 52.5" fill="none" stroke="#1b1b1f" stroke-width="1.6" stroke-linecap="round"/>' +
+    "</svg>",
+
+  guitar:
+    '<svg viewBox="0 0 60 84" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<rect x="21" y="40" width="18" height="44" fill="#6b3f1d"/>' +
+    '<g stroke="#e8dcc0" stroke-width="1"><path d="M21 52 H39 M21 62 H39 M21 72 H39"/></g>' +
+    '<g stroke="#d8d8d8" stroke-width=".9"><path d="M24 20 V84 M27 20 V84 M30 20 V84 M33 20 V84 M36 20 V84"/></g>' +
+    '<rect x="19" y="38" width="22" height="3.6" fill="#f3ead2" stroke="#3b2412" stroke-width=".8"/>' +
+    '<path d="M18 38 C14 28 14 10 20 4 C25 0 35 0 40 4 C46 10 46 28 42 38 Z" fill="#3b2412" stroke="#1b0d05" stroke-width="1.6" stroke-linejoin="round"/>' +
+    '<path d="M24 8 C27 5 33 5 36 8 C38 18 37 28 35 36 H25 C23 28 22 18 24 8 Z" fill="#5a3416"/>' +
+    '<g fill="#e5c25c" stroke="#8a6a1a" stroke-width=".8"><circle cx="12.5" cy="12" r="3.1"/><circle cx="12.5" cy="22" r="3.1"/><circle cx="12.5" cy="32" r="3.1"/><circle cx="47.5" cy="12" r="3.1"/><circle cx="47.5" cy="22" r="3.1"/><circle cx="47.5" cy="32" r="3.1"/></g>' +
+    '<g stroke="#8a6a1a" stroke-width="1.6"><path d="M15 12 H19 M15 22 H19 M15 32 H19 M41 12 H45 M41 22 H45 M41 32 H45"/></g>' +
+    "</svg>",
 
   trader:
     '<svg viewBox="0 0 76 56" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +

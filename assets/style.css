@@ -713,6 +713,180 @@
   --peek-rot: 0deg;
 }
 
+/* ---------- Piano: black lacquer, ivory keys, brass ---------- */
+
+:root[data-theme="piano"] {
+  --font: "Nunito", system-ui, sans-serif;
+  --display: Georgia, "Times New Roman", serif;
+  --bg: #12141a;
+  --bg-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27140%27%20height%3D%2714%27%3E%3Crect%20width%3D%27140%27%20height%3D%2714%27%20fill%3D%27%23fbf8f1%27%2F%3E%3Cpath%20d%3D%27M20%200V14M40%200V14M60%200V14M80%200V14M100%200V14M120%200V14%27%20stroke%3D%27%231b1b1f%27%20stroke-width%3D%271%27%2F%3E%3Cg%20fill%3D%27%231b1b1f%27%3E%3Crect%20x%3D%2714%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3Crect%20x%3D%2734%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3Crect%20x%3D%2774%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3Crect%20x%3D%2794%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3Crect%20x%3D%27114%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"),
+    linear-gradient(180deg, #262a36 0%, #14161c 420px);
+  --bg-size: 140px 14px, auto;
+  --bg-repeat: repeat-x, no-repeat;
+  --bg-pos: 0 0, 0 0;
+  --bg-attach: scroll;
+  --text: #1b1b1f;
+  --muted: #6f6a60;
+  --on-bg: #f1ede4;
+  --on-bg-shadow: 0 2px 0 #000;
+  --line: rgba(27, 27, 31, 0.2);
+  --title-size: 1rem;
+  --title-weight: 800;
+  --value-size: 1.12rem;
+  --value-weight: 700;
+  --gain-size: 3.2rem;
+  --gain-weight: 700;
+  --name-weight: 800;
+  --mark: #c9a24b;
+  --focus: #c9a24b;
+
+  --brand-bg: #f7f3ea;
+  --brand-border: 2.5px solid #e6dfce;
+  --brand-radius: 999px;
+  --brand-shadow: 0 3px 0 #b9ae95;
+  --brand-text: #1b1b1f;
+  --btn-bg: #f7f3ea;
+  --btn-border: 2.5px solid #e6dfce;
+  --btn-radius: 999px;
+  --btn-shadow: 0 3px 0 #b9ae95;
+  --btn-text: #1b1b1f;
+  --btn-active-bg: #1b1b1f;
+  --btn-active-text: #f7f3ea;
+  --sw-off: #cfc6b0;
+  --sw-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.18);
+  --toggle-bg: #0e0e11;
+  --toggle-border: 2.5px solid #c9a24b;
+  --toggle-shadow: 0 3px 0 #6d5a22;
+
+  --panel: #fbf8f1;
+  --panel-border: 2px solid #ffffff;
+  --panel-radius: 20px;
+  --panel-shadow: 0 6px 0 #b9ae95, 0 18px 28px rgba(0, 0, 0, 0.5);
+  --row-bg: #fbf8f1;
+  --row-border: 2px solid #e6dfce;
+  --row-radius: 16px;
+  --row-shadow: 0 4px 0 #b9ae95;
+  --row-hover: #f1ebdc;
+  --ring-idle: #d9cfb8;
+  --logo-radius: 12px;
+  --logo-border: 3px solid var(--ring-idle);
+
+  --pill-bg: #efe8d6;
+  --pill-text: #6f6a60;
+  --gain: #0e7c4f;
+  --gain-big: #0f8a55;
+  --gain-bg: #dcf3e6;
+  --loss-bg: #fbe0e0;
+
+  --total-bg: linear-gradient(180deg, #2f3340 0%, #0c0d11 100%);
+  --total-text: #f7f3ea;
+  --total-label: #c9a24b;
+  --total-border: 2.5px solid #c9a24b;
+  --total-radius: 22px;
+  --total-shadow: 0 6px 0 #000, 0 16px 26px rgba(0, 0, 0, 0.5);
+  --total-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
+  --total-text-shadow: none;
+
+  --a1: #c9a24b;
+  --a2: #1b1b1f;
+  --a3: #8b3a3a;
+  --a4: #2f5d8a;
+  --a5: #6b8f5e;
+  --a6: #9a7bb5;
+  --a7: #d98a4a;
+  --a8: #4a8f8f;
+
+  --peek-w: 88px;
+  --peek-h: 80px;
+  --peek-hide: 12px;
+  --peek-right: 30px;
+  --peek-rot: 0deg;
+}
+
+/* ---------- Guitar: warm wood, cream paper, brass strings ---------- */
+
+:root[data-theme="guitar"] {
+  --font: "Nunito", system-ui, sans-serif;
+  --display: var(--font);
+  --bg: #7a4a24;
+  --bg-image:
+    repeating-linear-gradient(90deg, rgba(60, 28, 6, 0.1) 0 2px, transparent 2px 11px),
+    repeating-linear-gradient(90deg, rgba(255, 220, 170, 0.06) 0 5px, transparent 5px 23px),
+    linear-gradient(180deg, #b0703f 0%, #6d3f1d 100%);
+  --text: #3b2412;
+  --muted: #7d5b3b;
+  --on-bg: #fff5e3;
+  --on-bg-shadow: 0 2px 0 #4a2a10;
+  --line: rgba(107, 58, 20, 0.25);
+  --title-size: 1rem;
+  --title-weight: 800;
+  --value-weight: 800;
+  --gain-weight: 800;
+  --name-weight: 800;
+  --mark: #c7792f;
+
+  --brand-bg: #fbf1dc;
+  --brand-border: 2.5px solid #e0b06a;
+  --brand-radius: 999px;
+  --brand-shadow: 0 3px 0 #4a2a10;
+  --brand-text: #6d3f1d;
+  --btn-bg: #fbf1dc;
+  --btn-border: 2.5px solid #e0b06a;
+  --btn-radius: 999px;
+  --btn-shadow: 0 3px 0 #4a2a10;
+  --btn-text: #6d3f1d;
+  --btn-active-bg: #c7792f;
+  --btn-active-text: #ffffff;
+  --sw-off: #ecd5a8;
+  --sw-shadow: inset 0 2px 0 rgba(107, 58, 20, 0.25);
+  --toggle-bg: #c7792f;
+  --toggle-border: 2.5px solid #fbf1dc;
+  --toggle-shadow: 0 3px 0 #4a2a10;
+
+  --panel: #fbf1dc;
+  --panel-border: 3px solid #e0b06a;
+  --panel-radius: 24px;
+  --panel-shadow: 0 6px 0 #4a2a10, 0 18px 26px rgba(30, 12, 0, 0.4);
+  --row-bg: #fff8ea;
+  --row-border: 2.5px solid #ecc888;
+  --row-radius: 18px;
+  --row-shadow: 0 4px 0 #8a5a2c;
+  --row-hover: #ffefcf;
+  --ring-idle: #ecc888;
+  --logo-radius: 50%;
+  --logo-border: 3px solid var(--ring-idle);
+
+  --pill-bg: #f3dfb4;
+  --pill-text: #7d5b3b;
+  --gain: #0e7c4f;
+  --gain-big: #14803f;
+
+  --total-bg: linear-gradient(180deg, #4a2a14 0%, #24120a 100%);
+  --total-text: #fbf1dc;
+  --total-label: #e0b06a;
+  --total-border: 2.5px solid #e0b06a;
+  --total-radius: 33px;
+  --total-shadow: 0 6px 0 #140a04, 0 16px 26px rgba(20, 8, 0, 0.5);
+  --total-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
+  --total-text-shadow: none;
+
+  --a1: #c7792f;
+  --a2: #3b2412;
+  --a3: #d6492f;
+  --a4: #2f6d8a;
+  --a5: #7a9a4a;
+  --a6: #8a5aa0;
+  --a7: #e0a82e;
+  --a8: #b04a6a;
+
+  --peek-w: 78px;
+  --peek-h: 109px;
+  --peek-hide: 44px;
+  --peek-right: 34px;
+  --peek-rot: -6deg;
+}
+
 /* ---------- Base ---------- */
 
 * {
@@ -1307,7 +1481,9 @@ body {
 :root[data-theme="kirby"] .logo,
 :root[data-theme="waddle"] .logo,
 :root[data-theme="makeup"] .logo,
-:root[data-theme="football"] .logo {
+:root[data-theme="football"] .logo,
+:root[data-theme="piano"] .logo,
+:root[data-theme="guitar"] .logo {
   border-color: var(--c, var(--ring-idle));
 }
 
