@@ -18,7 +18,8 @@
           "price": 5.477268
         }
       ],
-      "qty": 36.514556
+      "qty": 36.514556,
+      "note": "sběratelské karty a předměty na blockchainu"
     },
     {
       "name": "RoboStrategy",
@@ -38,7 +39,8 @@
         }
       ],
       "qty": 0.315322,
-      "sharesOutstanding": 24400000
+      "sharesOutstanding": 24400000,
+      "note": "fond na roboty a umělou inteligenci"
     },
     {
       "name": "Sui",
@@ -56,7 +58,8 @@
           "price": 24.406171
         }
       ],
-      "qty": 8.194649
+      "qty": 8.194649,
+      "note": "kryptoměna rychlé blockchainové sítě"
     },
     {
       "name": "Tesla",
@@ -76,7 +79,8 @@
           "qty": 0.012312,
           "price": 8122.245419
         }
-      ]
+      ],
+      "note": "elektromobily a energie"
     },
     {
       "name": "SpaceX",
@@ -96,12 +100,13 @@
           "qty": 0.029076,
           "price": 3439.27258
         }
-      ]
+      ],
+      "note": "rakety a internet Starlink"
     },
     {
       "name": "Cymetica",
       "symbol": "ET10",
-      "note": "zatím se neobchoduje",
+      "note": "fond podle novinových titulků, zatím se neobchoduje",
       "logo": "../assets/logos/cymetica.jpg",
       "url": "https://cymetica.com/",
       "qty": 100000,
