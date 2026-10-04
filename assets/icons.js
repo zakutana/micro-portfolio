@@ -100,9 +100,9 @@ window.MICRO_ICONS = {
 
   piano:
     '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-    '<rect x="3" y="5" width="26" height="22" rx="3" fill="#fbf8f1" stroke="#1b1b1f" stroke-width="1.6"/>' +
-    '<path d="M9.5 18 V27 M16 18 V27 M22.5 18 V27" stroke="#1b1b1f" stroke-width="1.2"/>' +
-    '<rect x="7" y="5.8" width="5" height="13" rx="1.2" fill="#1b1b1f"/><rect x="13.5" y="5.8" width="5" height="13" rx="1.2" fill="#1b1b1f"/><rect x="20" y="5.8" width="5" height="13" rx="1.2" fill="#1b1b1f"/>' +
+    '<rect x="3" y="5" width="26" height="22" rx="3" fill="#fff6e2" stroke="#3a2012" stroke-width="1.6"/>' +
+    '<path d="M9.5 18 V27 M16 18 V27 M22.5 18 V27" stroke="#3a2012" stroke-width="1.2"/>' +
+    '<rect x="7" y="5.8" width="5" height="13" rx="1.2" fill="#3a2012"/><rect x="13.5" y="5.8" width="5" height="13" rx="1.2" fill="#3a2012"/><rect x="20" y="5.8" width="5" height="13" rx="1.2" fill="#3a2012"/>' +
     '<rect x="8.2" y="7" width="1.2" height="7" rx=".6" fill="#fff" opacity=".35"/><rect x="14.7" y="7" width="1.2" height="7" rx=".6" fill="#fff" opacity=".35"/><rect x="21.2" y="7" width="1.2" height="7" rx=".6" fill="#fff" opacity=".35"/>' +
     "</svg>",
 
@@ -229,13 +229,13 @@ window.MICRO_PEEK = {
 
   piano:
     '<svg viewBox="0 0 70 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-    '<g fill="#1b1b1f" stroke="#1b1b1f" stroke-width="2.2" stroke-linejoin="round">' +
+    '<g fill="#3a2012" stroke="#3a2012" stroke-width="2.2" stroke-linejoin="round">' +
     '<rect x="22" y="10" width="4.6" height="38"/><rect x="54" y="4" width="4.6" height="36"/>' +
     '<polygon points="22,8 58.6,1.5 58.6,11 22,17.5"/><polygon points="22,22 58.6,15.5 58.6,25 22,31.5"/>' +
     '<ellipse cx="15" cy="49" rx="10" ry="7.5" transform="rotate(-22 15 49)"/><ellipse cx="47" cy="42" rx="10" ry="7.5" transform="rotate(-22 47 42)"/>' +
     '</g>' +
     '<g fill="#fff"><circle cx="11.5" cy="48" r="2.4"/><circle cx="18.5" cy="46" r="2.4"/><circle cx="43.5" cy="41" r="2.4"/><circle cx="50.5" cy="39" r="2.4"/></g>' +
-    '<g fill="#1b1b1f"><circle cx="11.9" cy="48.3" r="1.1"/><circle cx="18.9" cy="46.3" r="1.1"/><circle cx="43.9" cy="41.3" r="1.1"/><circle cx="50.9" cy="39.3" r="1.1"/></g>' +
+    '<g fill="#3a2012"><circle cx="11.9" cy="48.3" r="1.1"/><circle cx="18.9" cy="46.3" r="1.1"/><circle cx="43.9" cy="41.3" r="1.1"/><circle cx="50.9" cy="39.3" r="1.1"/></g>' +
     '<path d="M12 53 Q15 56 18.5 52.5" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>' +
     "</svg>",
 
@@ -263,14 +263,7 @@ window.MICRO_PEEK = {
     "</svg>",
 
   harry:
-    '<svg viewBox="0 0 84 56" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-    '<g fill="#f6f4fb" stroke="#7d7a96" stroke-width="1.5" stroke-linejoin="round">' +
-    '<path d="M33 30 C24 12 8 6 2 10 C4 22 16 34 33 36 Z"/><path d="M51 30 C60 12 76 6 82 10 C80 22 68 34 51 36 Z"/></g>' +
-    '<g fill="none" stroke="#a9a6c2" stroke-width="1"><path d="M31 31 C22 20 12 14 6 12 M31 33 C22 26 14 22 8 19 M53 31 C62 20 72 14 78 12 M53 33 C62 26 70 22 76 19"/></g>' +
-    '<circle cx="42" cy="34" r="11.5" fill="#e6b52c" stroke="#8a6612" stroke-width="1.6"/>' +
-    '<path d="M34 30 C36 26 40 24 44 24" fill="none" stroke="#fff3b8" stroke-width="2.2" stroke-linecap="round"/>' +
-    '<path d="M31 34 H53 M33 39 H51" stroke="#b98a14" stroke-width="1"/>' +
-    "</svg>",
+    '<svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="36" cy="63" rx="31" ry="8" fill="#6b4423" stroke="#3a210d" stroke-width="2.2"/><path d="M11 62 C16 46 22 32 31 21 C36 14 43 10 50 8.5 C54 8 58 9.5 62 14 C56 13 52 17 50.5 23 C48.5 32 52 47 61 62 Z" fill="#a47443" stroke="#3a210d" stroke-width="2.4" stroke-linejoin="round"/><path d="M50 8.8 C54 9.6 58 12 62 14 C57 14.5 53 18 51.5 22 Z" fill="#7a5128" stroke="#3a210d" stroke-width="1.6" stroke-linejoin="round"/><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 40 C28 36 40 36 50 41" stroke="#c9975b" stroke-width="1.6"/><path d="M17 52 C26 49 44 49 56 53" stroke="#7a5128" stroke-width="1.6" stroke-dasharray="3 2.6"/><path d="M30 24 C34 20 38 18 42 17" stroke="#c9975b" stroke-width="1.5"/><path d="M24 36.5 Q29.5 31.5 35 36" stroke="#2a1406" stroke-width="2.6"/><path d="M38.5 36 Q44 31.5 49.5 37" stroke="#2a1406" stroke-width="2.6"/><path d="M23 31.5 Q28.5 28 34 31" stroke="#7a5128" stroke-width="1.6"/><path d="M39 31 Q44.5 28 50 32" stroke="#7a5128" stroke-width="1.6"/></g><path d="M28 47.5 Q37 43.5 46 47.5 Q45 58 37 58 Q29 58 28 47.5 Z" fill="#2a1406" stroke="#2a1406" stroke-width="1.4" stroke-linejoin="round"/><path d="M32 55.4 Q37 51.6 42 55.4 Q40 58 37 58 Q34 58 32 55.4 Z" fill="#c4574a"/></svg>',
 
   sixseven:
     '<svg viewBox="0 0 84 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +

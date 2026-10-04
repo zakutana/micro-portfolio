@@ -739,18 +739,18 @@
 :root[data-theme="piano"] {
   --font: "Nunito", system-ui, sans-serif;
   --display: Georgia, "Times New Roman", serif;
-  --bg: #f3eee0;
+  --bg: #f1dfc0;
   --bg-image:
-    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27140%27%20height%3D%2714%27%3E%3Crect%20width%3D%27140%27%20height%3D%2714%27%20fill%3D%27%23fffefa%27%2F%3E%3Cpath%20d%3D%27M20%200V14M40%200V14M60%200V14M80%200V14M100%200V14M120%200V14%27%20stroke%3D%27%231b1b1f%27%20stroke-width%3D%271%27%2F%3E%3Cg%20fill%3D%27%231b1b1f%27%3E%3Crect%20x%3D%2714%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3Crect%20x%3D%2734%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3Crect%20x%3D%2774%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3Crect%20x%3D%2794%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3Crect%20x%3D%27114%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M0%2013.5H140%27%20stroke%3D%27%231b1b1f%27%20stroke-width%3D%271.2%27%2F%3E%3C%2Fsvg%3E"),
-    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27360%27%20height%3D%27170%27%3E%3Cg%20stroke%3D%27%231b1b1f%27%20stroke-opacity%3D%27.17%27%20stroke-width%3D%271%27%3E%3Cpath%20d%3D%27M0%2046H360%27%2F%3E%3Cpath%20d%3D%27M0%2054H360%27%2F%3E%3Cpath%20d%3D%27M0%2062H360%27%2F%3E%3Cpath%20d%3D%27M0%2070H360%27%2F%3E%3Cpath%20d%3D%27M0%2078H360%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M1%2046V78M359%2046V78%27%20stroke%3D%27%231b1b1f%27%20stroke-opacity%3D%27.25%27%20stroke-width%3D%271.6%27%2F%3E%3Cg%20fill%3D%27%231b1b1f%27%20fill-opacity%3D%27.2%27%3E%3Cellipse%20cx%3D%2770%27%20cy%3D%2756%27%20rx%3D%275%27%20ry%3D%273.6%27%20transform%3D%27rotate%28-20%2070%2056%29%27%2F%3E%3Crect%20x%3D%2774%27%20y%3D%2730%27%20width%3D%271.4%27%20height%3D%2726%27%2F%3E%3Cellipse%20cx%3D%27110%27%20cy%3D%2748%27%20rx%3D%275%27%20ry%3D%273.6%27%20transform%3D%27rotate%28-20%20110%2048%29%27%2F%3E%3Crect%20x%3D%27114%27%20y%3D%2722%27%20width%3D%271.4%27%20height%3D%2726%27%2F%3E%3Cellipse%20cx%3D%27150%27%20cy%3D%2764%27%20rx%3D%275%27%20ry%3D%273.6%27%20transform%3D%27rotate%28-20%20150%2064%29%27%2F%3E%3Crect%20x%3D%27154%27%20y%3D%2738%27%20width%3D%271.4%27%20height%3D%2726%27%2F%3E%3Cellipse%20cx%3D%27205%27%20cy%3D%2752%27%20rx%3D%275%27%20ry%3D%273.6%27%20transform%3D%27rotate%28-20%20205%2052%29%27%2F%3E%3Crect%20x%3D%27209%27%20y%3D%2726%27%20width%3D%271.4%27%20height%3D%2726%27%2F%3E%3Cellipse%20cx%3D%27255%27%20cy%3D%2760%27%20rx%3D%275%27%20ry%3D%273.6%27%20transform%3D%27rotate%28-20%20255%2060%29%27%2F%3E%3Crect%20x%3D%27259%27%20y%3D%2734%27%20width%3D%271.4%27%20height%3D%2726%27%2F%3E%3Cellipse%20cx%3D%27305%27%20cy%3D%2744%27%20rx%3D%275%27%20ry%3D%273.6%27%20transform%3D%27rotate%28-20%20305%2044%29%27%2F%3E%3Crect%20x%3D%27309%27%20y%3D%2718%27%20width%3D%271.4%27%20height%3D%2726%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27140%27%20height%3D%2714%27%3E%3Crect%20width%3D%27140%27%20height%3D%2714%27%20fill%3D%27%23fff7e6%27%2F%3E%3Cpath%20d%3D%27M20%200V14M40%200V14M60%200V14M80%200V14M100%200V14M120%200V14%27%20stroke%3D%27%234a2c17%27%20stroke-width%3D%271%27%2F%3E%3Cg%20fill%3D%27%234a2c17%27%3E%3Crect%20x%3D%2714%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3Crect%20x%3D%2734%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3Crect%20x%3D%2774%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3Crect%20x%3D%2794%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3Crect%20x%3D%27114%27%20width%3D%2712%27%20height%3D%279%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M0%2013.5H140%27%20stroke%3D%27%234a2c17%27%20stroke-width%3D%271.2%27%2F%3E%3C%2Fsvg%3E"),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27360%27%20height%3D%27170%27%3E%3Cg%20stroke%3D%27%234a2c17%27%20stroke-opacity%3D%27.17%27%20stroke-width%3D%271%27%3E%3Cpath%20d%3D%27M0%2046H360%27%2F%3E%3Cpath%20d%3D%27M0%2054H360%27%2F%3E%3Cpath%20d%3D%27M0%2062H360%27%2F%3E%3Cpath%20d%3D%27M0%2070H360%27%2F%3E%3Cpath%20d%3D%27M0%2078H360%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M1%2046V78M359%2046V78%27%20stroke%3D%27%234a2c17%27%20stroke-opacity%3D%27.25%27%20stroke-width%3D%271.6%27%2F%3E%3Cg%20fill%3D%27%234a2c17%27%20fill-opacity%3D%27.2%27%3E%3Cellipse%20cx%3D%2770%27%20cy%3D%2756%27%20rx%3D%275%27%20ry%3D%273.6%27%20transform%3D%27rotate%28-20%2070%2056%29%27%2F%3E%3Crect%20x%3D%2774%27%20y%3D%2730%27%20width%3D%271.4%27%20height%3D%2726%27%2F%3E%3Cellipse%20cx%3D%27110%27%20cy%3D%2748%27%20rx%3D%275%27%20ry%3D%273.6%27%20transform%3D%27rotate%28-20%20110%2048%29%27%2F%3E%3Crect%20x%3D%27114%27%20y%3D%2722%27%20width%3D%271.4%27%20height%3D%2726%27%2F%3E%3Cellipse%20cx%3D%27150%27%20cy%3D%2764%27%20rx%3D%275%27%20ry%3D%273.6%27%20transform%3D%27rotate%28-20%20150%2064%29%27%2F%3E%3Crect%20x%3D%27154%27%20y%3D%2738%27%20width%3D%271.4%27%20height%3D%2726%27%2F%3E%3Cellipse%20cx%3D%27205%27%20cy%3D%2752%27%20rx%3D%275%27%20ry%3D%273.6%27%20transform%3D%27rotate%28-20%20205%2052%29%27%2F%3E%3Crect%20x%3D%27209%27%20y%3D%2726%27%20width%3D%271.4%27%20height%3D%2726%27%2F%3E%3Cellipse%20cx%3D%27255%27%20cy%3D%2760%27%20rx%3D%275%27%20ry%3D%273.6%27%20transform%3D%27rotate%28-20%20255%2060%29%27%2F%3E%3Crect%20x%3D%27259%27%20y%3D%2734%27%20width%3D%271.4%27%20height%3D%2726%27%2F%3E%3Cellipse%20cx%3D%27305%27%20cy%3D%2744%27%20rx%3D%275%27%20ry%3D%273.6%27%20transform%3D%27rotate%28-20%20305%2044%29%27%2F%3E%3Crect%20x%3D%27309%27%20y%3D%2718%27%20width%3D%271.4%27%20height%3D%2726%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
   --bg-size: 140px 14px, 360px 170px;
   --bg-repeat: repeat-x, repeat;
   --bg-pos: 0 0, 0 14px;
   --bg-attach: scroll;
-  --text: #1b1b1f;
-  --muted: #6f6a60;
-  --on-bg: #1b1b1f;
-  --line: rgba(27, 27, 31, 0.22);
+  --text: #4a2c17;
+  --muted: #8a6a4a;
+  --on-bg: #4a2c17;
+  --line: rgba(74, 44, 23, 0.24);
   --title-size: 1rem;
   --title-weight: 800;
   --value-size: 1.12rem;
@@ -758,59 +758,59 @@
   --gain-size: 3.2rem;
   --gain-weight: 700;
   --name-weight: 800;
-  --mark: #c9a24b;
-  --focus: #1b1b1f;
+  --mark: #d9963a;
+  --focus: #4a2c17;
 
-  --brand-bg: #fffefa;
-  --brand-border: 2.5px solid #1b1b1f;
+  --brand-bg: #fff7e6;
+  --brand-border: 2.5px solid #4a2c17;
   --brand-radius: 999px;
-  --brand-shadow: 0 3px 0 #1b1b1f;
-  --brand-text: #1b1b1f;
-  --btn-bg: #fffefa;
-  --btn-border: 2.5px solid #1b1b1f;
+  --brand-shadow: 0 3px 0 #4a2c17;
+  --brand-text: #4a2c17;
+  --btn-bg: #fff7e6;
+  --btn-border: 2.5px solid #4a2c17;
   --btn-radius: 999px;
-  --btn-shadow: 0 3px 0 #1b1b1f;
-  --btn-text: #1b1b1f;
-  --btn-active-bg: #1b1b1f;
-  --btn-active-text: #fffefa;
-  --sw-off: #ddd5c0;
-  --sw-border: 2px solid #1b1b1f;
+  --btn-shadow: 0 3px 0 #4a2c17;
+  --btn-text: #4a2c17;
+  --btn-active-bg: #4a2c17;
+  --btn-active-text: #fff7e6;
+  --sw-off: #e6cfa6;
+  --sw-border: 2px solid #4a2c17;
   --sw-shadow: none;
-  --toggle-bg: #1b1b1f;
-  --toggle-border: 2.5px solid #c9a24b;
-  --toggle-shadow: 0 3px 0 #6d5a22;
+  --toggle-bg: #4a2c17;
+  --toggle-border: 2.5px solid #d9963a;
+  --toggle-shadow: 0 3px 0 #7a4a14;
 
-  --panel: #fffefa;
-  --panel-border: 2.5px solid #1b1b1f;
+  --panel: #fff7e6;
+  --panel-border: 2.5px solid #4a2c17;
   --panel-radius: 20px;
-  --panel-shadow: 0 5px 0 #1b1b1f, 0 14px 22px rgba(27, 27, 31, 0.14);
-  --row-bg: #fffefa;
-  --row-border: 2px solid #1b1b1f;
+  --panel-shadow: 0 5px 0 #4a2c17, 0 14px 22px rgba(74, 44, 23, 0.2);
+  --row-bg: #fff7e6;
+  --row-border: 2px solid #4a2c17;
   --row-radius: 16px;
-  --row-shadow: 0 3px 0 #1b1b1f;
-  --row-hover: #f6f0df;
-  --ring-idle: #1b1b1f;
+  --row-shadow: 0 3px 0 #4a2c17;
+  --row-hover: #fbecc9;
+  --ring-idle: #4a2c17;
   --logo-radius: 12px;
   --logo-border: 3px solid var(--ring-idle);
 
-  --pill-bg: #efe8d6;
-  --pill-text: #6f6a60;
+  --pill-bg: #f3e2c0;
+  --pill-text: #8a6a4a;
   --gain: #0e7c4f;
   --gain-big: #0f8a55;
   --gain-bg: #dcf3e6;
   --loss-bg: #fbe0e0;
 
-  --total-bg: linear-gradient(180deg, #2f3340 0%, #0c0d11 100%);
-  --total-text: #f7f3ea;
-  --total-label: #c9a24b;
-  --total-border: 2.5px solid #c9a24b;
+  --total-bg: linear-gradient(180deg, #94532b 0%, #4a2412 100%);
+  --total-text: #fff3dc;
+  --total-label: #d9963a;
+  --total-border: 2.5px solid #d9963a;
   --total-radius: 22px;
-  --total-shadow: 0 6px 0 #000, 0 14px 22px rgba(0, 0, 0, 0.35);
+  --total-shadow: 0 6px 0 #2a1209, 0 14px 22px rgba(74, 36, 18, 0.35);
   --total-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
   --total-text-shadow: none;
 
-  --a1: #c9a24b;
-  --a2: #1b1b1f;
+  --a1: #d9963a;
+  --a2: #6b3a1e;
   --a3: #8b3a3a;
   --a4: #2f5d8a;
   --a5: #6b8f5e;
@@ -1083,11 +1083,11 @@
   --a7: #2a6f6f;
   --a8: #c9a24b;
 
-  --peek-w: 84px;
-  --peek-h: 56px;
-  --peek-hide: 8px;
+  --peek-w: 92px;
+  --peek-h: 92px;
+  --peek-hide: 16px;
   --peek-right: 26px;
-  --peek-rot: -8deg;
+  --peek-rot: -4deg;
 }
 
 /* ---------- 6 7: loud neon, thick outlines, hands up and down ---------- */
