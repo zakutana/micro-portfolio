@@ -1163,6 +1163,364 @@
   filter: none;
 }
 
+/* ---------- Space: nebula, stars, a ringed planet, dark glass cards ---------- */
+
+:root[data-theme="space"] {
+  --font: "Nunito", system-ui, sans-serif;
+  --display: var(--font);
+  --bg: #070a1f;
+  --bg-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27200%27%20height%3D%27200%27%20viewBox%3D%270%200%20200%20200%27%3E%3Cdefs%3E%3CradialGradient%20id%3D%27g%27%20cx%3D%2735%25%27%20cy%3D%2730%25%27%20r%3D%2775%25%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%23ffc58a%27%2F%3E%3Cstop%20offset%3D%27.6%27%20stop-color%3D%27%23e8743f%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%238a2f1a%27%2F%3E%3C%2FradialGradient%3E%3C%2Fdefs%3E%3Cg%20transform%3D%27rotate%28-20%20100%20100%29%27%3E%3Cellipse%20cx%3D%27100%27%20cy%3D%27100%27%20rx%3D%2794%27%20ry%3D%2724%27%20fill%3D%27none%27%20stroke%3D%27%23f3c98b%27%20stroke-opacity%3D%27.65%27%20stroke-width%3D%276%27%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D%27100%27%20cy%3D%27100%27%20r%3D%2746%27%20fill%3D%27url%28%23g%29%27%2F%3E%3Cg%20transform%3D%27rotate%28-20%20100%20100%29%27%3E%3Cpath%20d%3D%27M6%20100%20A94%2024%200%200%200%20194%20100%27%20fill%3D%27none%27%20stroke%3D%27%23f3c98b%27%20stroke-opacity%3D%27.9%27%20stroke-width%3D%276%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2790%27%20height%3D%2790%27%20viewBox%3D%270%200%2090%2090%27%3E%3Ccircle%20cx%3D%2745%27%20cy%3D%2745%27%20r%3D%2732%27%20fill%3D%27%23c9cfe6%27%2F%3E%3Ccircle%20cx%3D%2734%27%20cy%3D%2736%27%20r%3D%277%27%20fill%3D%27%23aab2d2%27%2F%3E%3Ccircle%20cx%3D%2756%27%20cy%3D%2752%27%20r%3D%279%27%20fill%3D%27%23aab2d2%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2728%27%20r%3D%274%27%20fill%3D%27%23aab2d2%27%2F%3E%3C%2Fsvg%3E"),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%3E%3Ccircle%20cx%3D%27161%27%20cy%3D%27191%27%20r%3D%271.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.30%27%2F%3E%3Ccircle%20cx%3D%27216%27%20cy%3D%27200%27%20r%3D%270.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.30%27%2F%3E%3Ccircle%20cx%3D%27231%27%20cy%3D%2733%27%20r%3D%271.3%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%27100%27%20cy%3D%2730%27%20r%3D%270.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.30%27%2F%3E%3Ccircle%20cx%3D%27188%27%20cy%3D%27107%27%20r%3D%270.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%2744%27%20cy%3D%27205%27%20r%3D%270.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%2736%27%20cy%3D%274%27%20r%3D%270.6%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%27199%27%20cy%3D%27246%27%20r%3D%270.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%2777%27%20cy%3D%27246%27%20r%3D%271.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%27248%27%20r%3D%270.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%2779%27%20cy%3D%2795%27%20r%3D%270.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%2770%27%20cy%3D%2788%27%20r%3D%271.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.30%27%2F%3E%3Ccircle%20cx%3D%27154%27%20cy%3D%27182%27%20r%3D%270.6%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.70%27%2F%3E%3Ccircle%20cx%3D%2794%27%20cy%3D%2781%27%20r%3D%271.0%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%27125%27%20cy%3D%27182%27%20r%3D%270.6%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.70%27%2F%3E%3Ccircle%20cx%3D%27250%27%20cy%3D%2710%27%20r%3D%271.0%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%279%27%20cy%3D%27203%27%20r%3D%271.0%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%27150%27%20cy%3D%276%27%20r%3D%270.6%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%27161%27%20cy%3D%27245%27%20r%3D%270.6%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%27238%27%20cy%3D%27241%27%20r%3D%271.0%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.70%27%2F%3E%3Ccircle%20cx%3D%27229%27%20cy%3D%2767%27%20r%3D%271.3%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.30%27%2F%3E%3Ccircle%20cx%3D%27153%27%20cy%3D%27201%27%20r%3D%271.0%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.70%27%2F%3E%3Ccircle%20cx%3D%2713%27%20cy%3D%27242%27%20r%3D%270.6%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%2790%27%20cy%3D%27158%27%20r%3D%270.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.70%27%2F%3E%3Ccircle%20cx%3D%2773%27%20cy%3D%27181%27%20r%3D%270.6%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.70%27%2F%3E%3Ccircle%20cx%3D%27177%27%20cy%3D%2781%27%20r%3D%270.6%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%27186%27%20cy%3D%2782%27%20r%3D%271.3%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%27185%27%20cy%3D%2724%27%20r%3D%271.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%27191%27%20r%3D%271.0%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.70%27%2F%3E%3Ccircle%20cx%3D%27119%27%20cy%3D%27110%27%20r%3D%270.6%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.30%27%2F%3E%3Ccircle%20cx%3D%27206%27%20cy%3D%2788%27%20r%3D%270.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%27251%27%20cy%3D%27146%27%20r%3D%270.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%2731%27%20cy%3D%27114%27%20r%3D%270.8%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.30%27%2F%3E%3Ccircle%20cx%3D%27217%27%20cy%3D%2778%27%20r%3D%271.3%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%27250%27%20cy%3D%27118%27%20r%3D%271.3%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.70%27%2F%3E%3Ccircle%20cx%3D%27125%27%20cy%3D%2777%27%20r%3D%271.3%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%270.50%27%2F%3E%3C%2Fsvg%3E"),
+    radial-gradient(60% 40% at 18% 14%, rgba(124, 77, 255, 0.38), transparent),
+    radial-gradient(50% 36% at 86% 58%, rgba(40, 140, 255, 0.26), transparent),
+    linear-gradient(180deg, #0c1233 0%, #050714 100%);
+  --bg-size: 190px 190px, 52px 52px, 260px 260px, auto, auto, auto;
+  --bg-repeat: no-repeat, no-repeat, repeat, no-repeat, no-repeat, no-repeat;
+  --bg-pos: right -46px top 96px, left 26px top 84px, 0 0, 0 0, 0 0, 0 0;
+  --text: #e8ecff;
+  --muted: #9aa3d6;
+  --on-bg: #e8ecff;
+  --on-bg-shadow: 0 2px 0 #000;
+  --line: rgba(154, 163, 214, 0.28);
+  --title-size: 1rem;
+  --title-weight: 800;
+  --value-weight: 800;
+  --gain-weight: 800;
+  --name-weight: 800;
+  --mark: #7cf3ff;
+  --focus: #7cf3ff;
+
+  --brand-bg: #1a2150;
+  --brand-border: 2px solid #5b7cff;
+  --brand-radius: 999px;
+  --brand-shadow: 0 0 14px rgba(91, 124, 255, 0.45);
+  --brand-text: #e8ecff;
+  --btn-bg: #1a2150;
+  --btn-border: 2px solid #5b7cff;
+  --btn-radius: 999px;
+  --btn-shadow: 0 0 14px rgba(91, 124, 255, 0.35);
+  --btn-text: #e8ecff;
+  --btn-active-bg: #5b7cff;
+  --btn-active-text: #ffffff;
+  --sw-off: #2a3270;
+  --sw-shadow: none;
+  --toggle-bg: #1a2150;
+  --toggle-border: 2px solid #7cf3ff;
+  --toggle-shadow: 0 0 14px rgba(124, 243, 255, 0.45);
+
+  --panel: #141a40;
+  --panel-border: 2px solid #4a5fd0;
+  --panel-radius: 20px;
+  --panel-shadow: 0 0 26px rgba(91, 124, 255, 0.3), 0 16px 26px rgba(0, 0, 0, 0.5);
+  --row-bg: #1a2150;
+  --row-border: 1.5px solid #2f3b8f;
+  --row-radius: 16px;
+  --row-shadow: none;
+  --row-hover: #222b66;
+  --ring-idle: #3b4aa8;
+  --logo-radius: 50%;
+  --logo-border: 3px solid var(--ring-idle);
+
+  --pill-bg: rgba(255, 255, 255, 0.09);
+  --pill-text: #b7c0f0;
+  --gain: #5dffb0;
+  --loss: #ff8a9a;
+  --flat: #9aa3d6;
+  --gain-bg: rgba(93, 255, 176, 0.16);
+  --loss-bg: rgba(255, 120, 140, 0.16);
+  --flat-bg: rgba(255, 255, 255, 0.09);
+  --gain-big: #5dffb0;
+  --loss-big: #ff8a9a;
+
+  --total-bg: linear-gradient(180deg, #5a3bd6 0%, #2a1c82 100%);
+  --total-text: #ffffff;
+  --total-label: #cbc3ff;
+  --total-border: 2px solid #a99bff;
+  --total-radius: 33px;
+  --total-shadow: 0 0 26px rgba(124, 77, 255, 0.55), 0 14px 24px rgba(0, 0, 0, 0.5);
+  --total-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0));
+  --total-text-shadow: none;
+
+  --a1: #7cf3ff;
+  --a2: #a99bff;
+  --a3: #ff7ad9;
+  --a4: #ffd166;
+  --a5: #5dffb0;
+  --a6: #ff8a5c;
+  --a7: #5b7cff;
+  --a8: #e8ecff;
+
+  --peek-w: 80px;
+  --peek-h: 80px;
+  --peek-hide: 22px;
+  --peek-right: 30px;
+  --peek-rot: 6deg;
+}
+
+/* ---------- Robots: graphite circuit board, steel plates, orange and cyan, LED total ---------- */
+
+:root[data-theme="robots"] {
+  --font: "Nunito", system-ui, sans-serif;
+  --display: var(--font);
+  --bg: #243038;
+  --bg-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27200%27%20height%3D%27200%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%2319c3d6%27%20stroke-opacity%3D%27.2%27%20stroke-width%3D%271.6%27%20stroke-linejoin%3D%27round%27%3E%3Cpolyline%20points%3D%2710%2C30%2060%2C30%2060%2C80%27%2F%3E%3Cpolyline%20points%3D%2790%2C10%2090%2C50%20140%2C50%27%2F%3E%3Cpolyline%20points%3D%2730%2C120%2030%2C170%2080%2C170%27%2F%3E%3Cpolyline%20points%3D%27120%2C110%20170%2C110%20170%2C160%27%2F%3E%3Cpolyline%20points%3D%27150%2C20%20190%2C20%20190%2C70%27%2F%3E%3Cpolyline%20points%3D%2760%2C140%20110%2C140%20110%2C190%27%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%27%2319c3d6%27%20fill-opacity%3D%27.28%27%3E%3Ccircle%20cx%3D%2710%27%20cy%3D%2730%27%20r%3D%273%27%2F%3E%3Ccircle%20cx%3D%2760%27%20cy%3D%2780%27%20r%3D%273%27%2F%3E%3Ccircle%20cx%3D%2790%27%20cy%3D%2710%27%20r%3D%273%27%2F%3E%3Ccircle%20cx%3D%27140%27%20cy%3D%2750%27%20r%3D%273%27%2F%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%27120%27%20r%3D%273%27%2F%3E%3Ccircle%20cx%3D%2780%27%20cy%3D%27170%27%20r%3D%273%27%2F%3E%3Ccircle%20cx%3D%27120%27%20cy%3D%27110%27%20r%3D%273%27%2F%3E%3Ccircle%20cx%3D%27170%27%20cy%3D%27160%27%20r%3D%273%27%2F%3E%3Ccircle%20cx%3D%27150%27%20cy%3D%2720%27%20r%3D%273%27%2F%3E%3Ccircle%20cx%3D%27190%27%20cy%3D%2770%27%20r%3D%273%27%2F%3E%3Ccircle%20cx%3D%2760%27%20cy%3D%27140%27%20r%3D%273%27%2F%3E%3Ccircle%20cx%3D%27110%27%20cy%3D%27190%27%20r%3D%273%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"),
+    linear-gradient(180deg, #34444e 0%, #1c262c 100%);
+  --bg-size: 200px 200px, auto;
+  --bg-repeat: repeat, no-repeat;
+  --text: #1f2a30;
+  --muted: #5e6f79;
+  --on-bg: #e6f4f8;
+  --on-bg-shadow: 0 2px 0 #0b1216;
+  --line: rgba(31, 42, 48, 0.24);
+  --title-size: 1rem;
+  --title-weight: 800;
+  --value-size: 1.08rem;
+  --value-weight: 700;
+  --gain-weight: 700;
+  --name-weight: 800;
+  --mark: #1f2a30;
+  --focus: #19c3d6;
+
+  --brand-bg: #ff9a2e;
+  --brand-border: 2.5px solid #1f2a30;
+  --brand-radius: 12px;
+  --brand-shadow: 0 3px 0 #11181d;
+  --brand-text: #1f2a30;
+  --btn-bg: #eef3f6;
+  --btn-border: 2.5px solid #1f2a30;
+  --btn-radius: 12px;
+  --btn-shadow: 0 3px 0 #11181d;
+  --btn-text: #1f2a30;
+  --btn-active-bg: #19c3d6;
+  --btn-active-text: #06242a;
+  --sw-off: #c3cfd6;
+  --sw-radius: 6px;
+  --sw-border: 2px solid #1f2a30;
+  --knob-radius: 3px;
+  --knob-border: 2px solid #1f2a30;
+  --sw-shadow: none;
+  --toggle-bg: #19c3d6;
+  --toggle-border: 2.5px solid #1f2a30;
+  --toggle-radius: 12px;
+  --toggle-shadow: 0 3px 0 #11181d;
+
+  --panel: #eef3f6;
+  --panel-border: 3px solid #2c3a42;
+  --panel-radius: 14px;
+  --panel-shadow: 0 6px 0 #11181d, 0 16px 24px rgba(0, 0, 0, 0.4);
+  --row-bg: #f8fbfc;
+  --row-border: 2px solid #b8c6ce;
+  --row-radius: 10px;
+  --row-shadow: 0 4px 0 #6b7c86;
+  --row-hover: #e3edf1;
+  --ring-idle: #b8c6ce;
+  --logo-radius: 10px;
+  --logo-border: 3px solid var(--ring-idle);
+
+  --pill-bg: #dbe5ea;
+  --pill-text: #4d5f69;
+  --gain: #0e7c4f;
+  --gain-big: #0f8a55;
+
+  --total-font: "Press Start 2P", "Courier New", monospace;
+  --total-size: 1.1rem;
+  --total-bg: linear-gradient(180deg, #1a262c 0%, #0a1115 100%);
+  --total-text: #8dffb0;
+  --total-label: #7fd6e2;
+  --total-border: 3px solid #19c3d6;
+  --total-radius: 16px;
+  --total-shadow: 0 6px 0 #05090b, 0 16px 24px rgba(0, 0, 0, 0.45);
+  --total-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
+  --total-text-shadow: 0 0 10px rgba(141, 255, 176, 0.55);
+
+  --a1: #ff8a1f;
+  --a2: #19c3d6;
+  --a3: #6c7ae0;
+  --a4: #ff5a6a;
+  --a5: #8dd24a;
+  --a6: #ffd23d;
+  --a7: #9b6cff;
+  --a8: #1f2a30;
+
+  --peek-w: 76px;
+  --peek-h: 76px;
+  --peek-hide: 12px;
+  --peek-right: 30px;
+  --peek-rot: -5deg;
+}
+
+:root[data-theme="robots"] .total-value .cur {
+  font-size: 1em;
+}
+
+/* ---------- Anime: pastel sky, sakura petals, sparkles ---------- */
+
+:root[data-theme="anime"] {
+  --font: "Fredoka", system-ui, sans-serif;
+  --display: var(--font);
+  --bg: #e5d6ff;
+  --bg-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%3E%3Cpath%20transform%3D%27translate%2870%2060%29%20scale%281%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23fff%27%20fill-opacity%3D%27.85%27%2F%3E%3Cpath%20transform%3D%27translate%28220%20120%29%20scale%281.3%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23fff%27%20fill-opacity%3D%27.85%27%2F%3E%3Cpath%20transform%3D%27translate%28150%20230%29%20scale%280.9%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23fff%27%20fill-opacity%3D%27.85%27%2F%3E%3Cpath%20transform%3D%27translate%2840%20190%29%20scale%281.1%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23fff%27%20fill-opacity%3D%27.85%27%2F%3E%3C%2Fsvg%3E"),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27300%27%20height%3D%27300%27%3E%3Cpath%20transform%3D%27translate%2856%20203%29%20rotate%28229%29%20scale%280.74%29%27%20d%3D%27M0%200%20C-6%20-4%20-6%20-12%200%20-15%20C6%20-12%206%20-4%200%200Z%27%20fill%3D%27%23ffb3d1%27%20fill-opacity%3D%270.6%27%2F%3E%3Cpath%20transform%3D%27translate%28236%20153%29%20rotate%28182%29%20scale%280.62%29%27%20d%3D%27M0%200%20C-6%20-4%20-6%20-12%200%20-15%20C6%20-12%206%20-4%200%200Z%27%20fill%3D%27%23ff8fb8%27%20fill-opacity%3D%270.45%27%2F%3E%3Cpath%20transform%3D%27translate%28114%20174%29%20rotate%2825%29%20scale%280.90%29%27%20d%3D%27M0%200%20C-6%20-4%20-6%20-12%200%20-15%20C6%20-12%206%20-4%200%200Z%27%20fill%3D%27%23ffb3d1%27%20fill-opacity%3D%270.45%27%2F%3E%3Cpath%20transform%3D%27translate%28204%20132%29%20rotate%28358%29%20scale%280.89%29%27%20d%3D%27M0%200%20C-6%20-4%20-6%20-12%200%20-15%20C6%20-12%206%20-4%200%200Z%27%20fill%3D%27%23ffc4dc%27%20fill-opacity%3D%270.75%27%2F%3E%3Cpath%20transform%3D%27translate%28134%20278%29%20rotate%28194%29%20scale%280.85%29%27%20d%3D%27M0%200%20C-6%20-4%20-6%20-12%200%20-15%20C6%20-12%206%20-4%200%200Z%27%20fill%3D%27%23ff9fc7%27%20fill-opacity%3D%270.45%27%2F%3E%3Cpath%20transform%3D%27translate%2853%20239%29%20rotate%2845%29%20scale%280.96%29%27%20d%3D%27M0%200%20C-6%20-4%20-6%20-12%200%20-15%20C6%20-12%206%20-4%200%200Z%27%20fill%3D%27%23ffc4dc%27%20fill-opacity%3D%270.45%27%2F%3E%3Cpath%20transform%3D%27translate%28165%20106%29%20rotate%28174%29%20scale%280.59%29%27%20d%3D%27M0%200%20C-6%20-4%20-6%20-12%200%20-15%20C6%20-12%206%20-4%200%200Z%27%20fill%3D%27%23ff8fb8%27%20fill-opacity%3D%270.6%27%2F%3E%3Cpath%20transform%3D%27translate%28252%2076%29%20rotate%28281%29%20scale%280.60%29%27%20d%3D%27M0%200%20C-6%20-4%20-6%20-12%200%20-15%20C6%20-12%206%20-4%200%200Z%27%20fill%3D%27%23ff8fb8%27%20fill-opacity%3D%270.45%27%2F%3E%3Cpath%20transform%3D%27translate%28167%20167%29%20rotate%28140%29%20scale%280.67%29%27%20d%3D%27M0%200%20C-6%20-4%20-6%20-12%200%20-15%20C6%20-12%206%20-4%200%200Z%27%20fill%3D%27%23ffb3d1%27%20fill-opacity%3D%270.75%27%2F%3E%3Cpath%20transform%3D%27translate%28125%20112%29%20rotate%28162%29%20scale%280.69%29%27%20d%3D%27M0%200%20C-6%20-4%20-6%20-12%200%20-15%20C6%20-12%206%20-4%200%200Z%27%20fill%3D%27%23ffc4dc%27%20fill-opacity%3D%270.6%27%2F%3E%3Cpath%20transform%3D%27translate%2884%20244%29%20rotate%2857%29%20scale%280.86%29%27%20d%3D%27M0%200%20C-6%20-4%20-6%20-12%200%20-15%20C6%20-12%206%20-4%200%200Z%27%20fill%3D%27%23ffc4dc%27%20fill-opacity%3D%270.45%27%2F%3E%3Cpath%20transform%3D%27translate%28148%20164%29%20rotate%28269%29%20scale%280.61%29%27%20d%3D%27M0%200%20C-6%20-4%20-6%20-12%200%20-15%20C6%20-12%206%20-4%200%200Z%27%20fill%3D%27%23ff9fc7%27%20fill-opacity%3D%270.75%27%2F%3E%3Cpath%20transform%3D%27translate%28284%2042%29%20rotate%28241%29%20scale%280.81%29%27%20d%3D%27M0%200%20C-6%20-4%20-6%20-12%200%20-15%20C6%20-12%206%20-4%200%200Z%27%20fill%3D%27%23ff9fc7%27%20fill-opacity%3D%270.6%27%2F%3E%3C%2Fsvg%3E"),
+    linear-gradient(180deg, #ffd1e8 0%, #e2d4ff 55%, #cfe6ff 100%);
+  --bg-size: 260px 260px, 300px 300px, auto;
+  --bg-repeat: repeat, repeat, no-repeat;
+  --text: #4a2f6b;
+  --muted: #8a6fa8;
+  --on-bg: #7a3fb0;
+  --on-bg-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+  --line: rgba(122, 63, 176, 0.25);
+  --title-size: 1.02rem;
+  --title-weight: 600;
+  --mark: #c06cf0;
+
+  --brand-bg: #ffffff;
+  --brand-border: 2.5px solid #ffb3d6;
+  --brand-radius: 999px;
+  --brand-shadow: 0 3px 0 #cdb9f5;
+  --brand-text: #8a3fb0;
+  --btn-bg: #ffffff;
+  --btn-border: 2.5px solid #ffb3d6;
+  --btn-radius: 999px;
+  --btn-shadow: 0 3px 0 #cdb9f5;
+  --btn-text: #8a3fb0;
+  --btn-active-bg: #a98bff;
+  --btn-active-text: #ffffff;
+  --sw-off: #eadcff;
+  --sw-shadow: inset 0 2px 0 rgba(122, 63, 176, 0.2);
+  --toggle-bg: #ffb3d6;
+  --toggle-border: 2.5px solid #ffffff;
+  --toggle-shadow: 0 3px 0 #b48be6;
+
+  --panel: #ffffff;
+  --panel-border: 3px solid #ffb3d6;
+  --panel-radius: 26px;
+  --panel-shadow: 0 6px 0 #cdb9f5, 0 16px 26px rgba(122, 63, 176, 0.2);
+  --row-bg: #ffffff;
+  --row-border: 2.5px solid #ffd3ea;
+  --row-radius: 22px;
+  --row-shadow: 0 4px 0 #d8c9f7;
+  --row-hover: #fff3fa;
+  --ring-idle: #ffd3ea;
+  --logo-radius: 50%;
+  --logo-border: 3px solid var(--ring-idle);
+
+  --pill-bg: #f1e6ff;
+  --pill-text: #8a6fa8;
+  --gain-big: #14a06a;
+
+  --total-bg: linear-gradient(180deg, #ff9ccb 0%, #a98bff 100%);
+  --total-text: #ffffff;
+  --total-label: #ffffff;
+  --total-border: 3px solid #ffffff;
+  --total-radius: 33px;
+  --total-shadow: 0 6px 0 #7a5ad0, 0 16px 26px rgba(122, 63, 176, 0.35);
+  --total-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  --total-text-shadow: 0 2px 0 rgba(90, 50, 160, 0.4);
+
+  --a1: #ff8fb8;
+  --a2: #a98bff;
+  --a3: #7fe0c0;
+  --a4: #7fc4ff;
+  --a5: #ffb98a;
+  --a6: #ffe27a;
+  --a7: #ff6fa0;
+  --a8: #6a5acd;
+
+  --peek-w: 84px;
+  --peek-h: 84px;
+  --peek-hide: 24px;
+  --peek-right: 30px;
+  --peek-rot: 4deg;
+}
+
+/* ---------- KPop: stage spotlights, neon pink and cyan, holographic cards ---------- */
+
+:root[data-theme="kpop"] {
+  --font: "Fredoka", system-ui, sans-serif;
+  --display: var(--font);
+  --bg: #120a24;
+  --bg-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27390%27%20height%3D%27520%27%20viewBox%3D%270%200%20390%20520%27%20preserveAspectRatio%3D%27none%27%3E%3Cdefs%3E%3ClinearGradient%20id%3D%27b%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%270%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%23ffffff%27%20stop-opacity%3D%27.34%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23ffffff%27%20stop-opacity%3D%270%27%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%27p%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%270%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%23ff5fd0%27%20stop-opacity%3D%27.36%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23ff5fd0%27%20stop-opacity%3D%270%27%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%27c%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%270%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%236ee7ff%27%20stop-opacity%3D%27.3%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%236ee7ff%27%20stop-opacity%3D%270%27%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Cpolygon%20points%3D%2760%2C0%20100%2C0%20230%2C520%20-60%2C520%27%20fill%3D%27url%28%23p%29%27%2F%3E%3Cpolygon%20points%3D%27170%2C0%20220%2C0%20390%2C520%2080%2C520%27%20fill%3D%27url%28%23b%29%27%2F%3E%3Cpolygon%20points%3D%27310%2C0%20350%2C0%20520%2C520%20220%2C520%27%20fill%3D%27url%28%23c%29%27%2F%3E%3C%2Fsvg%3E"),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27250%27%20height%3D%27250%27%3E%3Cpath%20transform%3D%27translate%28141%20155%29%20scale%281%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23a78bfa%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%28160%20215%29%20scale%280.8%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%28232%20132%29%20scale%281.3%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%28227%20156%29%20scale%281%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23a78bfa%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%2881%20124%29%20scale%280.6%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23a78bfa%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%28198%2075%29%20scale%281%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%236ee7ff%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%2837%2023%29%20scale%281%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%236ee7ff%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%28238%2025%29%20scale%281%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23ff7ad9%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%28160%20187%29%20scale%281%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%2811%20131%29%20scale%281%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23a78bfa%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%2899%20168%29%20scale%280.6%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%28211%20182%29%20scale%280.6%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23ff7ad9%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%2844%2038%29%20scale%281%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23ff7ad9%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%2823%2073%29%20scale%280.8%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%236ee7ff%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%28166%2099%29%20scale%281.3%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%28146%20114%29%20scale%281%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23a78bfa%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%2826%20121%29%20scale%281.3%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23ffffff%27%20fill-opacity%3D%27.7%27%2F%3E%3Cpath%20transform%3D%27translate%2836%20211%29%20scale%280.6%29%27%20d%3D%27M0%20-6%20L1.6%20-1.6%20L6%200%20L1.6%201.6%20L0%206%20L-1.6%201.6%20L-6%200%20L-1.6%20-1.6Z%27%20fill%3D%27%23a78bfa%27%20fill-opacity%3D%27.7%27%2F%3E%3C%2Fsvg%3E"),
+    radial-gradient(70% 30% at 50% 108%, rgba(255, 95, 208, 0.5), transparent),
+    linear-gradient(180deg, #24123f 0%, #0f0820 100%);
+  --bg-size: 100% 520px, 250px 250px, auto, auto;
+  --bg-repeat: no-repeat, repeat, no-repeat, no-repeat;
+  --bg-pos: top center, 0 0, 0 0, 0 0;
+  --text: #2a1442;
+  --muted: #7b5fa0;
+  --on-bg: #ffffff;
+  --on-bg-shadow: 0 0 12px rgba(255, 95, 208, 0.65);
+  --line: rgba(122, 63, 176, 0.25);
+  --title-size: 1.02rem;
+  --title-weight: 600;
+  --mark: #ff5fd0;
+  --focus: #6ee7ff;
+
+  --brand-bg: #241540;
+  --brand-border: 2px solid #ff7ad9;
+  --brand-radius: 999px;
+  --brand-shadow: 0 0 16px rgba(255, 95, 208, 0.5);
+  --brand-text: #ffffff;
+  --btn-bg: #241540;
+  --btn-border: 2px solid #ff7ad9;
+  --btn-radius: 999px;
+  --btn-shadow: 0 0 14px rgba(255, 95, 208, 0.4);
+  --btn-text: #ffffff;
+  --btn-active-bg: #ff5fd0;
+  --btn-active-text: #ffffff;
+  --sw-off: #3c2563;
+  --sw-shadow: none;
+  --toggle-bg: linear-gradient(135deg, #ff5fd0, #7c5cff);
+  --toggle-border: 2px solid #ffffff;
+  --toggle-shadow: 0 0 16px rgba(255, 95, 208, 0.6);
+
+  --panel: linear-gradient(#fffaff, #f6f0ff) padding-box, linear-gradient(135deg, #ff5fd0, #6ee7ff 50%, #a78bfa) border-box;
+  --panel-border: 3px solid transparent;
+  --panel-radius: 24px;
+  --panel-shadow: 0 0 26px rgba(255, 95, 208, 0.35), 0 14px 26px rgba(0, 0, 0, 0.5);
+  --row-bg: linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(120deg, #ffb3ea, #a5ecff) border-box;
+  --row-border: 2px solid transparent;
+  --row-radius: 18px;
+  --row-shadow: none;
+  --row-hover: #fff0fb;
+  --ring-idle: #ffb3ea;
+  --logo-radius: 50%;
+  --logo-border: 3px solid var(--ring-idle);
+
+  --pill-bg: #f1e6ff;
+  --pill-text: #7b5fa0;
+  --gain-big: #14a06a;
+
+  --total-bg: linear-gradient(90deg, #ff5fd0 0%, #7c5cff 55%, #3ac7ff 100%);
+  --total-text: #ffffff;
+  --total-label: #ffffff;
+  --total-border: 2.5px solid #ffffff;
+  --total-radius: 33px;
+  --total-shadow: 0 0 28px rgba(255, 95, 208, 0.6), 0 12px 24px rgba(0, 0, 0, 0.5);
+  --total-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0));
+  --total-text-shadow: 0 0 10px rgba(60, 0, 90, 0.55);
+
+  --a1: #ff5fd0;
+  --a2: #6ee7ff;
+  --a3: #a78bfa;
+  --a4: #ffd166;
+  --a5: #5dffb0;
+  --a6: #ff8a5c;
+  --a7: #3ac7ff;
+  --a8: #2a1442;
+
+  --peek-w: 56px;
+  --peek-h: 86px;
+  --peek-hide: 30px;
+  --peek-right: 40px;
+  --peek-rot: 12deg;
+}
+
 /* ---------- Base ---------- */
 
 * {
@@ -1762,7 +2120,11 @@ body {
 :root[data-theme="guitar"] .logo,
 :root[data-theme="wednesday"] .logo,
 :root[data-theme="harry"] .logo,
-:root[data-theme="sixseven"] .logo {
+:root[data-theme="sixseven"] .logo,
+:root[data-theme="space"] .logo,
+:root[data-theme="robots"] .logo,
+:root[data-theme="anime"] .logo,
+:root[data-theme="kpop"] .logo {
   border-color: var(--c, var(--ring-idle));
 }
 

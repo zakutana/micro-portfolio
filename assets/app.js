@@ -22,6 +22,10 @@
     { id: "wednesday", label: "Wednesday", color: "#0d0b10" },
     { id: "harry", label: "Potter", color: "#0d1233" },
     { id: "sixseven", label: "6 7", color: "#1c0f3a" },
+    { id: "space", label: "Vesmír", color: "#070a1f" },
+    { id: "robots", label: "Roboti", color: "#243038" },
+    { id: "anime", label: "Anime", color: "#ffd6ec" },
+    { id: "kpop", label: "KPop", color: "#120a24" },
   ];
 
   const COINGECKO = "https://api.coingecko.com/api/v3";
