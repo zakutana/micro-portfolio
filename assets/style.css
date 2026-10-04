@@ -351,6 +351,7 @@
   --a7: #ec4899;
   --a8: #14b8a6;
 
+  --tab-top: 36px;
   --peek-w: 104px;
   --peek-h: 104px;
   --peek-hide: 30px;
@@ -1862,6 +1863,11 @@ body {
   gap: 14px;
 }
 
+/* the tabs without the peeking figure: a theme with a header band (Pokémon) needs a little room below it */
+.stage:not(.has-hero) {
+  padding-top: var(--tab-top, 0px);
+}
+
 .stage.has-hero {
   padding-top: calc(var(--peek-h) - var(--peek-hide));
 }
@@ -2612,7 +2618,7 @@ body {
 }
 
 .pane-intro {
-  margin: 4px 0 12px;
+  margin: 4px 6px 12px;
   color: var(--on-bg);
   font-size: calc(var(--base-size) * 0.9);
   line-height: 1.45;
@@ -2621,7 +2627,7 @@ body {
 }
 
 .pane-note {
-  margin: 14px 4px 0;
+  margin: 14px 6px 0;
   color: var(--on-bg);
   font-size: calc(var(--base-size) * 0.82);
   line-height: 1.45;
