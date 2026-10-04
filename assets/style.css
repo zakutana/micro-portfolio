@@ -1146,6 +1146,10 @@ body {
   border-top: 2px dashed var(--line);
 }
 
+.perf-pro .alloc-bar {
+  margin-top: 2px;
+}
+
 .alloc-title {
   color: var(--muted);
   font-size: calc(var(--base-size) * 0.78);
@@ -1186,7 +1190,6 @@ body {
 
 /* Minecraft: the bar is an experience bar, the numbers below it are captions */
 :root[data-theme="minecraft"] .alloc-bar {
-  order: 3;
   gap: 2px;
   height: 14px;
   padding: 2px;
@@ -1200,7 +1203,6 @@ body {
 }
 
 :root[data-theme="minecraft"] .perf-pills {
-  order: 4;
   justify-content: space-between;
   gap: 8px;
   margin-top: 8px;
@@ -1210,10 +1212,6 @@ body {
   padding: 0;
   border-radius: 0;
   font-size: 0.52rem;
-}
-
-:root[data-theme="minecraft"] .perf-pro {
-  order: 5;
 }
 
 /* ---------- List ---------- */

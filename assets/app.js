@@ -140,7 +140,7 @@
     const icon = el("div", "lock-icon", "\u{1F512}");
     icon.setAttribute("aria-hidden", "true");
     const title = el("h2", "", name ? `Ahoj ${name}!` : "Tahle stránka je jen pro tebe");
-    const hint = el("p", "", "Napiš heslo z kartičky. Stačí jednou, příště se stránka otevře sama.");
+    const hint = el("p", "", "Zadej heslo. Stačí jednou, příště se stránka otevře sama.");
 
     const form = el("form", "pw-form");
     const input = el("input", "pw-input");
@@ -527,9 +527,9 @@
     const pro = el("div", "pro-only perf-pro");
     const allocTitle = el("div", "alloc-title", "Z čeho se portfolio skládá");
     const legend = el("div", "alloc-legend");
-    pro.append(allocTitle, legend);
+    pro.append(allocTitle, bar, legend);
 
-    box.append(cap, gain, pills, bar, pro);
+    box.append(cap, gain, pills, pro);
     $("content").prepend(box);
     perfRefs = { box, cap, num, unit, pills, bar, legend };
   }
@@ -554,8 +554,7 @@
     const blocks = [...byDate.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1)); // oldest first: #0 = genesis
 
     const box = el("details", "panel history");
-    box.open = true;
-    box.append(el("summary", "", "Historie nákupů"));
+    box.append(el("summary", "", "Historie nákupů")); // collapsed until opened
     const list = el("ol", "blocks");
     blocks
       .map(([, items], i) => ({ date: items[0].date, items, no: i }))
