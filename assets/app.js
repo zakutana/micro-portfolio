@@ -843,6 +843,11 @@
     ["history", "Historie", "pane-history"],
     ["discover", "Objevuj", "pane-discover"],
   ];
+  const TAB_ICONS = {
+    portfolio: '<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5V12h8.5"/>',
+    history: '<path d="M5 6.5h14M5 12h14M5 17.5h8.5"/>',
+    discover: '<circle cx="12" cy="12" r="8.5"/><path d="M15.8 8.2l-2.1 5.5-5.5 2.1 2.1-5.5z"/>',
+  };
   let activeTab = "portfolio";
 
   function showTab(id, { instant = false } = {}) {
@@ -861,6 +866,7 @@
       tab.tabIndex = on ? 0 : -1;
     });
     $("total-bar").hidden = id !== "portfolio";
+    $("app").dataset.tab = id;
     setHero(id === "portfolio");
     if (!instant) window.scrollTo({ top: 0 });
     if (id === "discover") refreshDiscover();
@@ -870,7 +876,10 @@
     const nav = $("tabs");
     nav.replaceChildren();
     for (const [id, label, paneId] of TABS) {
-      const btn = el("button", "tab", label);
+      const btn = el("button", "tab");
+      const ico = el("span", "tab-ico");
+      ico.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${TAB_ICONS[id]}</svg>`;
+      btn.append(ico, el("span", "tab-label", label));
       btn.type = "button";
       btn.id = `tab-${id}`;
       btn.setAttribute("role", "tab");
@@ -887,6 +896,7 @@
       $(`tab-${next}`).focus();
     });
     nav.hidden = false;
+    $("app").classList.add("has-tabs");
 
     // swipe: a clearly horizontal, quick move of the finger changes the tab
     let start = null;

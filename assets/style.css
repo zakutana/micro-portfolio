@@ -2494,46 +2494,93 @@ body {
   padding-left: 14px;
 }
 
-/* ---------- Tabs: Portfolio / Historie / Objevuj ---------- */
+/* ---------- Tabs: a bar at the bottom of the screen, like in a phone app ---------- */
+
+.app {
+  --nav-h: 64px;
+}
 
 .tabs {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 30;
+  transform: translateX(-50%);
+  width: min(100%, 560px);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  margin: 2px 0 14px;
+  padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+  background: var(--btn-bg);
+  border-top: var(--btn-border);
+  box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.14);
+}
+
+.app.has-tabs {
+  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
+}
+
+.app.has-tabs .total {
+  bottom: calc(var(--nav-h) + 10px + env(safe-area-inset-bottom));
+  margin-bottom: 10px;
+}
+
+.app[data-tab]:not([data-tab="portfolio"]) .status {
+  display: none;
 }
 
 .tab {
   appearance: none;
   min-width: 0;
-  padding: 9px 6px;
+  padding: 2px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
   font: inherit;
-  font-size: calc(var(--base-size) * 0.92);
-  font-weight: 800;
   color: var(--btn-text);
-  background: var(--btn-bg);
-  border: var(--btn-border);
-  border-radius: var(--btn-radius);
-  box-shadow: var(--btn-shadow);
+  background: transparent;
+  border: 0;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.tab[aria-selected="true"] {
+.tab-ico {
+  width: 54px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+}
+
+.tab-ico svg {
+  width: 24px;
+  height: 24px;
+}
+
+.tab-label {
+  font-size: calc(var(--base-size) * 0.74);
+  font-weight: 800;
+  opacity: 0.8;
+}
+
+.tab[aria-selected="true"] .tab-ico {
   color: var(--btn-active-text);
   background: var(--btn-active-bg);
 }
 
-.tab:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
+.tab[aria-selected="true"] .tab-label {
+  opacity: 1;
 }
 
-:root[data-theme="minecraft"] .tab {
-  font-size: 0.55rem;
+.tab:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: -2px;
+  border-radius: 12px;
+}
+
+:root[data-theme="minecraft"] .tab-label {
+  font-size: 0.5rem;
 }
 
 :root[data-theme="minecraft"] .disc-note {

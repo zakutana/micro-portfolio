@@ -90,7 +90,7 @@ Sekce „Historie nákupů“ na stránce ukazuje každý nákup jako blok: **Bl
 
 ## Záložky a „Objevuj“
 
-Pod hlavičkou jsou tři záložky: **Portfolio**, **Historie** (všechny nákupy jako bloky) a **Objevuj** (věci, které by se mohly hodit: S&P 500, Nasdaq 100, Bitcoin, Ethereum, Solana, zlato, NVIDIA, Apple). Mezi záložkami se dá přepínat i tažením prstu doleva a doprava. Součet dole je vidět jen na záložce Portfolio.
+Dole na obrazovce je (jako v aplikaci) lišta se třemi záložkami: **Portfolio**, **Historie** (všechny nákupy jako bloky) a **Objevuj** (věci, které by se mohly hodit: S&P 500, Nasdaq 100, Bitcoin, Ethereum, Solana, zlato, NVIDIA, Apple). Mezi záložkami se dá přepínat i tažením prstu doleva a doprava. Součet dole je vidět jen na záložce Portfolio.
 
 Seznam v Objevuj je v `assets/discover.json` (stejný pro obě stránky): `id` je CoinGecko id, `name`, `symbol` a `note` (jedna věta česky), `logo` je soubor v `assets/logos/discover/`. Ceny se stahují (v korunách z CoinGecka) až po otevření záložky a obnovují se jednou za minutu, dokud je otevřená. Nic se tu nekupuje, je to jen na koukání. Indexy jsou tokenizované fondy (xStocks), takže cena je za jeden díl fondu, ne za bod indexu.
 
