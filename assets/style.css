@@ -3193,3 +3193,9 @@ body {
   font-weight: 700;
   color: var(--muted);
 }
+
+/* a long title can wrap on a narrow screen: keep it clear of the first row */
+#pane-discover .section-title {
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
