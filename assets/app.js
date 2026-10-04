@@ -537,7 +537,6 @@
   ];
 
   let rowRefs = [];
-  let retryPrices = null; // set once the page is open: loads the prices again
   let perfRefs = null;
 
   function buildList() {
@@ -768,18 +767,10 @@
     if (allLive) {
       status.textContent = "";
     } else {
-      const when = known && cachedAt ? ` (naposledy ${time(cachedAt)})` : "";
+      const when = known && cachedAt ? ` (${time(cachedAt)})` : "";
       status.innerHTML = known
-        ? `${dot}Ceny se nepodařilo načíst, ukazuju poslední známé${when}`
-        : `${dot}Ceny se teď nepodařilo načíst.`;
-      const retry = el("button", "status-retry", "Zkusit znovu");
-      retry.type = "button";
-      retry.addEventListener("click", () => {
-        retry.disabled = true;
-        retry.textContent = "Zkouším…";
-        if (retryPrices) retryPrices();
-      });
-      status.append(retry);
+        ? `${dot}Ukazuju poslední známé ceny${when}. Stáhni stránku dolů.`
+        : `${dot}Ceny se nepodařilo načíst. Stáhni stránku dolů.`;
     }
   }
 
@@ -1079,7 +1070,6 @@
       lastRun = Date.now();
       showPrices(await loadPrices());
     };
-    retryPrices = refresh;
     await refresh();
 
     setInterval(() => {
