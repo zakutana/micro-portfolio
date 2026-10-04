@@ -80,7 +80,7 @@
           "price": 8122.245419
         }
       ],
-      "note": "elektromobily a energie"
+      "note": "elektromobily, energie a roboty"
     },
     {
       "name": "SpaceX",
@@ -101,12 +101,12 @@
           "price": 3439.27258
         }
       ],
-      "note": "rakety a internet Starlink"
+      "note": "firma zaměřená na vesmír: rakety a internet Starlink"
     },
     {
       "name": "Cymetica",
       "symbol": "ET10",
-      "note": "fond podle novinových titulků, zatím se neobchoduje",
+      "note": "spící AI gigant, zatím se neobchoduje",
       "logo": "../assets/logos/cymetica.jpg",
       "url": "https://cymetica.com/",
       "qty": 100000,

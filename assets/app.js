@@ -552,7 +552,9 @@
       a.setAttribute("aria-label", `${h.name} – otevřít web`);
 
       const name = el("span", "name");
-      name.append(el("strong", "", h.name), el("small", "", h.note ? `${h.symbol} · ${h.note}` : h.symbol));
+      const sub = el("small", "", h.symbol);
+      if (h.note) sub.append(el("span", "disc-note", ` · ${h.note}`)); // Minecraft's wide font has no room for it
+      name.append(el("strong", "", h.name), sub);
 
       const value = el("span", "value is-loading", "…");
       a.append(logoNode(h), name, value);

@@ -4,17 +4,17 @@
    a clean list, one total bar. */
 
 @font-face {
-  font-family: "Fredoka";
-  font-weight: 400 700;
+  font-family: "Baloo 2";
+  font-weight: 400 800;
   font-display: swap;
-  src: url("fonts/fredoka-latin-ext.woff2") format("woff2");
+  src: url("fonts/baloo2-latin-ext.woff2") format("woff2");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: "Fredoka";
-  font-weight: 400 700;
+  font-family: "Baloo 2";
+  font-weight: 400 800;
   font-display: swap;
-  src: url("fonts/fredoka-latin.woff2") format("woff2");
+  src: url("fonts/baloo2-latin.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
@@ -44,18 +44,6 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: "Lilita One";
-  font-display: swap;
-  src: url("fonts/lilita-latin-ext.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-@font-face {
-  font-family: "Lilita One";
-  font-display: swap;
-  src: url("fonts/lilita-latin.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
   font-family: "Exo 2";
   font-weight: 500 800;
   font-display: swap;
@@ -80,7 +68,7 @@
 /* ---------- Defaults (every theme overrides what it needs) ---------- */
 
 :root {
-  --font: "Fredoka", system-ui, sans-serif;
+  --font: "Baloo 2", system-ui, sans-serif;
   --display: var(--font);
   --base-size: 1rem;
   --letter: 0;
@@ -281,7 +269,7 @@
 
 :root[data-theme="pokemon"] {
   --font: "Nunito", system-ui, sans-serif;
-  --display: "Lilita One", "Nunito", system-ui, sans-serif;
+  --display: "Baloo 2", "Nunito", system-ui, sans-serif;
   --bg: #f7f4ec;
   --bg-image: linear-gradient(180deg, #f43f3f 0, #dc1212 96px, #2b2b2b 96px, #2b2b2b 101px, transparent 101px);
   --bg-attach: scroll;
@@ -291,14 +279,14 @@
   --on-bg: #2b2b2b;
   --line: rgba(43, 43, 43, 0.18);
   --title-size: 1.45rem;
-  --title-weight: 400;
-  --title-font: "Lilita One", "Nunito", sans-serif;
+  --title-weight: 800;
+  --title-font: "Baloo 2", "Nunito", sans-serif;
   --title-spacing: 0.01em;
   --title-shadow: 0 3px 0 rgba(0, 0, 0, 0.28);
   --value-size: 1.2rem;
-  --value-weight: 400;
+  --value-weight: 800;
   --gain-size: 3.2rem;
-  --gain-weight: 400;
+  --gain-weight: 800;
   --total-size: 2.05rem;
   --mark-size: 34px;
   --name-weight: 800;
@@ -1094,7 +1082,7 @@
 /* ---------- 6 7: loud neon, thick outlines, hands up and down ---------- */
 
 :root[data-theme="sixseven"] {
-  --font: "Fredoka", system-ui, sans-serif;
+  --font: "Baloo 2", system-ui, sans-serif;
   --display: var(--font);
   --bg: #1c0f3a;
   --bg-image:
@@ -1429,7 +1417,7 @@
 /* ---------- Anime: pastel sky, sakura petals, sparkles ---------- */
 
 :root[data-theme="anime"] {
-  --font: "Fredoka", system-ui, sans-serif;
+  --font: "Baloo 2", system-ui, sans-serif;
   --display: var(--font);
   --bg: #e5d6ff;
   --bg-image:
@@ -1510,7 +1498,7 @@
 /* ---------- KPop: stage spotlights, neon pink and cyan, holographic cards ---------- */
 
 :root[data-theme="kpop"] {
-  --font: "Fredoka", system-ui, sans-serif;
+  --font: "Baloo 2", system-ui, sans-serif;
   --display: var(--font);
   --bg: #120a24;
   --bg-image:
@@ -2119,7 +2107,7 @@ body {
 }
 
 :root[data-theme="pokemon"] .section-title {
-  font-weight: 400;
+  font-weight: 800;
   font-size: 1.35rem;
 }
 
@@ -2485,7 +2473,10 @@ body {
   text-shadow: var(--total-text-shadow, none);
 }
 
-:root[data-theme="pokemon"] .total-value,
+:root[data-theme="pokemon"] .total-value {
+  font-weight: 800;
+}
+
 :root[data-theme="minecraft"] .total-value {
   font-weight: 400;
 }

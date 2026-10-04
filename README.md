@@ -102,7 +102,7 @@ Minecraft, Kirby, Waddle Dee, Pokémon, Make-up, Fotbal, Trader, Klavír, Kytara
 
 Všechny motivy mají stejnou stavbu: hlavička (název, přepínač Pro, tlačítko motivu), jedna karta s růstem portfolia a postavičkou, která se přes ní dívá, čistý seznam a jeden součet dole. Liší se barvami, rámečky, písmem a postavičkou (Kirby, Waddle Dee, Pikachu, creeper, rtěnka, míč, svíčkový graf, noty, hlava kytary, ruka „Věc“, zlatonka, dvě ruce „6 7“, astronaut, robot, chibi dívka, světelná tyčinka). Barevný proužek pod růstem ukazuje, z čeho se portfolio skládá, a stejnou barvou je kroužek kolem loga každé položky.
 
-Motivy jsou sady CSS proměnných na začátku `assets/style.css` (barvy, rámečky, stíny, písmo, velikost a poloha postavičky, paleta proužku `--a1` až `--a8`), pár drobných úprav je na konci bloku motivu. Postavičky a ikony jsou v `assets/icons.js` (`MICRO_PEEK`, `MICRO_TOTAL`, `MICRO_MARKS`; `MICRO_ICONS` používají i kartičky). Písma (Fredoka, Press Start 2P, Nunito, Lilita One) jsou uložená v `assets/fonts/`, stránka nestahuje nic zvenčí kromě cen.
+Motivy jsou sady CSS proměnných na začátku `assets/style.css` (barvy, rámečky, stíny, písmo, velikost a poloha postavičky, paleta proužku `--a1` až `--a8`), pár drobných úprav je na konci bloku motivu. Postavičky a ikony jsou v `assets/icons.js` (`MICRO_PEEK`, `MICRO_TOTAL`, `MICRO_MARKS`; `MICRO_ICONS` používají i kartičky). Písma (Baloo 2, Press Start 2P, Nunito, Exo 2, Orbitron) jsou uložená v `assets/fonts/`, stránka nestahuje nic zvenčí kromě cen.
 
 ## Heslo jako hádanka
 
