@@ -890,6 +890,279 @@
   --peek-rot: -6deg;
 }
 
+/* ---------- Wednesday: gothic black, bone-white paper, plum, cobwebs ---------- */
+
+:root[data-theme="wednesday"] {
+  --font: "Nunito", system-ui, sans-serif;
+  --display: Georgia, "Times New Roman", serif;
+  --bg: #0d0b10;
+  --bg-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27230%27%20height%3D%27230%27%20viewBox%3D%270%200%20230%20230%27%3E%3Cpath%20d%3D%27M230%200L230.0%20215.0M230%200L163.6%20204.5M230%200L103.6%20173.9M230%200L56.1%20126.4M230%200L25.5%2066.4M230%200L15.0%200.0M230.0%2036.0Q226.0%2025.3%20218.9%2034.2M218.9%2034.2Q218.4%2022.8%20208.8%2029.1M208.8%2029.1Q211.9%2018.1%20200.9%2021.2M200.9%2021.2Q207.2%2011.6%20195.8%2011.1M195.8%2011.1Q204.7%204.0%20194.0%200.0M230.0%2072.0Q222.0%2050.6%20207.8%2068.5M207.8%2068.5Q206.8%2045.6%20187.7%2058.2M187.7%2058.2Q193.8%2036.2%20171.8%2042.3M171.8%2042.3Q184.4%2023.2%20161.5%2022.2M161.5%2022.2Q179.4%208.0%20158.0%200.0M230.0%20108.0Q218.0%2075.9%20196.6%20102.7M196.6%20102.7Q195.1%2068.4%20166.5%2087.4M166.5%2087.4Q175.7%2054.3%20142.6%2063.5M142.6%2063.5Q161.6%2034.9%20127.3%2033.4M127.3%2033.4Q154.1%2012.0%20122.0%200.0M230.0%20144.0Q214.0%20101.1%20185.5%20137.0M185.5%20137.0Q183.5%2091.2%20145.4%20116.5M145.4%20116.5Q157.6%2072.4%20113.5%2084.6M113.5%2084.6Q138.8%2046.5%2093.0%2044.5M93.0%2044.5Q128.9%2016.0%2086.0%200.0M230.0%20180.0Q210.0%20126.4%20174.4%20171.2M174.4%20171.2Q171.9%20114.1%20124.2%20145.6M124.2%20145.6Q139.5%2090.5%2084.4%20105.8M84.4%20105.8Q115.9%2058.1%2058.8%2055.6M58.8%2055.6Q103.6%2020.0%2050.0%200.0M230.0%20212.0Q206.4%20148.9%20164.5%20201.6M164.5%20201.6Q161.6%20134.3%20105.4%20171.5M105.4%20171.5Q123.4%20106.6%2058.5%20124.6M58.5%20124.6Q95.7%2068.4%2028.4%2065.5M28.4%2065.5Q81.1%2023.6%2018.0%200.0%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-opacity%3D%27.2%27%20stroke-width%3D%271%27%2F%3E%3C%2Fsvg%3E"),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27180%27%20height%3D%27180%27%20viewBox%3D%270%200%20180%20180%27%3E%3Cpath%20d%3D%27M0%20180L-0.0%2010.0M0%20180L52.5%2018.3M0%20180L99.9%2042.5M0%20180L137.5%2080.1M0%20180L161.7%20127.5M0%20180L170.0%20180.0M-0.0%20150.0Q3.3%20158.9%209.3%20151.5M9.3%20151.5Q9.7%20161.0%2017.6%20155.7M17.6%20155.7Q15.1%20164.9%2024.3%20162.4M24.3%20162.4Q19.0%20170.3%2028.5%20170.7M28.5%20170.7Q21.1%20176.7%2030.0%20180.0M-0.0%20120.0Q6.7%20137.9%2018.5%20122.9M18.5%20122.9Q19.4%20142.0%2035.3%20131.5M35.3%20131.5Q30.2%20149.8%2048.5%20144.7M48.5%20144.7Q38.0%20160.6%2057.1%20161.5M57.1%20161.5Q42.1%20173.3%2060.0%20180.0M-0.0%2090.0Q10.0%20116.8%2027.8%2094.4M27.8%2094.4Q29.1%20123.0%2052.9%20107.2M52.9%20107.2Q45.3%20134.7%2072.8%20127.1M72.8%20127.1Q57.0%20150.9%2085.6%20152.2M85.6%20152.2Q63.2%20170.0%2090.0%20180.0M-0.0%2060.0Q13.3%2095.7%2037.1%2065.9M37.1%2065.9Q38.7%20104.0%2070.5%2082.9M70.5%2082.9Q60.3%20119.7%2097.1%20109.5M97.1%20109.5Q76.0%20141.3%20114.1%20142.9M114.1%20142.9Q84.3%20166.7%20120.0%20180.0M-0.0%2030.0Q16.7%2074.6%2046.4%2037.3M46.4%2037.3Q48.4%2085.0%2088.2%2058.6M88.2%2058.6Q75.4%20104.6%20121.4%2091.8M121.4%2091.8Q95.0%20131.6%20142.7%20133.6M142.7%20133.6Q105.4%20163.3%20150.0%20180.0M-0.0%2012.0Q18.7%2062.0%2051.9%2020.2M51.9%2020.2Q54.2%2073.6%2098.7%2044.1M98.7%2044.1Q84.5%2095.5%20135.9%2081.3M135.9%2081.3Q106.4%20125.8%20159.8%20128.1M159.8%20128.1Q118.0%20161.3%20168.0%20180.0%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-opacity%3D%27.16%27%20stroke-width%3D%271%27%2F%3E%3C%2Fsvg%3E"),
+    linear-gradient(180deg, #1c1424 0%, #0b090e 480px);
+  --bg-size: 230px 230px, 180px 180px, auto;
+  --bg-repeat: no-repeat, no-repeat, no-repeat;
+  --bg-pos: 100% 0, 0 100%, 0 0;
+  --text: #1a1020;
+  --muted: #6d6270;
+  --on-bg: #efe6f2;
+  --on-bg-shadow: 0 2px 0 #000;
+  --line: rgba(26, 16, 32, 0.22);
+  --title-size: 1rem;
+  --title-weight: 800;
+  --title-style: italic;
+  --value-size: 1.12rem;
+  --value-weight: 700;
+  --gain-size: 3.2rem;
+  --gain-weight: 700;
+  --name-weight: 800;
+  --mark: #7a2d86;
+  --focus: #c79bd3;
+
+  --brand-bg: #f4efe9;
+  --brand-border: 2.5px solid #ffffff;
+  --brand-radius: 999px;
+  --brand-shadow: 0 3px 0 #5a1f66;
+  --brand-text: #1a1020;
+  --btn-bg: #f4efe9;
+  --btn-border: 2.5px solid #ffffff;
+  --btn-radius: 999px;
+  --btn-shadow: 0 3px 0 #5a1f66;
+  --btn-text: #1a1020;
+  --btn-active-bg: #7a2d86;
+  --btn-active-text: #ffffff;
+  --sw-off: #d6cbd9;
+  --sw-shadow: inset 0 2px 0 rgba(26, 16, 32, 0.2);
+  --toggle-bg: #f4efe9;
+  --toggle-border: 2.5px solid #7a2d86;
+  --toggle-shadow: 0 3px 0 #5a1f66;
+
+  --panel: #f4efe9;
+  --panel-border: 2.5px solid #ffffff;
+  --panel-radius: 18px;
+  --panel-shadow: 0 6px 0 #5a1f66, 0 18px 28px rgba(0, 0, 0, 0.55);
+  --row-bg: #faf6f1;
+  --row-border: 2px solid #e2d8d0;
+  --row-radius: 14px;
+  --row-shadow: 0 4px 0 #6a3a72;
+  --row-hover: #f1e9f3;
+  --ring-idle: #cdbfd3;
+  --logo-radius: 12px;
+  --logo-border: 3px solid var(--ring-idle);
+
+  --pill-bg: #e9dfee;
+  --pill-text: #5d4a66;
+  --gain: #0e7c4f;
+  --gain-big: #0f8a55;
+
+  --total-bg: linear-gradient(180deg, #2a1f33 0%, #08060b 100%);
+  --total-text: #f4efe9;
+  --total-label: #d8b4e2;
+  --total-border: 2.5px solid #7a2d86;
+  --total-radius: 20px;
+  --total-shadow: 0 6px 0 #000, 0 16px 26px rgba(0, 0, 0, 0.55);
+  --total-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
+  --total-text-shadow: none;
+
+  --a1: #7a2d86;
+  --a2: #1a1020;
+  --a3: #b0303d;
+  --a4: #2f5d8a;
+  --a5: #5f8a5a;
+  --a6: #c79bd3;
+  --a7: #d98a4a;
+  --a8: #4a8f8f;
+
+  --peek-w: 88px;
+  --peek-h: 100px;
+  --peek-hide: 32px;
+  --peek-right: 36px;
+  --peek-rot: 6deg;
+}
+
+/* ---------- Harry Potter: night sky, castle, parchment, Gryffindor red and gold ---------- */
+
+:root[data-theme="harry"] {
+  --font: "Nunito", system-ui, sans-serif;
+  --display: Georgia, "Times New Roman", serif;
+  --bg: #0b1030;
+  --bg-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27100%27%20viewBox%3D%270%200%20400%20100%27%20preserveAspectRatio%3D%27xMidYMax%20slice%27%3E%3Cg%20fill%3D%27%2306081c%27%3E%3Crect%20x%3D%270%27%20y%3D%2786%27%20width%3D%27400%27%20height%3D%2714%27%2F%3E%3Crect%20x%3D%2730%27%20y%3D%2740%27%20width%3D%2722%27%20height%3D%2748%27%2F%3E%3Cpolygon%20points%3D%2727%2C40%2041%2C8%2055%2C40%27%2F%3E%3Crect%20x%3D%27150%27%20y%3D%2756%27%20width%3D%27100%27%20height%3D%2732%27%2F%3E%3Crect%20x%3D%27185%27%20y%3D%2726%27%20width%3D%2730%27%20height%3D%2762%27%2F%3E%3Cpolygon%20points%3D%27181%2C26%20200%2C0%20219%2C26%27%2F%3E%3Crect%20x%3D%27300%27%20y%3D%2736%27%20width%3D%2726%27%20height%3D%2752%27%2F%3E%3Cpolygon%20points%3D%27297%2C36%20313%2C8%20329%2C36%27%2F%3E%3Crect%20x%3D%2795%27%20y%3D%2768%27%20width%3D%2728%27%20height%3D%2720%27%2F%3E%3Cpolygon%20points%3D%2792%2C68%20109%2C50%20126%2C68%27%2F%3E%3Crect%20x%3D%27346%27%20y%3D%2762%27%20width%3D%2724%27%20height%3D%2726%27%2F%3E%3Cpolygon%20points%3D%27343%2C62%20358%2C44%20373%2C62%27%2F%3E%3Crect%20x%3D%2762%27%20y%3D%2760%27%20width%3D%2712%27%20height%3D%2728%27%2F%3E%3Cpolygon%20points%3D%2760%2C60%2068%2C44%2076%2C60%27%2F%3E%3C%2Fg%3E%3Crect%20x%3D%2738%27%20y%3D%2756%27%20width%3D%273%27%20height%3D%275%27%20rx%3D%271%27%20fill%3D%27%23f5c242%27%20fill-opacity%3D%27.9%27%2F%3E%3Crect%20x%3D%2740%27%20y%3D%2766%27%20width%3D%273%27%20height%3D%275%27%20rx%3D%271%27%20fill%3D%27%23f5c242%27%20fill-opacity%3D%27.9%27%2F%3E%3Crect%20x%3D%27160%27%20y%3D%2766%27%20width%3D%273%27%20height%3D%275%27%20rx%3D%271%27%20fill%3D%27%23f5c242%27%20fill-opacity%3D%27.9%27%2F%3E%3Crect%20x%3D%27172%27%20y%3D%2766%27%20width%3D%273%27%20height%3D%275%27%20rx%3D%271%27%20fill%3D%27%23f5c242%27%20fill-opacity%3D%27.9%27%2F%3E%3Crect%20x%3D%27232%27%20y%3D%2766%27%20width%3D%273%27%20height%3D%275%27%20rx%3D%271%27%20fill%3D%27%23f5c242%27%20fill-opacity%3D%27.9%27%2F%3E%3Crect%20x%3D%27193%27%20y%3D%2738%27%20width%3D%273%27%20height%3D%275%27%20rx%3D%271%27%20fill%3D%27%23f5c242%27%20fill-opacity%3D%27.9%27%2F%3E%3Crect%20x%3D%27204%27%20y%3D%2754%27%20width%3D%273%27%20height%3D%275%27%20rx%3D%271%27%20fill%3D%27%23f5c242%27%20fill-opacity%3D%27.9%27%2F%3E%3Crect%20x%3D%27306%27%20y%3D%2750%27%20width%3D%273%27%20height%3D%275%27%20rx%3D%271%27%20fill%3D%27%23f5c242%27%20fill-opacity%3D%27.9%27%2F%3E%3Crect%20x%3D%27312%27%20y%3D%2764%27%20width%3D%273%27%20height%3D%275%27%20rx%3D%271%27%20fill%3D%27%23f5c242%27%20fill-opacity%3D%27.9%27%2F%3E%3Crect%20x%3D%2760%27%20y%3D%2774%27%20width%3D%273%27%20height%3D%275%27%20rx%3D%271%27%20fill%3D%27%23f5c242%27%20fill-opacity%3D%27.9%27%2F%3E%3Crect%20x%3D%27120%27%20y%3D%2772%27%20width%3D%273%27%20height%3D%275%27%20rx%3D%271%27%20fill%3D%27%23f5c242%27%20fill-opacity%3D%27.9%27%2F%3E%3Crect%20x%3D%27270%27%20y%3D%2772%27%20width%3D%273%27%20height%3D%275%27%20rx%3D%271%27%20fill%3D%27%23f5c242%27%20fill-opacity%3D%27.9%27%2F%3E%3C%2Fsvg%3E"),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%3E%3Ccircle%20cx%3D%27118%27%20cy%3D%27145%27%20r%3D%271.3%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%27132%27%20cy%3D%27152%27%20r%3D%270.8%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%27163%27%20cy%3D%27204%27%20r%3D%270.6%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%2780%27%20cy%3D%2727%27%20r%3D%270.6%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%27247%27%20cy%3D%27169%27%20r%3D%271.7%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%27161%27%20cy%3D%27214%27%20r%3D%270.6%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.35%27%2F%3E%3Ccircle%20cx%3D%2713%27%20cy%3D%27226%27%20r%3D%271.7%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.35%27%2F%3E%3Ccircle%20cx%3D%27200%27%20cy%3D%2786%27%20r%3D%271.7%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%27135%27%20cy%3D%27165%27%20r%3D%271.3%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.35%27%2F%3E%3Ccircle%20cx%3D%27171%27%20cy%3D%27119%27%20r%3D%271.0%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%27255%27%20cy%3D%27255%27%20r%3D%270.6%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.70%27%2F%3E%3Ccircle%20cx%3D%2783%27%20cy%3D%2762%27%20r%3D%271.0%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.35%27%2F%3E%3Ccircle%20cx%3D%2722%27%20cy%3D%27197%27%20r%3D%271.3%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.35%27%2F%3E%3Ccircle%20cx%3D%27217%27%20cy%3D%27101%27%20r%3D%270.6%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.35%27%2F%3E%3Ccircle%20cx%3D%2758%27%20cy%3D%27238%27%20r%3D%270.6%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%2799%27%20cy%3D%27183%27%20r%3D%271.3%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.35%27%2F%3E%3Ccircle%20cx%3D%27147%27%20cy%3D%2754%27%20r%3D%271.0%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.70%27%2F%3E%3Ccircle%20cx%3D%2726%27%20cy%3D%2788%27%20r%3D%271.3%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.35%27%2F%3E%3Ccircle%20cx%3D%2738%27%20cy%3D%27182%27%20r%3D%270.6%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.35%27%2F%3E%3Ccircle%20cx%3D%27121%27%20cy%3D%27127%27%20r%3D%271.7%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%27117%27%20cy%3D%2752%27%20r%3D%270.8%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%27166%27%20cy%3D%2733%27%20r%3D%271.3%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%274%27%20cy%3D%27222%27%20r%3D%271.7%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.70%27%2F%3E%3Ccircle%20cx%3D%27255%27%20cy%3D%279%27%20r%3D%270.8%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%27255%27%20cy%3D%27156%27%20r%3D%271.7%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.35%27%2F%3E%3Ccircle%20cx%3D%2715%27%20cy%3D%2741%27%20r%3D%271.3%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.70%27%2F%3E%3Ccircle%20cx%3D%276%27%20cy%3D%27158%27%20r%3D%271.0%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%2722%27%20cy%3D%2727%27%20r%3D%271.7%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%278%27%20cy%3D%2797%27%20r%3D%271.7%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.90%27%2F%3E%3Ccircle%20cx%3D%2736%27%20cy%3D%27152%27%20r%3D%271.7%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%27222%27%20cy%3D%2750%27%20r%3D%270.8%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.70%27%2F%3E%3Ccircle%20cx%3D%27233%27%20cy%3D%27210%27%20r%3D%270.8%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%2744%27%20cy%3D%27163%27%20r%3D%271.7%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.50%27%2F%3E%3Ccircle%20cx%3D%27177%27%20cy%3D%27102%27%20r%3D%271.3%27%20fill%3D%27%23fff8d8%27%20fill-opacity%3D%270.35%27%2F%3E%3C%2Fsvg%3E"),
+    linear-gradient(180deg, #1d1a4a 0%, #0b1030 100%);
+  --bg-size: 100% auto, 260px 260px, auto;
+  --bg-repeat: no-repeat, repeat, no-repeat;
+  --bg-pos: bottom center, 0 0, 0 0;
+  --text: #3a2610;
+  --muted: #7a5f3a;
+  --on-bg: #f6e7b4;
+  --on-bg-shadow: 0 2px 0 #000;
+  --line: rgba(90, 58, 18, 0.28);
+  --title-size: 1rem;
+  --title-weight: 800;
+  --value-size: 1.12rem;
+  --value-weight: 700;
+  --gain-size: 3.2rem;
+  --gain-weight: 700;
+  --name-weight: 800;
+  --mark: #9b1111;
+  --focus: #e6b52c;
+
+  --brand-bg: #f4e7c3;
+  --brand-border: 2.5px solid #d4a017;
+  --brand-radius: 999px;
+  --brand-shadow: 0 3px 0 #5a3a12;
+  --brand-text: #7f0909;
+  --btn-bg: #f4e7c3;
+  --btn-border: 2.5px solid #d4a017;
+  --btn-radius: 999px;
+  --btn-shadow: 0 3px 0 #5a3a12;
+  --btn-text: #7f0909;
+  --btn-active-bg: #9b1111;
+  --btn-active-text: #fff5d6;
+  --sw-off: #e3cf9c;
+  --sw-shadow: inset 0 2px 0 rgba(90, 58, 18, 0.28);
+  --toggle-bg: #f4e7c3;
+  --toggle-border: 2.5px solid #d4a017;
+  --toggle-shadow: 0 3px 0 #5a3a12;
+
+  --panel: #f4e7c3;
+  --panel-border: 3px solid #d4a017;
+  --panel-radius: 18px;
+  --panel-shadow: 0 6px 0 #5a3a12, 0 18px 28px rgba(0, 0, 0, 0.5);
+  --row-bg: #fbf1d6;
+  --row-border: 2.5px solid #dcbf74;
+  --row-radius: 14px;
+  --row-shadow: 0 4px 0 #8a6528;
+  --row-hover: #f6e6b8;
+  --ring-idle: #dcbf74;
+  --logo-radius: 50%;
+  --logo-border: 3px solid var(--ring-idle);
+
+  --pill-bg: #ecd9a2;
+  --pill-text: #7a5f3a;
+  --gain: #0e7c4f;
+  --gain-big: #14803f;
+
+  --total-bg: linear-gradient(180deg, #a31515 0%, #5a0707 100%);
+  --total-text: #fff0c4;
+  --total-label: #f0cf70;
+  --total-border: 2.5px solid #d4a017;
+  --total-radius: 20px;
+  --total-shadow: 0 6px 0 #2e0303, 0 16px 26px rgba(0, 0, 0, 0.55);
+  --total-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
+  --total-text-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+
+  --a1: #d4a017;
+  --a2: #9b1111;
+  --a3: #1a472a;
+  --a4: #1c2f66;
+  --a5: #6a4a2a;
+  --a6: #5c2a7a;
+  --a7: #2a6f6f;
+  --a8: #c9a24b;
+
+  --peek-w: 84px;
+  --peek-h: 56px;
+  --peek-hide: 8px;
+  --peek-right: 26px;
+  --peek-rot: -8deg;
+}
+
+/* ---------- 6 7: loud neon, thick outlines, hands up and down ---------- */
+
+:root[data-theme="sixseven"] {
+  --font: "Fredoka", system-ui, sans-serif;
+  --display: var(--font);
+  --bg: #1c0f3a;
+  --bg-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27240%27%20height%3D%27240%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-opacity%3D%27.08%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20transform%3D%27translate%2818%2022%29%20scale%283.4%29%27%20d%3D%27M15%204%20C8%203%203%209%203%2018%20C3%2024%207%2026%2010%2026%20C14%2026%2017%2023%2017%2019%20C17%2015%2014%2012%2010%2012%20C6%2012%203%2015%203%2018%27%2F%3E%3Cpath%20transform%3D%27translate%2886%2022%29%20scale%283.4%29%27%20d%3D%27M2%203%20H17%20L8%2026%27%2F%3E%3Cpath%20transform%3D%27translate%28150%20142%29%20scale%282.6%29%27%20d%3D%27M15%204%20C8%203%203%209%203%2018%20C3%2024%207%2026%2010%2026%20C14%2026%2017%2023%2017%2019%20C17%2015%2014%2012%2010%2012%20C6%2012%203%2015%203%2018%27%2F%3E%3Cpath%20transform%3D%27translate%28200%20142%29%20scale%282.6%29%27%20d%3D%27M2%203%20H17%20L8%2026%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"),
+    linear-gradient(180deg, #2c1560 0%, #170b33 100%);
+  --bg-size: 240px 240px, auto;
+  --bg-repeat: repeat, no-repeat;
+  --text: #101010;
+  --muted: #5a5470;
+  --on-bg: #ffffff;
+  --on-bg-shadow: 0 2px 0 #000;
+  --line: rgba(16, 16, 16, 0.22);
+  --title-size: 1.02rem;
+  --title-weight: 700;
+  --value-weight: 700;
+  --gain-weight: 700;
+  --mark: #101010;
+
+  --brand-bg: #c6ff3d;
+  --brand-border: 3px solid #101010;
+  --brand-radius: 999px;
+  --brand-shadow: 0 3px 0 #101010;
+  --brand-text: #101010;
+  --btn-bg: #ffffff;
+  --btn-border: 3px solid #101010;
+  --btn-radius: 999px;
+  --btn-shadow: 0 3px 0 #101010;
+  --btn-text: #101010;
+  --btn-active-bg: #ff3d9a;
+  --btn-active-text: #ffffff;
+  --sw-off: #d9d4e6;
+  --sw-border: 2px solid #101010;
+  --knob-border: 2px solid #101010;
+  --sw-shadow: none;
+  --toggle-bg: #ff3d9a;
+  --toggle-border: 3px solid #101010;
+  --toggle-shadow: 0 3px 0 #101010;
+
+  --panel: #ffffff;
+  --panel-border: 3px solid #101010;
+  --panel-radius: 20px;
+  --panel-shadow: 0 6px 0 #c6ff3d, 0 16px 24px rgba(0, 0, 0, 0.45);
+  --row-bg: #ffffff;
+  --row-border: 3px solid #101010;
+  --row-radius: 16px;
+  --row-shadow: 0 4px 0 #c6ff3d;
+  --row-hover: #f6ffd9;
+  --ring-idle: #101010;
+  --logo-radius: 50%;
+  --logo-border: 3px solid var(--ring-idle);
+
+  --pill-bg: #efeaff;
+  --pill-text: #5a5470;
+  --chip-border: 2px solid #101010;
+  --gain: #0b5a2e;
+  --gain-bg: #c6ff3d;
+  --loss: #7a0f2a;
+  --loss-bg: #ff9bb8;
+  --gain-big: #0f8a40;
+  --loss-big: #e0224f;
+
+  --total-bg: #c6ff3d;
+  --total-text: #101010;
+  --total-label: #101010;
+  --total-border: 3px solid #101010;
+  --total-radius: 30px;
+  --total-shadow: 0 6px 0 #ff3d9a, 0 16px 24px rgba(0, 0, 0, 0.45);
+  --total-gloss: none;
+  --total-text-shadow: none;
+
+  --a1: #c6ff3d;
+  --a2: #ff3d9a;
+  --a3: #3d7bff;
+  --a4: #ffd23d;
+  --a5: #ff7a3d;
+  --a6: #8a5cff;
+  --a7: #2de2e6;
+  --a8: #101010;
+
+  --peek-w: 84px;
+  --peek-h: 64px;
+  --peek-hide: 14px;
+  --peek-right: 26px;
+  --peek-rot: 0deg;
+}
+
+:root[data-theme="sixseven"] .mascot {
+  filter: none;
+}
+
 /* ---------- Base ---------- */
 
 * {
@@ -1486,7 +1759,10 @@ body {
 :root[data-theme="makeup"] .logo,
 :root[data-theme="football"] .logo,
 :root[data-theme="piano"] .logo,
-:root[data-theme="guitar"] .logo {
+:root[data-theme="guitar"] .logo,
+:root[data-theme="wednesday"] .logo,
+:root[data-theme="harry"] .logo,
+:root[data-theme="sixseven"] .logo {
   border-color: var(--c, var(--ring-idle));
 }
 

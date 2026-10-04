@@ -19,6 +19,9 @@
     { id: "trader", label: "Trader", color: "#0d1118" },
     { id: "piano", label: "Klavír", color: "#14161c" },
     { id: "guitar", label: "Kytara", color: "#a8683a" },
+    { id: "wednesday", label: "Wednesday", color: "#0d0b10" },
+    { id: "harry", label: "Potter", color: "#0d1233" },
+    { id: "sixseven", label: "6 7", color: "#1c0f3a" },
   ];
 
   const COINGECKO = "https://api.coingecko.com/api/v3";

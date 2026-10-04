@@ -116,6 +116,31 @@ window.MICRO_ICONS = {
     '<path d="M16 4 V24" stroke="#e8dcc0" stroke-width=".5"/>' +
     "</g></svg>",
 
+  wednesday:
+    '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<g fill="none" stroke="#1a1020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M12.5 15 L6 9 L3 12 M12 17.5 L4.5 17 L2.5 20.5 M12.6 20 L7 25 L8 29 M13.6 22 L11 29.5"/>' +
+    '<path d="M19.5 15 L26 9 L29 12 M20 17.5 L27.5 17 L29.5 20.5 M19.4 20 L25 25 L24 29 M18.4 22 L21 29.5"/></g>' +
+    '<ellipse cx="16" cy="20.5" rx="5.2" ry="6.2" fill="#1a1020"/><circle cx="16" cy="12.6" r="3.4" fill="#1a1020"/>' +
+    '<circle cx="14.8" cy="12" r=".9" fill="#fff"/><circle cx="17.2" cy="12" r=".9" fill="#fff"/>' +
+    '<path d="M16 16 V25" stroke="#7a2d86" stroke-width="1.2"/>' +
+    "</svg>",
+
+  harry:
+    '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<path d="M6 25.5 C8 19 11 12 15 3.5 C17 6 20.5 7.5 23 6.5 C22 13 24 20 27 25.5 Z" fill="#3b2a6b" stroke="#1d1238" stroke-width="1.2" stroke-linejoin="round"/>' +
+    '<path d="M7.2 22 C13 24 20 24 25.8 22 L27 25.5 C20 27.5 13 27.5 6 25.5 Z" fill="#e0b13a" stroke="#8a6612" stroke-width=".8"/>' +
+    '<ellipse cx="16.5" cy="27" rx="12.5" ry="3.2" fill="#2c1f55" stroke="#1d1238" stroke-width="1.2"/>' +
+    '<path d="M15 10 l.9 2.2 2.3.2 -1.8 1.5 .6 2.3 -2-1.3 -2 1.3 .6-2.3 -1.8-1.5 2.3-.2z" fill="#f3d36a"/>' +
+    "</svg>",
+
+  sixseven:
+    '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<circle cx="16" cy="16" r="14.5" fill="#c6ff3d" stroke="#101010" stroke-width="2"/>' +
+    '<g fill="none" stroke="#101010" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path transform="translate(5.2 8.2) scale(.55)" d="M15 4 C8 3 3 9 3 18 C3 24 7 26 10 26 C14 26 17 23 17 19 C17 15 14 12 10 12 C6 12 3 15 3 18"/><path transform="translate(17 8.2) scale(.55)" d="M2 3 H17 L8 26"/></g>' +
+    "</svg>",
+
   trader:
     '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
     '<rect x="2" y="2" width="28" height="28" rx="5" fill="#0f1420"/>' +
@@ -202,6 +227,38 @@ window.MICRO_PEEK = {
     '<g stroke="#8a6a1a" stroke-width="1.6"><path d="M15 12 H19 M15 22 H19 M15 32 H19 M41 12 H45 M41 22 H45 M41 32 H45"/></g>' +
     "</svg>",
 
+  wednesday:
+    '<svg viewBox="0 0 70 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<g fill="#1a1020" stroke="#1a1020" stroke-width="3.6" stroke-linejoin="round">' +
+    '<rect x="17" y="40" width="36" height="40" rx="9"/><rect x="17" y="24" width="8" height="26" rx="4"/><rect x="26.5" y="13" width="8" height="34" rx="4"/><rect x="36" y="6" width="8" height="42" rx="4"/><rect x="45.5" y="15" width="8" height="34" rx="4"/>' +
+    '<rect x="2" y="36" width="8" height="26" rx="4" transform="rotate(-38 6 49)"/></g>' +
+    '<g fill="#eadcc8"><rect x="17" y="40" width="36" height="40" rx="9"/><rect x="17" y="24" width="8" height="26" rx="4"/><rect x="26.5" y="13" width="8" height="34" rx="4"/><rect x="36" y="6" width="8" height="42" rx="4"/><rect x="45.5" y="15" width="8" height="34" rx="4"/>' +
+    '<rect x="2" y="36" width="8" height="26" rx="4" transform="rotate(-38 6 49)"/></g>' +
+    '<g fill="#d7c4aa"><rect x="17.8" y="44" width="34.4" height="3" rx="1.5"/><rect x="26.6" y="14" width="1.6" height="12" rx=".8"/><rect x="36.4" y="8" width="1.6" height="12" rx=".8"/></g>' +
+    '<g fill="#f6efe4" stroke="#1a1020" stroke-width="1"><rect x="27.4" y="14.6" width="6.2" height="5" rx="2"/><rect x="36.9" y="7.6" width="6.2" height="5" rx="2"/><rect x="46.4" y="16.6" width="6.2" height="5" rx="2"/><rect x="17.9" y="25.6" width="6.2" height="5" rx="2"/></g>' +
+    "</svg>",
+
+  harry:
+    '<svg viewBox="0 0 84 56" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<g fill="#f6f4fb" stroke="#7d7a96" stroke-width="1.5" stroke-linejoin="round">' +
+    '<path d="M33 30 C24 12 8 6 2 10 C4 22 16 34 33 36 Z"/><path d="M51 30 C60 12 76 6 82 10 C80 22 68 34 51 36 Z"/></g>' +
+    '<g fill="none" stroke="#a9a6c2" stroke-width="1"><path d="M31 31 C22 20 12 14 6 12 M31 33 C22 26 14 22 8 19 M53 31 C62 20 72 14 78 12 M53 33 C62 26 70 22 76 19"/></g>' +
+    '<circle cx="42" cy="34" r="11.5" fill="#e6b52c" stroke="#8a6612" stroke-width="1.6"/>' +
+    '<path d="M34 30 C36 26 40 24 44 24" fill="none" stroke="#fff3b8" stroke-width="2.2" stroke-linecap="round"/>' +
+    '<path d="M31 34 H53 M33 39 H51" stroke="#b98a14" stroke-width="1"/>' +
+    "</svg>",
+
+  sixseven:
+    '<svg viewBox="0 0 84 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<g transform="rotate(-9 20 22)"><rect x="6" y="4" width="28" height="34" rx="13" fill="#ffd9b0" stroke="#101010" stroke-width="2.6"/>' +
+    '<ellipse cx="6" cy="22" rx="5" ry="8" transform="rotate(14 6 22)" fill="#ffd9b0" stroke="#101010" stroke-width="2.6"/><rect x="7.6" y="14" width="6" height="14" fill="#ffd9b0"/>' +
+    '<path transform="translate(13 10) scale(.55)" d="M15 4 C8 3 3 9 3 18 C3 24 7 26 10 26 C14 26 17 23 17 19 C17 15 14 12 10 12 C6 12 3 15 3 18" fill="none" stroke="#101010" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/></g>' +
+    '<g transform="rotate(9 64 40)"><rect x="50" y="22" width="28" height="34" rx="13" fill="#ffd9b0" stroke="#101010" stroke-width="2.6"/>' +
+    '<ellipse cx="78" cy="40" rx="5" ry="8" transform="rotate(-14 78 40)" fill="#ffd9b0" stroke="#101010" stroke-width="2.6"/><rect x="70" y="32" width="6" height="14" fill="#ffd9b0"/>' +
+    '<path transform="translate(57 28) scale(.55)" d="M2 3 H17 L8 26" fill="none" stroke="#101010" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/></g>' +
+    '<g fill="none" stroke="#c6ff3d" stroke-width="2.4" stroke-linecap="round"><path d="M40 6 V20 M36 10 L40 5 L44 10"/><path d="M44 58 V44 M40 54 L44 59 L48 54"/></g>' +
+    "</svg>",
+
   trader:
     '<svg viewBox="0 0 76 56" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
     '<g stroke-width="2.4" stroke-linecap="round">' +
@@ -212,6 +269,7 @@ window.MICRO_PEEK = {
 };
 
 window.MICRO_TOTAL = Object.assign({}, window.MICRO_ICONS, {
+  wednesday: window.MICRO_ICONS.wednesday.replace(/#1a1020/g, "#f4efe9").replace(/#7a2d86/g, "#d8b4e2"),
   minecraft:
     '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
     '<polygon points="12,1 21,7 21,17 12,23 3,17 3,7" fill="#17dd62" stroke="#064d1f" stroke-width="1.6" stroke-linejoin="round"/>' +
