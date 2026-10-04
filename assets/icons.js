@@ -180,13 +180,14 @@ window.MICRO_PEEK = {
 
   piano:
     '<svg viewBox="0 0 70 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-    '<g fill="#fbf8f1" stroke="#1b1b1f" stroke-width="2.2" stroke-linejoin="round">' +
+    '<g fill="#1b1b1f" stroke="#1b1b1f" stroke-width="2.2" stroke-linejoin="round">' +
     '<rect x="22" y="10" width="4.6" height="38"/><rect x="54" y="4" width="4.6" height="36"/>' +
     '<polygon points="22,8 58.6,1.5 58.6,11 22,17.5"/><polygon points="22,22 58.6,15.5 58.6,25 22,31.5"/>' +
     '<ellipse cx="15" cy="49" rx="10" ry="7.5" transform="rotate(-22 15 49)"/><ellipse cx="47" cy="42" rx="10" ry="7.5" transform="rotate(-22 47 42)"/>' +
     '</g>' +
-    '<g fill="#1b1b1f"><circle cx="11.5" cy="48" r="1.9"/><circle cx="18.5" cy="46" r="1.9"/><circle cx="43.5" cy="41" r="1.9"/><circle cx="50.5" cy="39" r="1.9"/></g>' +
-    '<path d="M12 53 Q15 56 18.5 52.5" fill="none" stroke="#1b1b1f" stroke-width="1.6" stroke-linecap="round"/>' +
+    '<g fill="#fff"><circle cx="11.5" cy="48" r="2.4"/><circle cx="18.5" cy="46" r="2.4"/><circle cx="43.5" cy="41" r="2.4"/><circle cx="50.5" cy="39" r="2.4"/></g>' +
+    '<g fill="#1b1b1f"><circle cx="11.9" cy="48.3" r="1.1"/><circle cx="18.9" cy="46.3" r="1.1"/><circle cx="43.9" cy="41.3" r="1.1"/><circle cx="50.9" cy="39.3" r="1.1"/></g>' +
+    '<path d="M12 53 Q15 56 18.5 52.5" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>' +
     "</svg>",
 
   guitar:
@@ -195,8 +196,8 @@ window.MICRO_PEEK = {
     '<g stroke="#e8dcc0" stroke-width="1"><path d="M21 52 H39 M21 62 H39 M21 72 H39"/></g>' +
     '<g stroke="#d8d8d8" stroke-width=".9"><path d="M24 20 V84 M27 20 V84 M30 20 V84 M33 20 V84 M36 20 V84"/></g>' +
     '<rect x="19" y="38" width="22" height="3.6" fill="#f3ead2" stroke="#3b2412" stroke-width=".8"/>' +
-    '<path d="M18 38 C14 28 14 10 20 4 C25 0 35 0 40 4 C46 10 46 28 42 38 Z" fill="#3b2412" stroke="#1b0d05" stroke-width="1.6" stroke-linejoin="round"/>' +
-    '<path d="M24 8 C27 5 33 5 36 8 C38 18 37 28 35 36 H25 C23 28 22 18 24 8 Z" fill="#5a3416"/>' +
+    '<path d="M18 38 C14 28 14 10 20 4 C25 0 35 0 40 4 C46 10 46 28 42 38 Z" fill="#d79a58" stroke="#5a3010" stroke-width="1.8" stroke-linejoin="round"/>' +
+    '<path d="M24 8 C27 5 33 5 36 8 C38 18 37 28 35 36 H25 C23 28 22 18 24 8 Z" fill="#3b2412"/>' +
     '<g fill="#e5c25c" stroke="#8a6a1a" stroke-width=".8"><circle cx="12.5" cy="12" r="3.1"/><circle cx="12.5" cy="22" r="3.1"/><circle cx="12.5" cy="32" r="3.1"/><circle cx="47.5" cy="12" r="3.1"/><circle cx="47.5" cy="22" r="3.1"/><circle cx="47.5" cy="32" r="3.1"/></g>' +
     '<g stroke="#8a6a1a" stroke-width="1.6"><path d="M15 12 H19 M15 22 H19 M15 32 H19 M41 12 H45 M41 22 H45 M41 32 H45"/></g>' +
     "</svg>",
