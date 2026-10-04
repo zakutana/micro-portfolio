@@ -3185,3 +3185,8 @@ body {
     transition: none;
   }
 }
+
+/* Objevuj: a stock shows only its change, so the pill is the whole value */
+#discover-list .value .micro:only-child {
+  margin-top: 0;
+}

@@ -983,7 +983,9 @@
       if (hit) cache[d.id] = { price: hit.price };
       value.classList.remove("is-loading");
       value.classList.toggle("is-stale", !hit);
-      value.replaceChildren(price === null ? document.createTextNode("—") : moneyNode(formatUnitPrice(price)));
+      // stocks and funds: the price of one token is just confusing, so only the change is shown
+      value.replaceChildren(d.hidePrice ? document.createTextNode("") : price === null ? document.createTextNode("—") : moneyNode(formatUnitPrice(price)));
+      if (d.hidePrice && !Number.isFinite(change)) value.textContent = "—";
       if (Number.isFinite(change)) {
         const r = change / 100;
         const micro = el("small", `micro is-${trend(r)}`);
