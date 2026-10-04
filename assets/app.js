@@ -152,10 +152,11 @@
     '<path class="tw" d="M8 8 l1.4 3.2 3.2 1.4 -3.2 1.4 -1.4 3.2 -1.4-3.2 -3.2-1.4 3.2-1.4z" fill="#ffd24a"/>' +
     '<path class="tw tw2" d="M54 6 l1.1 2.5 2.5 1.1 -2.5 1.1 -1.1 2.5 -1.1-2.5 -2.5-1.1 2.5-1.1z" fill="#7ee7ff"/>' +
     "</svg>";
+  const FESTIVE_THEMES = ["kirby", "waddle"];
   const CONFETTI = ["#ff5fa2", "#ffd24a", "#7ee7ff", "#a78bfa", "#5dffb0", "#ff8a5c"];
 
   function confettiLayer(count, burst) {
-    const layer = el("div", burst ? "confetti is-burst" : "confetti");
+    const layer = el("div", burst ? "confetti is-burst fest-only" : "confetti fest-only");
     layer.setAttribute("aria-hidden", "true");
     const rnd = (a, b) => a + Math.random() * (b - a);
     for (let i = 0; i < count; i += 1) {
@@ -188,12 +189,17 @@
 
     lock.classList.add("is-festive");
     lock.classList.remove("is-open");
-    const icon = el("div", "lock-gift");
+    const icon = el("div", "lock-gift fest-only");
     icon.setAttribute("aria-hidden", "true");
     icon.innerHTML = GIFT_SVG;
-    const title = el("h2", "", name ? `Všechno nejlepší, ${name}!` : "Všechno nejlepší!");
-    const hint = el("p", "", "Tohle je tvůj dárek. Zadej heslo a rozbal ho.");
-    const note = el("p", "lock-note", "Heslo stačí jednou, příště se stránka otevře sama.");
+    // the party look is only for the two themes the pages are handed over in (see FESTIVE_THEMES)
+    const title = el("h2");
+    title.append(
+      el("span", "fest-only", name ? `Všechno nejlepší, ${name}!` : "Všechno nejlepší!"),
+      el("span", "plain-only", name ? `Ahoj ${name}!` : "Tahle stránka je jen pro tebe"),
+    );
+    const hint = el("p", "", "Zadej heslo.");
+    const note = el("p", "lock-note", "Stačí jednou, příště se stránka otevře sama.");
 
     const form = el("form", "pw-form");
     const input = el("input", "pw-input");
@@ -206,7 +212,8 @@
     input.setAttribute("autocorrect", "off");
     input.setAttribute("aria-label", "Heslo");
     input.placeholder = "•••••";
-    const button = el("button", "pw-btn", "Rozbalit dárek");
+    const button = el("button", "pw-btn");
+    button.append(el("span", "fest-only", "Rozbalit dárek"), el("span", "plain-only", "Odemknout"));
     button.type = "submit";
     const message = el("p", "pw-message");
     message.setAttribute("aria-live", "polite");
@@ -224,9 +231,10 @@
         if (!(window.crypto && crypto.subtle)) throw new Error("no WebCrypto");
         if ((await deriveHash(password)) === cfg.passHash) {
           store.set("auth", cfg.passHash);
+          const party = FESTIVE_THEMES.includes(root.dataset.theme);
           lock.classList.add("is-open");
           lock.append(confettiLayer(34, true));
-          if (!matchMedia("(prefers-reduced-motion: reduce)").matches) await new Promise((r) => setTimeout(r, 1100));
+          if (party && !matchMedia("(prefers-reduced-motion: reduce)").matches) await new Promise((r) => setTimeout(r, 1100));
           lock.hidden = true;
           setHero(false);
           await onUnlock();
@@ -600,7 +608,12 @@
       if (!h || !Array.isArray(h.lots)) continue;
       for (const l of h.lots) if (l.qty > 0 && l.price > 0 && typeof l.date === "string") lots.push({ h, ...l });
     }
-    if (!lots.length) return;
+    const pane = $("pane-history");
+    pane.querySelector(".history")?.remove();
+    if (!lots.length) {
+      pane.append(el("p", "pane-intro", "Zatím tu nejsou žádné nákupy."));
+      return;
+    }
 
     // purchases recorded within the same minute belong to one block
     const byDate = new Map();
@@ -611,8 +624,7 @@
     }
     const blocks = [...byDate.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1)); // oldest first: #0 = genesis
 
-    const box = el("details", "panel history");
-    box.append(el("summary", "", "Nákupy")); // collapsed until opened
+    const box = el("section", "panel history");
     const list = el("ol", "blocks");
     blocks
       .map(([, items], i) => ({ date: items[0].date, items, no: i }))
@@ -645,7 +657,7 @@
         list.append(li);
       });
     box.append(list);
-    $("content").append(box);
+    pane.append(box);
   }
 
   function buildGlossary() {
@@ -824,6 +836,156 @@
       });
   }
 
+  /* ---------- Tabs: Portfolio, Historie, Objevuj (swipe left / right works too) ---------- */
+
+  const TABS = [
+    ["portfolio", "Portfolio", "content"],
+    ["history", "Historie", "pane-history"],
+    ["discover", "Objevuj", "pane-discover"],
+  ];
+  let activeTab = "portfolio";
+
+  function showTab(id, { instant = false } = {}) {
+    const from = TABS.findIndex((t) => t[0] === activeTab);
+    const to = TABS.findIndex((t) => t[0] === id);
+    if (to < 0) return;
+    activeTab = id;
+    TABS.forEach(([tabId, , paneId], i) => {
+      const pane = $(paneId);
+      const on = tabId === id;
+      pane.hidden = !on;
+      pane.classList.remove("slide-from-right", "slide-from-left");
+      if (on && !instant && from !== to) pane.classList.add(to > from ? "slide-from-right" : "slide-from-left");
+      const tab = $(`tab-${tabId}`);
+      tab.setAttribute("aria-selected", String(on));
+      tab.tabIndex = on ? 0 : -1;
+    });
+    $("total-bar").hidden = id !== "portfolio";
+    setHero(id === "portfolio");
+    if (!instant) window.scrollTo({ top: 0 });
+    if (id === "discover") refreshDiscover();
+  }
+
+  function buildTabs() {
+    const nav = $("tabs");
+    nav.replaceChildren();
+    for (const [id, label, paneId] of TABS) {
+      const btn = el("button", "tab", label);
+      btn.type = "button";
+      btn.id = `tab-${id}`;
+      btn.setAttribute("role", "tab");
+      btn.setAttribute("aria-controls", paneId);
+      btn.addEventListener("click", () => showTab(id));
+      nav.append(btn);
+    }
+    nav.addEventListener("keydown", (event) => {
+      const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+      if (!step) return;
+      const i = TABS.findIndex((t) => t[0] === activeTab);
+      const next = TABS[(i + step + TABS.length) % TABS.length][0];
+      showTab(next);
+      $(`tab-${next}`).focus();
+    });
+    nav.hidden = false;
+
+    // swipe: a clearly horizontal, quick move of the finger changes the tab
+    let start = null;
+    document.addEventListener(
+      "touchstart",
+      (event) => {
+        const t = event.touches[0];
+        start = event.touches.length === 1 && !event.target.closest?.("input, .themes") ? { x: t.clientX, y: t.clientY, at: Date.now() } : null;
+      },
+      { passive: true },
+    );
+    document.addEventListener(
+      "touchend",
+      (event) => {
+        if (!start || nav.hidden) return;
+        const t = event.changedTouches[0];
+        const dx = t.clientX - start.x;
+        const dy = t.clientY - start.y;
+        const quick = Date.now() - start.at < 700;
+        start = null;
+        if (!quick || Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.6) return;
+        const i = TABS.findIndex((tab) => tab[0] === activeTab);
+        const next = TABS[i + (dx < 0 ? 1 : -1)];
+        if (next) showTab(next[0]);
+      },
+      { passive: true },
+    );
+    showTab("portfolio", { instant: true });
+  }
+
+  /* ---------- Discover: things worth a look (prices only, nothing to buy here) ---------- */
+
+  let discoverItems = null;
+  let discoverRows = [];
+  let discoverTimer = null;
+  let discoverReady = null;
+
+  async function buildDiscover() {
+    const list = $("discover-list");
+    try {
+      const res = await fetch("../assets/discover.json", { cache: "no-cache" });
+      discoverItems = (await res.json()).items ?? [];
+    } catch {
+      discoverItems = [];
+    }
+    list.replaceChildren();
+    discoverRows = [];
+    for (const d of discoverItems) {
+      const li = el("li");
+      const a = el("a", "row");
+      a.href = `https://www.coingecko.com/cs/coins/${d.id}`;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.setAttribute("aria-label", `${d.name} – otevřít web`);
+      const name = el("span", "name");
+      const sub = el("small", "", d.symbol);
+      sub.append(el("span", "disc-note", ` · ${d.note}`));
+      name.append(el("strong", "", d.name), sub);
+      const value = el("span", "value is-loading", "…");
+      a.append(logoNode(d), name, value);
+      li.append(a);
+      list.append(li);
+      discoverRows.push({ d, value });
+    }
+  }
+
+  async function refreshDiscover() {
+    await discoverReady;
+    if (!discoverItems?.length) return;
+    clearTimeout(discoverTimer);
+    const prices = await fetchCoinGecko(discoverItems.map((d) => d.id));
+    let cache = {};
+    try {
+      cache = JSON.parse(store.get("discover")) ?? {};
+    } catch {
+      /* no cache yet */
+    }
+    for (const { d, value } of discoverRows) {
+      const hit = prices.get(d.id);
+      const price = hit?.price ?? cache[d.id]?.price ?? null;
+      const change = hit ? hit.change24 : null;
+      if (hit) cache[d.id] = { price: hit.price };
+      value.classList.remove("is-loading");
+      value.classList.toggle("is-stale", !hit);
+      value.replaceChildren(price === null ? document.createTextNode("—") : moneyNode(formatUnitPrice(price)));
+      if (Number.isFinite(change)) {
+        const r = change / 100;
+        const micro = el("small", `micro is-${trend(r)}`);
+        micro.append(el("i", "arr", ARROW[trend(r)]), document.createTextNode(formatPct(r)));
+        value.append(micro);
+      }
+    }
+    store.set("discover", JSON.stringify(cache));
+    // keep it fresh only while somebody is looking at it
+    discoverTimer = setTimeout(() => {
+      if (activeTab === "discover" && !document.hidden) refreshDiscover();
+    }, REFRESH_MS);
+  }
+
   /* ---------- Pro mode ---------- */
 
   function applyPro(on) {
@@ -921,7 +1083,6 @@
     buildProBar();
 
     $("content").hidden = false;
-    $("total-bar").hidden = false;
     buildPerf();
     perfRefs.box.hidden = false;
     perfRefs.num.textContent = "…";
@@ -929,6 +1090,8 @@
     buildList();
     buildHistory();
     buildGlossary();
+    buildTabs();
+    discoverReady = buildDiscover(); // the prices are fetched when the tab is first opened
 
     let lastRun = 0;
     const refresh = async () => {

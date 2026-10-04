@@ -1,0 +1,12 @@
+{
+  "items": [
+    { "id": "sp500-xstock", "name": "S&P 500", "symbol": "SPYx", "note": "500 největších firem USA v jednom balíčku", "logo": "../assets/logos/discover/sp500.png" },
+    { "id": "nasdaq-xstock", "name": "Nasdaq 100", "symbol": "QQQx", "note": "100 největších technologických firem USA", "logo": "../assets/logos/discover/nasdaq.png" },
+    { "id": "bitcoin", "name": "Bitcoin", "symbol": "BTC", "note": "digitální zlato, nejznámější kryptoměna", "logo": "../assets/logos/discover/bitcoin.png" },
+    { "id": "ethereum", "name": "Ethereum", "symbol": "ETH", "note": "síť, na které běží spousta aplikací", "logo": "../assets/logos/discover/ethereum.png" },
+    { "id": "solana", "name": "Solana", "symbol": "SOL", "note": "rychlá síť, běží na ní i tokenizované akcie", "logo": "../assets/logos/discover/solana.png" },
+    { "id": "pax-gold", "name": "Zlato", "symbol": "PAXG", "note": "1 token = 1 unce opravdového zlata", "logo": "../assets/logos/discover/paxg.png" },
+    { "id": "nvidia-xstock", "name": "NVIDIA", "symbol": "NVDAx", "note": "čipy pro umělou inteligenci a hry", "logo": "../assets/logos/discover/nvidia.png" },
+    { "id": "apple-xstock", "name": "Apple", "symbol": "AAPLx", "note": "iPhone, Mac a spol.", "logo": "../assets/logos/discover/apple.png" }
+  ]
+}

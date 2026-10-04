@@ -88,6 +88,14 @@ Nová položka: přidej ji do `config.json` s `"qty": 0` a pak ji koupí příka
 
 Sekce „Historie nákupů“ na stránce ukazuje každý nákup jako blok: **Blok #0 je genesis** (startovní portfolio), další bloky jsou dokoupení, nejnovější nahoře. Nákupy zapsané ve stejné minutě tvoří jeden blok. Hodnoty, vložené peníze, zisky i celkový růst se počítají právě z těchto záznamů (`lots` v `config.json`), takže historie a čísla se nemohou rozejít. Dokoupení se zapisuje příkazem `add` a hned se ukáže jako nový blok.
 
+## Záložky a „Objevuj“
+
+Pod hlavičkou jsou tři záložky: **Portfolio**, **Historie** (všechny nákupy jako bloky) a **Objevuj** (věci, které by se mohly hodit: S&P 500, Nasdaq 100, Bitcoin, Ethereum, Solana, zlato, NVIDIA, Apple). Mezi záložkami se dá přepínat i tažením prstu doleva a doprava. Součet dole je vidět jen na záložce Portfolio.
+
+Seznam v Objevuj je v `assets/discover.json` (stejný pro obě stránky): `id` je CoinGecko id, `name`, `symbol` a `note` (jedna věta česky), `logo` je soubor v `assets/logos/discover/`. Ceny se stahují (v korunách z CoinGecka) až po otevření záložky a obnovují se jednou za minutu, dokud je otevřená. Nic se tu nekupuje, je to jen na koukání. Indexy jsou tokenizované fondy (xStocks), takže cena je za jeden díl fondu, ne za bod indexu.
+
+Slavnostní úvodní obrazovka (dárek, konfety, „Všechno nejlepší“) se ukáže jen v motivech Kirby a Waddle Dee, tedy v těch, ve kterých se stránky předávají. V ostatních motivech je obyčejné „Zadej heslo“.
+
 ## Motivy
 
 Minecraft, Kirby, Waddle Dee, Pokémon, Make-up, Fotbal, Trader, Klavír, Kytara, Wednesday, Potter, 6 7, Vesmír, Roboti (sci-fi HUD), Anime, KPop. Motiv se mění kulatým tlačítkem vpravo nahoře (otevře se výběr se všemi motivy) a ukládá se do telefonu (`localStorage`), takže zůstane i po zavření stránky. `p2` začíná s Kirby (růžová), `p1` s Waddle Dee (modrá s oranžovou). Výchozí motiv je atribut `data-theme` v `index.html` stránky.
