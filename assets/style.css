@@ -1086,40 +1086,54 @@ body {
   font-size: calc(var(--gain-size) * 0.6);
 }
 
-.perf-pills {
+.perf-body {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+}
+
+.perf-facts {
+  justify-self: end;
+  min-width: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 6px;
+  flex-direction: column;
+  gap: 9px;
+  padding-left: 16px;
+  border-left: 2px dashed var(--line);
 }
 
-.pill {
-  padding: 3px 10px;
-  border: var(--chip-border, 0);
-  border-radius: 999px;
-  font-family: var(--font);
-  font-size: calc(var(--base-size) * 0.78);
+.fact small {
+  display: block;
+  font-size: calc(var(--base-size) * 0.72);
   font-weight: 700;
-  color: var(--pill-text, var(--flat));
-  background: var(--pill-bg, var(--flat-bg));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
-.pill.up {
+.fact b {
+  display: block;
+  margin-top: 1px;
+  font-family: var(--display);
+  font-size: calc(var(--value-size) * 1.12);
+  font-weight: var(--value-weight, 700);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+.fact b.up {
   color: var(--gain);
-  background: var(--gain-bg);
 }
 
-.pill.dn {
+.fact b.dn {
   color: var(--loss);
-  background: var(--loss-bg);
 }
 
 .arr {
   font-style: normal;
-}
-
-.pill .arr {
-  margin-right: 0.35em;
 }
 
 .alloc-bar {
@@ -1202,16 +1216,13 @@ body {
   --seg-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.4), inset 0 -3px 0 rgba(0, 0, 0, 0.3);
 }
 
-:root[data-theme="minecraft"] .perf-pills {
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 8px;
+:root[data-theme="minecraft"] .fact small {
+  font-size: 0.46rem;
+  text-transform: none;
 }
 
-:root[data-theme="minecraft"] .pill {
-  padding: 0;
-  border-radius: 0;
-  font-size: 0.52rem;
+:root[data-theme="minecraft"] .fact b {
+  font-size: 0.7rem;
 }
 
 /* ---------- List ---------- */
@@ -1446,16 +1457,13 @@ body {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
 }
-:root[data-theme="minecraft"] .is-up > .arr,
-:root[data-theme="minecraft"] .pill.up > .arr {
+:root[data-theme="minecraft"] .is-up > .arr {
   border-bottom: 7px solid currentColor;
 }
-:root[data-theme="minecraft"] .is-down > .arr,
-:root[data-theme="minecraft"] .pill.dn > .arr {
+:root[data-theme="minecraft"] .is-down > .arr {
   border-top: 7px solid currentColor;
 }
-:root[data-theme="minecraft"] .is-flat > .arr,
-:root[data-theme="minecraft"] .pill.n > .arr {
+:root[data-theme="minecraft"] .is-flat > .arr {
   display: none;
 }
 
@@ -1935,6 +1943,12 @@ body {
 }
 
 @media (max-width: 380px) {
+  .perf-num {
+    font-size: calc(var(--gain-size) * 0.86);
+  }
+  .perf-facts {
+    padding-left: 12px;
+  }
   .app {
     padding-inline: 12px;
   }

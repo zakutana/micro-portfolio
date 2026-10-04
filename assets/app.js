@@ -520,7 +520,9 @@
     const num = el("b", "perf-num");
     const unit = el("span", "perf-unit");
     gain.append(num, unit);
-    const pills = el("div", "perf-pills");
+    const facts = el("div", "perf-facts");
+    const body = el("div", "perf-body");
+    body.append(gain, facts);
     const bar = el("div", "alloc-bar");
     bar.setAttribute("aria-hidden", "true");
 
@@ -529,9 +531,9 @@
     const legend = el("div", "alloc-legend");
     pro.append(allocTitle, bar, legend);
 
-    box.append(cap, gain, pills, pro);
+    box.append(cap, body, pro);
     $("content").prepend(box);
-    perfRefs = { box, cap, num, unit, pills, bar, legend };
+    perfRefs = { box, cap, num, unit, facts, bar, legend };
   }
 
   /* Purchase history: every purchase is a "block"; the first one is the genesis block.
@@ -705,12 +707,14 @@
   function showPerformance({ costSum, valueSum, since, rows, total, waiting }) {
     const p = perfRefs;
     p.box.classList.remove("is-up", "is-down", "is-flat", "is-waiting");
-    p.pills.replaceChildren();
-    const pill = (text, kind = "n", arrow = "") => {
-      const node = el("span", `pill ${kind}`);
-      if (arrow) node.append(el("i", "arr", arrow));
-      node.append(document.createTextNode(text));
-      p.pills.append(node);
+    p.facts.replaceChildren();
+    // a small label over a bigger number: "Vloženo 800 Kč", "Zisk +6,74 Kč"
+    const fact = (label, value, kind = "") => {
+      const node = el("div", "fact");
+      const num = el("b", kind);
+      num.append(/Kč$/.test(value) ? moneyNode(value) : document.createTextNode(value));
+      node.append(el("small", "", label), num);
+      p.facts.append(node);
     };
     const lead = ownerName ? `${ownerName} · ` : "";
 
@@ -721,7 +725,7 @@
       p.cap.textContent = ownerName || "Portfolio";
       p.num.textContent = `Start ${formatDate(since).replace(/ 20\d\d$/, "")}`;
       p.unit.textContent = "";
-      pill("sledování růstu začne");
+      fact("Sledování růstu", "začne");
     } else if (!(costSum > 0)) {
       p.box.hidden = true; // no starting point recorded yet
       setHero(false);
@@ -737,8 +741,8 @@
       const cut = text.lastIndexOf(" ");
       p.num.textContent = text.slice(0, cut);
       p.unit.textContent = text.slice(cut + 1);
-      pill(formatSignedCzk(diff), t === "up" ? "up" : t === "down" ? "dn" : "n", ARROW[t]);
-      pill(`Vloženo ${formatCzk(costSum)}`);
+      fact("Vloženo", formatCzk(costSum));
+      fact("Zisk", formatSignedCzk(diff), t === "up" ? "up" : t === "down" ? "dn" : "");
     }
     setHero(true);
 
