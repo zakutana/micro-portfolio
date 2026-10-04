@@ -2614,6 +2614,8 @@ body {
 .pane-intro {
   margin: 4px 0 12px;
   color: var(--on-bg);
+  font-size: calc(var(--base-size) * 0.9);
+  line-height: 1.45;
   font-weight: 600;
   opacity: 0.9;
 }
