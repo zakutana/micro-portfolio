@@ -43,7 +43,7 @@ Zdroje živé ceny (obojí zdarma, bez API klíče):
 - `{ "type": "coingecko", "id": "<id mince>" }` – krypto, cena rovnou v Kč. Id je v URL na coingecko.com (`/coins/<id>`).
 - `{ "type": "dexscreener", "chain": "solana", "address": "<adresa tokenu>" }` – tokenizované akcie (např. RoboStrategy **BOT**) a menší tokeny. Cena je v USD a převádí se na Kč aktuálním kurzem. Vybere se pár s největší likviditou. Tokenizované akcie se obchodují 24/7, takže cena se hýbe i o víkendu.
 
-- `{ "type": "fixed", "priceUsd": 0.001 }` (nebo `"priceCzk"`) – pro něco, co se zatím neobchoduje: cena napsaná natvrdo, USD se přepočítá živým kurzem. U každé položky může být `"note"` (krátký popisek, co to je), který se ukáže pod názvem vedle symbolu, třeba `"zatím se neobchoduje"`. Až se začne obchodovat, nahradí se zdroj za `coingecko` nebo `dexscreener`. S `"notTraded": true` se položka ukáže ztlumená, s popiskem „mimo součet“, a **nezapočítá se** do celkové hodnoty, růstu, podílů ani rozložení portfolia. Až se začne obchodovat, příznak odeber.
+- `{ "type": "fixed", "priceUsd": 0.001 }` (nebo `"priceCzk"`) – pro něco, co se zatím neobchoduje: cena napsaná natvrdo, USD se přepočítá živým kurzem. U každé položky je `"group"` (`"crypto"` nebo `"stocks"`): v Portfoliu jsou nahoře Crypto a pod nimi Akcie. U každé položky může být `"note"` (krátký popisek, co to je), který se ukáže pod názvem vedle symbolu, třeba `"zatím se neobchoduje"`. Až se začne obchodovat, nahradí se zdroj za `coingecko` nebo `dexscreener`. S `"notTraded": true` se položka ukáže ztlumená, s popiskem „mimo součet“, a **nezapočítá se** do celkové hodnoty, růstu, podílů ani rozložení portfolia. Až se začne obchodovat, příznak odeber.
 
 **Tržní kapitalizace** (Pro režim): u kryptoměn ji vrací CoinGecko. U tokenizovaných akcií se počítá jako živá cena × počet akcií firmy, který je v položce jako `"sharesOutstanding"` (např. BOT 24,4 mil., Tesla 3,237 mld., SpaceX 13,57 mld.). Je to přibližný, ručně zapsaný údaj, občas ho tedy aktualizuj. Bez `sharesOutstanding` se ukáže pomlčka.
 
@@ -92,7 +92,7 @@ Sekce „Historie nákupů“ na stránce ukazuje každý nákup jako blok: **Bl
 
 Dole na obrazovce je (jako v aplikaci) lišta se třemi záložkami: **Portfolio**, **Historie** (všechny nákupy jako bloky) a **Objevuj** (věci, které by se mohly hodit: S&P 500, Nasdaq 100, Bitcoin, Ethereum, Solana, zlato, NVIDIA, Apple). Mezi záložkami se dá přepínat i tažením prstu doleva a doprava. Součet dole je vidět jen na záložce Portfolio.
 
-Seznam v Objevuj je v `assets/discover.json` (stejný pro obě stránky): `id` je CoinGecko id, `name`, `symbol` a `note` (jedna věta česky), `logo` je soubor v `assets/logos/discover/`. V Objevuj nejsou žádné ceny ani růst, jen název, jedna věta o tom, co to je, a šipka (klepnutí otevře stránku na CoinGecku). Nic se tu nestahuje. Indexy jsou tokenizované fondy (xStocks).
+Seznam v Objevuj je v `assets/discover.json` (stejný pro obě stránky): `id` je CoinGecko id, `group` (`crypto`, `stocks` nebo `indexes`: sekce Crypto, Akcie a Indexy), `name`, `symbol` a `note` (jedna věta česky), `logo` je soubor v `assets/logos/discover/`. V Objevuj nejsou žádné ceny ani růst, jen název, jedna věta o tom, co to je, a šipka (klepnutí otevře stránku na CoinGecku). Nic se tu nestahuje. Indexy jsou tokenizované fondy (xStocks).
 
 Slavnostní úvodní obrazovka (dárek, konfety, „Všechno nejlepší“) se ukáže jen v motivech Kirby a Waddle Dee, tedy v těch, ve kterých se stránky předávají. V ostatních motivech je obyčejné „Zadej heslo“.
 

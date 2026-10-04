@@ -2139,6 +2139,26 @@ body {
   overflow: hidden;
 }
 
+.list li.group-title {
+  padding: 0 6px;
+  font-family: var(--display);
+  font-size: calc(var(--base-size) * 0.86);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--on-bg);
+  text-shadow: var(--on-bg-shadow, none);
+  background: none;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
+  opacity: 0.9;
+}
+
+.list li.group-title:not(:first-child) {
+  margin-top: 10px;
+}
+
 .row {
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr) auto;

@@ -516,6 +516,15 @@
     return box;
   }
 
+  const GROUPS = [
+    { id: "crypto", label: "Crypto" },
+    { id: "stocks", label: "Akcie" },
+    { id: "indexes", label: "Indexy" },
+  ];
+  const groupRank = (h) => {
+    const i = GROUPS.findIndex((g) => g.id === h.group);
+    return i < 0 ? GROUPS.length : i;
+  };
   const ALLOC_COLORS = 8; // --a1 ... --a8 in style.css: every theme has its own palette
   const allocColor = (i) => `var(--a${(i % ALLOC_COLORS) + 1})`;
   const DETAIL_CELLS = [
@@ -543,7 +552,15 @@
     const list = $("list");
     list.replaceChildren();
     rowRefs = [];
+    let lastGroup = null;
     for (const h of holdings) {
+      const group = GROUPS.find((g) => g.id === h.group);
+      if (group && group.id !== lastGroup) {
+        const head = el("li", "group-title", group.label);
+        head.setAttribute("role", "presentation");
+        list.append(head);
+        lastGroup = group.id;
+      }
       const li = el("li");
       const a = el("a", "row");
       a.href = h.url;
@@ -941,7 +958,16 @@
       discoverItems = [];
     }
     list.replaceChildren();
+    discoverItems = discoverItems.map((d, i) => [d, i]).sort((a, b) => groupRank(a[0]) - groupRank(b[0]) || a[1] - b[1]).map(([d]) => d);
+    let lastGroup = null;
     for (const d of discoverItems) {
+      const group = GROUPS.find((g) => g.id === d.group);
+      if (group && group.id !== lastGroup) {
+        const head = el("li", "group-title", group.label);
+        head.setAttribute("role", "presentation");
+        list.append(head);
+        lastGroup = group.id;
+      }
       const li = el("li");
       const a = el("a", "row");
       a.href = `https://www.coingecko.com/cs/coins/${d.id}`;
@@ -1052,6 +1078,8 @@
   async function openContent() {
     showOwner();
     holdings = (Array.isArray(cfg.holdings) ? cfg.holdings : []).filter((h) => h && h.source && position(h).qty > 0);
+    // crypto first, stocks below it (a holding without a group goes last); the order is stable inside a group
+    holdings = holdings.map((h, i) => [h, i]).sort((a, b) => groupRank(a[0]) - groupRank(b[0]) || a[1] - b[1]).map(([h]) => h);
     buildProBar();
 
     $("content").hidden = false;

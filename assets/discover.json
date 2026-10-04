@@ -5,77 +5,88 @@
       "name": "S&P 500",
       "symbol": "SPYx",
       "note": "500 největších firem USA v jednom balíčku",
-      "logo": "../assets/logos/discover/sp500.png"
+      "logo": "../assets/logos/discover/sp500.png",
+      "group": "indexes"
     },
     {
       "id": "nasdaq-xstock",
       "name": "Nasdaq 100",
       "symbol": "QQQx",
       "note": "100 největších technologických firem USA",
-      "logo": "../assets/logos/discover/nasdaq.png"
+      "logo": "../assets/logos/discover/nasdaq.png",
+      "group": "indexes"
     },
     {
       "id": "bitcoin",
       "name": "Bitcoin",
       "symbol": "BTC",
       "note": "digitální zlato, nejznámější kryptoměna",
-      "logo": "../assets/logos/discover/bitcoin.png"
+      "logo": "../assets/logos/discover/bitcoin.png",
+      "group": "crypto"
     },
     {
       "id": "ethereum",
       "name": "Ethereum",
       "symbol": "ETH",
       "note": "síť, na které běží spousta aplikací",
-      "logo": "../assets/logos/discover/ethereum.png"
+      "logo": "../assets/logos/discover/ethereum.png",
+      "group": "crypto"
     },
     {
       "id": "solana",
       "name": "Solana",
       "symbol": "SOL",
       "note": "rychlá síť, běží na ní i tokenizované akcie",
-      "logo": "../assets/logos/discover/solana.png"
+      "logo": "../assets/logos/discover/solana.png",
+      "group": "crypto"
     },
     {
       "id": "pax-gold",
       "name": "Zlato",
       "symbol": "PAXG",
       "note": "1 token = 1 unce zlata, spíš uchovatel hodnoty",
-      "logo": "../assets/logos/discover/paxg.png"
+      "logo": "../assets/logos/discover/paxg.png",
+      "group": "crypto"
     },
     {
       "id": "nvidia-xstock",
       "name": "NVIDIA",
       "symbol": "NVDAx",
       "note": "čipy pro umělou inteligenci a hry",
-      "logo": "../assets/logos/discover/nvidia.png"
+      "logo": "../assets/logos/discover/nvidia.png",
+      "group": "stocks"
     },
     {
       "id": "apple-xstock",
       "name": "Apple",
       "symbol": "AAPLx",
       "note": "iPhone, Mac a spol.",
-      "logo": "../assets/logos/discover/apple.png"
+      "logo": "../assets/logos/discover/apple.png",
+      "group": "stocks"
     },
     {
       "id": "amazon-xstock",
       "name": "Amazon",
       "symbol": "AMZNx",
       "note": "internetový obchod a cloud (AWS)",
-      "logo": "../assets/logos/discover/amazon.png"
+      "logo": "../assets/logos/discover/amazon.png",
+      "group": "stocks"
     },
     {
       "id": "meta-xstock",
       "name": "Meta",
       "symbol": "METAx",
       "note": "Facebook, Instagram a WhatsApp",
-      "logo": "../assets/logos/discover/meta.png"
+      "logo": "../assets/logos/discover/meta.png",
+      "group": "stocks"
     },
     {
       "id": "alphabet-xstock",
       "name": "Google",
       "symbol": "GOOGLx",
       "note": "vyhledávač, YouTube a Android",
-      "logo": "../assets/logos/discover/google.png"
+      "logo": "../assets/logos/discover/google.png",
+      "group": "stocks"
     }
   ]
 }

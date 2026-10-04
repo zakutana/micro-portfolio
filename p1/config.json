@@ -19,7 +19,8 @@
         }
       ],
       "qty": 36.514556,
-      "note": "sběratelské karty a předměty na blockchainu"
+      "note": "sběratelské karty a předměty na blockchainu",
+      "group": "crypto"
     },
     {
       "name": "RoboStrategy",
@@ -40,7 +41,8 @@
       ],
       "qty": 0.315322,
       "sharesOutstanding": 24400000,
-      "note": "fond na roboty a umělou inteligenci"
+      "note": "fond na roboty a umělou inteligenci",
+      "group": "stocks"
     },
     {
       "name": "Sui",
@@ -59,7 +61,8 @@
         }
       ],
       "qty": 8.194649,
-      "note": "kryptoměna rychlé blockchainové sítě"
+      "note": "kryptoměna rychlé blockchainové sítě",
+      "group": "crypto"
     },
     {
       "name": "COTI",
@@ -78,7 +81,8 @@
         }
       ],
       "qty": 1661.075166,
-      "note": "kryptoměna, která chrání soukromí dat na blockchainu"
+      "note": "kryptoměna, která chrání soukromí dat na blockchainu",
+      "group": "crypto"
     },
     {
       "name": "Tesla",
@@ -99,7 +103,8 @@
           "price": 8122.245419
         }
       ],
-      "note": "elektromobily, energie a roboty"
+      "note": "elektromobily, energie a roboty",
+      "group": "stocks"
     },
     {
       "name": "SpaceX",
@@ -120,7 +125,8 @@
           "price": 3439.27258
         }
       ],
-      "note": "firma zaměřená na vesmír: rakety a internet Starlink"
+      "note": "firma zaměřená na vesmír: rakety a internet Starlink",
+      "group": "stocks"
     },
     {
       "name": "Cymetica",
@@ -140,7 +146,8 @@
           "price": 0.0217
         }
       ],
-      "notTraded": true
+      "notTraded": true,
+      "group": "stocks"
     }
   ]
 }
