@@ -141,15 +141,59 @@
     setHero(true);
   }
 
+  /* Festive lock screen: a gift, confetti that keeps falling, and a burst when the right password is entered. */
+  const GIFT_SVG =
+    '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="10" y="29" width="44" height="29" rx="3" fill="#ff5fa2" stroke="#8a2a58" stroke-width="2.2"/>' +
+    '<rect x="28" y="29" width="8" height="29" fill="#ffd24a" stroke="#a37a12" stroke-width="1.6"/>' +
+    '<g class="gift-lid"><rect x="6" y="20" width="52" height="11" rx="3" fill="#ff86bd" stroke="#8a2a58" stroke-width="2.2"/>' +
+    '<rect x="28" y="20" width="8" height="11" fill="#ffd24a" stroke="#a37a12" stroke-width="1.6"/>' +
+    '<path d="M32 20 C24 6 12 10 18 17 C21 20 28 20 32 20 Z M32 20 C40 6 52 10 46 17 C43 20 36 20 32 20 Z" fill="#ffd24a" stroke="#a37a12" stroke-width="1.8" stroke-linejoin="round"/></g>' +
+    '<path class="tw" d="M8 8 l1.4 3.2 3.2 1.4 -3.2 1.4 -1.4 3.2 -1.4-3.2 -3.2-1.4 3.2-1.4z" fill="#ffd24a"/>' +
+    '<path class="tw tw2" d="M54 6 l1.1 2.5 2.5 1.1 -2.5 1.1 -1.1 2.5 -1.1-2.5 -2.5-1.1 2.5-1.1z" fill="#7ee7ff"/>' +
+    "</svg>";
+  const CONFETTI = ["#ff5fa2", "#ffd24a", "#7ee7ff", "#a78bfa", "#5dffb0", "#ff8a5c"];
+
+  function confettiLayer(count, burst) {
+    const layer = el("div", burst ? "confetti is-burst" : "confetti");
+    layer.setAttribute("aria-hidden", "true");
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    for (let i = 0; i < count; i += 1) {
+      const piece = document.createElement("i");
+      const set = (k, v) => piece.style.setProperty(k, v);
+      set("--c", CONFETTI[i % CONFETTI.length]);
+      set("--w", `${rnd(6, 11).toFixed(1)}px`);
+      set("--r", `${Math.round(rnd(240, 900))}deg`);
+      if (burst) {
+        const angle = rnd(-Math.PI, 0);
+        const dist = rnd(90, 230);
+        set("--dx", `${Math.round(Math.cos(angle) * dist)}px`);
+        set("--dy", `${Math.round(Math.sin(angle) * dist)}px`);
+        set("--d", `${rnd(0, 0.15).toFixed(2)}s`);
+      } else {
+        set("--x", `${rnd(2, 98).toFixed(1)}%`);
+        set("--sway", `${Math.round(rnd(-40, 40))}px`);
+        set("--t", `${rnd(6, 11).toFixed(1)}s`);
+        set("--d", `-${rnd(0, 10).toFixed(1)}s`);
+      }
+      layer.append(piece);
+    }
+    return layer;
+  }
+
   function showLock(onUnlock) {
     const lock = $("lock");
     lock.replaceChildren();
     const name = (new URLSearchParams(location.search).get("n") || "").trim().slice(0, 30);
 
-    const icon = el("div", "lock-icon", "\u{1F512}");
+    lock.classList.add("is-festive");
+    lock.classList.remove("is-open");
+    const icon = el("div", "lock-gift");
     icon.setAttribute("aria-hidden", "true");
-    const title = el("h2", "", name ? `Ahoj ${name}!` : "Tahle stránka je jen pro tebe");
-    const hint = el("p", "", "Zadej heslo. Stačí jednou, příště se stránka otevře sama.");
+    icon.innerHTML = GIFT_SVG;
+    const title = el("h2", "", name ? `Všechno nejlepší, ${name}!` : "Všechno nejlepší!");
+    const hint = el("p", "", "Tohle je tvůj dárek. Zadej heslo a rozbal ho.");
+    const note = el("p", "lock-note", "Heslo stačí jednou, příště se stránka otevře sama.");
 
     const form = el("form", "pw-form");
     const input = el("input", "pw-input");
@@ -162,12 +206,12 @@
     input.setAttribute("autocorrect", "off");
     input.setAttribute("aria-label", "Heslo");
     input.placeholder = "•••••";
-    const button = el("button", "pw-btn", "Odemknout");
+    const button = el("button", "pw-btn", "Rozbalit dárek");
     button.type = "submit";
     const message = el("p", "pw-message");
     message.setAttribute("aria-live", "polite");
     form.append(input, button, message);
-    lock.append(icon, title, hint, form);
+    lock.append(confettiLayer(26, false), icon, title, hint, form, note);
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -180,6 +224,9 @@
         if (!(window.crypto && crypto.subtle)) throw new Error("no WebCrypto");
         if ((await deriveHash(password)) === cfg.passHash) {
           store.set("auth", cfg.passHash);
+          lock.classList.add("is-open");
+          lock.append(confettiLayer(34, true));
+          if (!matchMedia("(prefers-reduced-motion: reduce)").matches) await new Promise((r) => setTimeout(r, 1100));
           lock.hidden = true;
           setHero(false);
           await onUnlock();
@@ -565,7 +612,7 @@
     const blocks = [...byDate.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1)); // oldest first: #0 = genesis
 
     const box = el("details", "panel history");
-    box.append(el("summary", "", "Historie nákupů")); // collapsed until opened
+    box.append(el("summary", "", "Nákupy")); // collapsed until opened
     const list = el("ol", "blocks");
     blocks
       .map(([, items], i) => ({ date: items[0].date, items, no: i }))

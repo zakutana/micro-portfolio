@@ -2518,6 +2518,164 @@ body {
   line-height: 1.5;
 }
 
+/* festive lock screen */
+.lock {
+  position: relative;
+  overflow: hidden;
+}
+
+.lock > * {
+  position: relative;
+  z-index: 1;
+}
+
+.lock > .confetti {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.lock.is-festive {
+  padding-top: 20px;
+  padding-bottom: 22px;
+}
+
+.lock.is-festive h2 {
+  margin: 8px 0 6px;
+  font-size: calc(var(--base-size) * 1.5);
+  line-height: 1.15;
+}
+
+:root[data-theme="minecraft"] .lock.is-festive h2 {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.lock-gift {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto;
+  animation: gift-bob 2.6s ease-in-out infinite;
+}
+
+.lock-gift svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.gift-lid {
+  transform-box: fill-box;
+  transform-origin: 20% 100%;
+  transition: transform 0.45s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+.lock.is-open .gift-lid {
+  transform: translate(-6px, -16px) rotate(-24deg);
+}
+
+.lock.is-open .lock-gift {
+  animation: none;
+}
+
+.lock .tw {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: twinkle 1.8s ease-in-out infinite;
+}
+
+.lock .tw2 {
+  animation-delay: 0.9s;
+}
+
+.lock .lock-note {
+  margin-top: 12px;
+  font-size: calc(var(--base-size) * 0.85);
+  opacity: 0.85;
+}
+
+.confetti i {
+  position: absolute;
+  top: -14px;
+  left: var(--x, 50%);
+  width: var(--w);
+  height: calc(var(--w) * 1.6);
+  background: var(--c);
+  border-radius: 2px;
+  opacity: 0.92;
+  animation: confetti-fall var(--t, 8s) linear var(--d, 0s) infinite;
+}
+
+.confetti i:nth-child(3n) {
+  height: var(--w);
+  border-radius: 50%;
+}
+
+.confetti.is-burst i {
+  top: 90px;
+  left: 50%;
+  opacity: 0;
+  animation: confetti-burst 1s ease-out var(--d, 0s) forwards;
+}
+
+@keyframes confetti-fall {
+  from {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  to {
+    transform: translate3d(var(--sway, 0px), 560px, 0) rotate(var(--r, 360deg));
+  }
+}
+
+@keyframes confetti-burst {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--dx), calc(var(--dy) + 140px), 0) rotate(var(--r, 360deg));
+  }
+}
+
+@keyframes gift-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(3deg);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: scale(0.5);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti i,
+  .lock-gift,
+  .lock .tw {
+    animation: none;
+  }
+  .confetti:not(.is-burst) i {
+    top: calc(60px + var(--sway, 0px));
+  }
+}
+
 /* password form on the lock screen */
 .pw-form {
   margin-top: 16px;
@@ -2715,7 +2873,11 @@ body {
 
 .history summary {
   padding: 12px 0;
+  font-size: calc(var(--base-size) * 0.78);
   font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
   cursor: pointer;
 }
 
