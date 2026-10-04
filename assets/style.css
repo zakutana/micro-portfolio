@@ -2646,14 +2646,6 @@ body {
   opacity: 0.9;
 }
 
-.pane-note {
-  margin: 14px 6px 0;
-  color: var(--on-bg);
-  font-size: calc(var(--base-size) * 0.82);
-  line-height: 1.45;
-  opacity: 0.8;
-}
-
 /* ---------- Lock screen ---------- */
 
 .lock {
