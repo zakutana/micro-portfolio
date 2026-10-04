@@ -150,13 +150,8 @@ window.MICRO_ICONS = {
     "</svg>",
 
   robots:
-    '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-    '<path d="M16 7 V3.6" stroke="#2a3942" stroke-width="1.6"/><circle cx="16" cy="3" r="2" fill="#ff8a1f" stroke="#2a3942" stroke-width="1"/>' +
-    '<rect x="5.5" y="7" width="21" height="19" rx="4.5" fill="#cfd8de" stroke="#2a3942" stroke-width="1.5"/>' +
-    '<rect x="8.6" y="10.6" width="14.8" height="8.4" rx="2.6" fill="#1b2a33"/>' +
-    '<circle cx="12.6" cy="14.8" r="2.3" fill="#19e3f0"/><circle cx="19.4" cy="14.8" r="2.3" fill="#19e3f0"/><circle cx="13.2" cy="14.1" r=".7" fill="#fff"/><circle cx="20" cy="14.1" r=".7" fill="#fff"/>' +
-    '<path d="M11 22.2 H21 M13.4 21 V23.4 M16 21 V23.4 M18.6 21 V23.4" stroke="#2a3942" stroke-width="1.1"/>' +
-    '<rect x="2.4" y="12" width="3" height="7" rx="1.2" fill="#ff8a1f" stroke="#2a3942" stroke-width=".9"/><rect x="26.6" y="12" width="3" height="7" rx="1.2" fill="#ff8a1f" stroke="#2a3942" stroke-width=".9"/>' +
+    '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<path d="M32 14 V6" stroke="#8aa4b4" stroke-width="2.4" stroke-linecap="round"/><circle cx="32" cy="5" r="5.6" fill="#ff3df2" opacity=".28"/><circle cx="32" cy="5" r="3.2" fill="#ff3df2"/><rect x="4.5" y="25" width="8.5" height="18" rx="3" fill="#2b3a4a" stroke="#0b1118" stroke-width="1.8"/><rect x="7.2" y="29" width="3" height="10" rx="1.5" fill="#29e6ff"/><rect x="51" y="25" width="8.5" height="18" rx="3" fill="#2b3a4a" stroke="#0b1118" stroke-width="1.8"/><rect x="54" y="29" width="3" height="10" rx="1.5" fill="#29e6ff"/><path d="M13 23 Q13 14 22 14 H42 Q51 14 51 23 V47 Q51 57 41 57 H23 Q13 57 13 47 Z" fill="#dce8ef" stroke="#0b1118" stroke-width="2.4" stroke-linejoin="round"/><path d="M17.4 21.6 Q17.4 17.6 21.6 17.6 H33" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".9"/><rect x="17" y="24" width="30" height="15" rx="7.5" fill="#050b14" stroke="#29e6ff" stroke-width="1.4"/><rect x="21" y="29" width="8" height="5" rx="2.5" fill="#29e6ff"/><rect x="35" y="29" width="8" height="5" rx="2.5" fill="#29e6ff"/><circle cx="23.2" cy="30.4" r="1" fill="#fff"/><circle cx="37.2" cy="30.4" r="1" fill="#fff"/><path d="M27 44 V50 M32 44 V50 M37 44 V50" stroke="#7d93a2" stroke-width="1.6" stroke-linecap="round"/><circle cx="19" cy="47" r="1.3" fill="#29e6ff"/><circle cx="45" cy="47" r="1.3" fill="#29e6ff"/>' +
     "</svg>",
 
   anime:
@@ -301,13 +296,7 @@ window.MICRO_PEEK = {
 
   robots:
     '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-    '<path d="M32 15 V5" stroke="#2a3942" stroke-width="2.4"/><circle cx="32" cy="4.5" r="3.6" fill="#ff8a1f" stroke="#2a3942" stroke-width="1.8"/>' +
-    '<rect x="9" y="14" width="46" height="42" rx="10" fill="#cfd8de" stroke="#2a3942" stroke-width="2.6"/>' +
-    '<rect x="15" y="21" width="34" height="19" rx="6" fill="#1b2a33"/>' +
-    '<circle cx="25" cy="30.5" r="5" fill="#19e3f0"/><circle cx="39" cy="30.5" r="5" fill="#19e3f0"/><circle cx="26.5" cy="28.8" r="1.5" fill="#fff"/><circle cx="40.5" cy="28.8" r="1.5" fill="#fff"/>' +
-    '<path d="M22 47 H42 M26 44.4 V50 M32 44.4 V50 M38 44.4 V50" stroke="#2a3942" stroke-width="2"/>' +
-    '<rect x="2" y="25" width="7" height="14" rx="2.6" fill="#ff8a1f" stroke="#2a3942" stroke-width="1.6"/><rect x="55" y="25" width="7" height="14" rx="2.6" fill="#ff8a1f" stroke="#2a3942" stroke-width="1.6"/>' +
-    '<g fill="#8fa0aa"><circle cx="14" cy="18" r="1.3"/><circle cx="50" cy="18" r="1.3"/><circle cx="14" cy="52" r="1.3"/><circle cx="50" cy="52" r="1.3"/></g>' +
+    '<path d="M32 14 V6" stroke="#8aa4b4" stroke-width="2.4" stroke-linecap="round"/><circle cx="32" cy="5" r="5.6" fill="#ff3df2" opacity=".28"/><circle cx="32" cy="5" r="3.2" fill="#ff3df2"/><rect x="4.5" y="25" width="8.5" height="18" rx="3" fill="#2b3a4a" stroke="#0b1118" stroke-width="1.8"/><rect x="7.2" y="29" width="3" height="10" rx="1.5" fill="#29e6ff"/><rect x="51" y="25" width="8.5" height="18" rx="3" fill="#2b3a4a" stroke="#0b1118" stroke-width="1.8"/><rect x="54" y="29" width="3" height="10" rx="1.5" fill="#29e6ff"/><path d="M13 23 Q13 14 22 14 H42 Q51 14 51 23 V47 Q51 57 41 57 H23 Q13 57 13 47 Z" fill="#dce8ef" stroke="#0b1118" stroke-width="2.4" stroke-linejoin="round"/><path d="M17.4 21.6 Q17.4 17.6 21.6 17.6 H33" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".9"/><rect x="17" y="24" width="30" height="15" rx="7.5" fill="#050b14" stroke="#29e6ff" stroke-width="1.4"/><rect x="21" y="29" width="8" height="5" rx="2.5" fill="#29e6ff"/><rect x="35" y="29" width="8" height="5" rx="2.5" fill="#29e6ff"/><circle cx="23.2" cy="30.4" r="1" fill="#fff"/><circle cx="37.2" cy="30.4" r="1" fill="#fff"/><path d="M27 44 V50 M32 44 V50 M37 44 V50" stroke="#7d93a2" stroke-width="1.6" stroke-linecap="round"/><circle cx="19" cy="47" r="1.3" fill="#29e6ff"/><circle cx="45" cy="47" r="1.3" fill="#29e6ff"/>' +
     "</svg>",
 
   anime:

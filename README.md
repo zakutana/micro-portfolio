@@ -90,7 +90,7 @@ Sekce „Historie nákupů“ na stránce ukazuje každý nákup jako blok: **Bl
 
 ## Motivy
 
-Minecraft, Kirby, Waddle Dee, Pokémon, Make-up, Fotbal, Trader, Klavír, Kytara, Wednesday, Potter, 6 7, Vesmír, Roboti, Anime, KPop. Motiv se mění kulatým tlačítkem vpravo nahoře (otevře se výběr se všemi sedmi) a ukládá se do telefonu (`localStorage`), takže zůstane i po zavření stránky. `p2` začíná s Kirby (růžová), `p1` s Waddle Dee (modrá s oranžovou). Výchozí motiv je atribut `data-theme` v `index.html` stránky.
+Minecraft, Kirby, Waddle Dee, Pokémon, Make-up, Fotbal, Trader, Klavír, Kytara, Wednesday, Potter, 6 7, Vesmír, Roboti (sci-fi HUD), Anime, KPop. Motiv se mění kulatým tlačítkem vpravo nahoře (otevře se výběr se všemi motivy) a ukládá se do telefonu (`localStorage`), takže zůstane i po zavření stránky. `p2` začíná s Kirby (růžová), `p1` s Waddle Dee (modrá s oranžovou). Výchozí motiv je atribut `data-theme` v `index.html` stránky.
 
 Všechny motivy mají stejnou stavbu: hlavička (název, přepínač Pro, tlačítko motivu), jedna karta s růstem portfolia a postavičkou, která se přes ní dívá, čistý seznam a jeden součet dole. Liší se barvami, rámečky, písmem a postavičkou (Kirby, Waddle Dee, Pikachu, creeper, rtěnka, míč, svíčkový graf, noty, hlava kytary, ruka „Věc“, zlatonka, dvě ruce „6 7“, astronaut, robot, chibi dívka, světelná tyčinka). Barevný proužek pod růstem ukazuje, z čeho se portfolio skládá, a stejnou barvou je kroužek kolem loga každé položky.
 

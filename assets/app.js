@@ -23,7 +23,7 @@
     { id: "harry", label: "Potter", color: "#0d1233" },
     { id: "sixseven", label: "6 7", color: "#1c0f3a" },
     { id: "space", label: "Vesmír", color: "#070a1f" },
-    { id: "robots", label: "Roboti", color: "#243038" },
+    { id: "robots", label: "Roboti", color: "#03060d" },
     { id: "anime", label: "Anime", color: "#ffd6ec" },
     { id: "kpop", label: "KPop", color: "#120a24" },
   ];
