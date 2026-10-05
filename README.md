@@ -96,6 +96,10 @@ Seznam v Objevuj je v `assets/discover.json` (stejný pro obě stránky): `id` j
 
 Slavnostní úvodní obrazovka (dárek, konfety, „Všechno nejlepší“) se ukáže jen v motivech Kirby a Waddle Dee, tedy v těch, ve kterých se stránky předávají. V ostatních motivech je obyčejné „Zadej heslo“.
 
+## Stránky vypnout a zapnout
+
+`node tools/pages.mjs off` udělá z `p1/index.html` a `p2/index.html` prázdné stránky, takže po naskenování QR kódu se nezobrazí nic. Skutečné stránky se schovají do `tools/paused/`. `node tools/pages.mjs on` je vrátí zpátky, `status` ukáže, v jakém jsou stavu. Po každé změně je potřeba push na `main`; nasazení trvá minutu dvě a telefon si starou stránku může chvíli pamatovat. Datové soubory (`config.json`, `assets/`) zůstávají na místě. Úplně offline jsou stránky, až když vypneš GitHub Pages v nastavení repozitáře.
+
 ## Motivy
 
 Minecraft, Kirby, Waddle Dee, Pokémon, Make-up, Fotbal, Trader, Klavír, Kytara, Wednesday, Potter, 6 7, Vesmír, Roboti (sci-fi HUD), Anime, KPop. Motiv se mění kulatým tlačítkem vpravo nahoře (otevře se výběr se všemi motivy) a ukládá se do telefonu (`localStorage`), takže zůstane i po zavření stránky. `p2` začíná s Kirby (růžová), `p1` s Waddle Dee (modrá s oranžovou). Výchozí motiv je atribut `data-theme` v `index.html` stránky.

@@ -10,10 +10,12 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const version = Date.now().toString(36);
 for (const dir of fs.readdirSync(root).filter((d) => /^p\d+$/.test(d))) {
-  const file = path.join(root, dir, "index.html");
+  let file = path.join(root, dir, "index.html");
+  // a page that is switched off (tools/pages.mjs) is blank: the real one is kept in tools/paused/
+  if (fs.readFileSync(file, "utf8").includes("micro-portfolio:paused")) file = path.join(root, "tools", "paused", `${dir}.index.html`);
   const html = fs.readFileSync(file, "utf8");
   const next = html.replace(/\?v=[0-9a-z]+/g, `?v=${version}`);
   if (next === html) throw new Error(`${file}: no ?v= found`);
   fs.writeFileSync(file, next);
-  console.log(`${dir}/index.html -> v=${version}`);
+  console.log(`${path.relative(root, file)} -> v=${version}`);
 }
