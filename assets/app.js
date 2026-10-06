@@ -518,6 +518,7 @@
 
   const GROUPS = [
     { id: "cash", label: "Měny" },
+    { id: "commodities", label: "Komodity" },
     { id: "crypto", label: "Crypto" },
     { id: "stocks", label: "Akcie" },
     { id: "indexes", label: "Indexy" },

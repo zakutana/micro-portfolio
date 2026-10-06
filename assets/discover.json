@@ -51,7 +51,7 @@
       "symbol": "PAXG",
       "note": "1 token = 1 unce zlata, spíš uchovatel hodnoty",
       "logo": "../assets/logos/discover/paxg.png",
-      "group": "crypto",
+      "group": "commodities",
       "yahoo": "GC=F"
     },
     {
