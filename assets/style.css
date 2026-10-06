@@ -3338,6 +3338,11 @@ body {
   font-size: 1.05rem;
 }
 
+.lightbox-price {
+  font-size: 1.25rem;
+  color: #ffe27a;
+}
+
 .lightbox-fig figcaption span {
   opacity: 0.8;
 }
@@ -3379,4 +3384,23 @@ body.has-lightbox {
   .lightbox {
     animation: none;
   }
+}
+
+.disc-val {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.disc-price {
+  font-family: var(--display);
+  font-size: calc(var(--base-size) * 1.02);
+  font-weight: var(--value-weight, 700);
+  white-space: nowrap;
+  color: var(--text);
+}
+
+:root[data-theme="minecraft"] .disc-price {
+  font-size: 0.5rem;
 }

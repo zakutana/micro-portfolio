@@ -1010,10 +1010,19 @@
       sub.append(noteEl);
       name.append(el("strong", "", d.name), sub);
       const change = el("span", d.group === "upcoming" ? "disc-change is-soon" : "disc-change", d.group === "upcoming" ? "brzy" : "…");
-      a.append(logoNode(d), name, change);
+      let price = null;
+      if (d.pricecharting) {
+        // a collectible has no live price: show what the card costs now (PSA 10, from the file) and below it the change
+        price = el("strong", "disc-price", "…");
+        const box = el("span", "disc-val");
+        box.append(price, change);
+        a.append(logoNode(d), name, box);
+      } else {
+        a.append(logoNode(d), name, change);
+      }
       li.append(a);
       list.append(li);
-      discoverRows.push({ d, change, noteEl });
+      discoverRows.push({ d, change, noteEl, price });
     }
     const select = $("range-select");
     const saved = store.get("range");
@@ -1057,7 +1066,10 @@
     const { box, img, cap, close } = cardView;
     img.src = d.image;
     img.alt = d.name;
-    cap.replaceChildren(el("strong", "", d.name), el("span", "", d.note));
+    cap.replaceChildren(el("strong", "", d.name));
+    const text = cardPriceText(d);
+    if (text) cap.append(el("b", "lightbox-price", `Aktuální cena: ${text}`));
+    cap.append(el("span", "", d.note));
     box.hidden = false;
     document.body.classList.add("has-lightbox");
     close.focus();
@@ -1080,13 +1092,25 @@
     } catch {
       livePrices = null;
     }
+    usdCzk = (await fetchUsdCzk()) ?? Number(readCache().fx) ?? null;
     paintChanges();
+  }
+
+  let usdCzk = null;
+  function cardPriceText(d) {
+    const usd = discoverHistory?.items?.[d.id]?.last;
+    return isPrice(usd) && isPrice(usdCzk) ? formatCzk(usd * usdCzk) : null;
   }
 
   function paintChanges() {
     const range = $("range-select").value;
-    for (const { d, change, noteEl } of discoverRows) {
+    for (const { d, change, noteEl, price } of discoverRows) {
       if (d.group === "upcoming") continue;
+      if (price) {
+        const text = cardPriceText(d);
+        price.replaceChildren(text ? moneyNode(text) : document.createTextNode("—"));
+        d.priceText = text;
+      }
       if (d.cash) {
         // roughly how much per year the crown loses, from the 10 year figure (the yearly loss that compounds to it)
         const ten = discoverHistory?.cash?.["10y"]?.combined;
