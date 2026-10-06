@@ -193,7 +193,8 @@
       "note": "nejslavnější Pokémon karta z úplně první sady, v nejlepším stavu",
       "group": "collectibles",
       "pricecharting": "pokemon-base-set/charizard-1st-edition-4",
-      "logo": "../assets/logos/discover/charizard-1st.png"
+      "logo": "../assets/logos/discover/charizard-1st.png",
+      "image": "../assets/logos/discover/cards/charizard-1st.jpg"
     },
     {
       "id": "pc-mewtwo-1st",
@@ -202,7 +203,8 @@
       "note": "vzácný Mewtwo z první sady, v nejlepším stavu",
       "group": "collectibles",
       "pricecharting": "pokemon-base-set/mewtwo-1st-edition-10",
-      "logo": "../assets/logos/discover/mewtwo-1st.png"
+      "logo": "../assets/logos/discover/mewtwo-1st.png",
+      "image": "../assets/logos/discover/cards/mewtwo-1st.jpg"
     },
     {
       "id": "pc-umbreon-vmax",
@@ -211,7 +213,8 @@
       "note": "nová oblíbená karta s alternativní kresbou, v nejlepším stavu",
       "group": "collectibles",
       "pricecharting": "pokemon-evolving-skies/umbreon-vmax-215",
-      "logo": "../assets/logos/discover/umbreon-vmax.png"
+      "logo": "../assets/logos/discover/umbreon-vmax.png",
+      "image": "../assets/logos/discover/cards/umbreon-vmax.jpg"
     },
     {
       "id": "pc-pikachu-base",
@@ -220,7 +223,8 @@
       "note": "první Pikachu karta z roku 1999, v nejlepším stavu",
       "group": "collectibles",
       "pricecharting": "pokemon-base-set/pikachu-58",
-      "logo": "../assets/logos/discover/pikachu-base.png"
+      "logo": "../assets/logos/discover/pikachu-base.png",
+      "image": "../assets/logos/discover/cards/pikachu-base.jpg"
     }
   ]
 }

@@ -3285,3 +3285,98 @@ body {
   margin-bottom: 8px;
   line-height: 1.35;
 }
+
+/* Objevuj: a collectible card shown big */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 18px 14px calc(18px + env(safe-area-inset-bottom));
+  background: rgba(8, 6, 16, 0.86);
+  cursor: zoom-out;
+  animation: lightbox-in 0.2s ease-out;
+}
+
+.lightbox[hidden] {
+  display: none;
+}
+
+.lightbox-fig {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 100%;
+}
+
+.lightbox-fig img {
+  display: block;
+  max-width: min(88vw, 420px);
+  max-height: 72vh;
+  width: auto;
+  height: auto;
+  border-radius: 14px;
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.6);
+  background: #1b1b22;
+}
+
+.lightbox-fig figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 420px;
+  text-align: center;
+  color: #ffffff;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.lightbox-fig figcaption strong {
+  font-size: 1.05rem;
+}
+
+.lightbox-fig figcaption span {
+  opacity: 0.8;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  right: 14px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  font: inherit;
+  font-size: 2rem;
+  line-height: 1;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.16);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.lightbox-close:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 2px;
+}
+
+body.has-lightbox {
+  overflow: hidden;
+}
+
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox {
+    animation: none;
+  }
+}

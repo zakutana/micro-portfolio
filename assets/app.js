@@ -987,10 +987,23 @@
       }
       const li = el("li");
       const a = el("a", "row");
-      a.href = `https://www.coingecko.com/cs/coins/${d.id}`;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-      a.setAttribute("aria-label", `${d.name} – otevřít web`);
+      if (d.image) {
+        // a collectible card: a tap shows the card big instead of opening a web page
+        a.href = d.image;
+        a.setAttribute("aria-label", `${d.name} – zobrazit kartu`);
+        a.addEventListener("click", (event) => {
+          event.preventDefault();
+          showCard(d);
+        });
+      } else if (d.cash) {
+        a.removeAttribute("href"); // nothing to open for the crown
+        a.setAttribute("role", "group");
+      } else {
+        a.href = `https://www.coingecko.com/cs/coins/${d.id}`;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.setAttribute("aria-label", `${d.name} – otevřít web`);
+      }
       const name = el("span", "name");
       const sub = el("small", "", d.symbol);
       const noteEl = el("span", "disc-note", ` · ${d.note}`);
@@ -1010,6 +1023,44 @@
       paintChanges();
     });
     loadChanges();
+  }
+
+  /* A big view of a collectible card: tap anywhere, the cross or Escape to close. */
+  let cardView = null;
+  function showCard(d) {
+    if (!cardView) {
+      const box = el("div", "lightbox");
+      box.hidden = true;
+      box.setAttribute("role", "dialog");
+      box.setAttribute("aria-modal", "true");
+      const close = el("button", "lightbox-close", "\u00d7");
+      close.type = "button";
+      close.setAttribute("aria-label", "Zavřít");
+      const fig = el("figure", "lightbox-fig");
+      const img = document.createElement("img");
+      img.alt = "";
+      const cap = el("figcaption");
+      fig.append(img, cap);
+      box.append(close, fig);
+      const hide = () => {
+        box.hidden = true;
+        document.body.classList.remove("has-lightbox");
+        img.removeAttribute("src");
+      };
+      box.addEventListener("click", hide);
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !box.hidden) hide();
+      });
+      document.body.append(box);
+      cardView = { box, img, cap, close };
+    }
+    const { box, img, cap, close } = cardView;
+    img.src = d.image;
+    img.alt = d.name;
+    cap.replaceChildren(el("strong", "", d.name), el("span", "", d.note));
+    box.hidden = false;
+    document.body.classList.add("has-lightbox");
+    close.focus();
   }
 
   /* The change of every asset since the chosen moment: the live price against the old price from assets/discover-history.json. */
