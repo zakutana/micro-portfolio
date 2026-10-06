@@ -2,8 +2,8 @@
 /*
  * Switches the two pages off (the QR codes then open a blank page) and on again.
  *
- *   node tools/pages.mjs off      p1/index.html and p2/index.html become empty pages; the real ones are kept in tools/paused/
- *   node tools/pages.mjs on       puts the real pages back
+ *   node tools/pages.mjs off [p1]   p1/index.html and p2/index.html (or just the one named) become empty pages; the real ones are kept in tools/paused/
+ *   node tools/pages.mjs on [p1]    puts the real pages back (all of them, or just the one named)
  *   node tools/pages.mjs status
  *
  * Push to main afterwards: GitHub Pages needs a minute or two, and phones may keep the old page in their cache for a while.
@@ -29,8 +29,10 @@ const BLANK = `<!doctype html>
 </html>
 `;
 
-const pages = fs.readdirSync(root).filter((d) => /^p\d+$/.test(d));
+const only = process.argv[3];
+const pages = fs.readdirSync(root).filter((d) => /^p\d+$/.test(d) && (!only || d === only));
 const command = process.argv[2];
+if (only && !pages.length) throw new Error(`no such page: ${only}`);
 
 for (const dir of pages) {
   const file = path.join(root, dir, "index.html");

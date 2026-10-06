@@ -1,11 +1,72 @@
 <!doctype html>
-<html lang="cs">
+<html lang="cs" data-id="p1" data-theme="waddle">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
-  <title></title>
-  <!-- micro-portfolio:paused -->
+  <meta name="theme-color" content="#3a56d8">
+  <title>Micro portfolio</title>
+  <link rel="stylesheet" href="../assets/style.css?v=muwb618k">
+  <script src="../assets/icons.js?v=muwb618k"></script>
+  <script src="../assets/app.js?v=muwb618k"></script>
 </head>
-<body style="margin:0;background:#fff"></body>
+<body>
+  <div class="app" id="app">
+    <header class="header">
+      <div class="brand">
+        <span class="brand-mark" id="brand-mark" aria-hidden="true"></span>
+        <h1 class="title">Micro portfolio</h1>
+      </div>
+      <div class="header-tools" id="tools">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Změnit motiv" aria-expanded="false" aria-controls="themes"></button>
+      </div>
+      <nav class="themes" id="themes" aria-label="Motiv stránky" hidden></nav>
+    </header>
+
+    <p class="status" id="status" aria-live="polite"></p>
+
+
+    <div class="stage" id="stage">
+      <div class="mascot" id="mascot" aria-hidden="true"></div>
+
+      <section class="panel lock" id="lock" hidden>
+        <div class="lock-icon" aria-hidden="true">🔒</div>
+        <h2>Tahle stránka je jen pro tebe</h2>
+        <p>Otevři ji naskenováním QR kódu na své kartičce.</p>
+      </section>
+
+      <main id="content" hidden>
+        <ul class="list" id="list"></ul>
+      </main>
+
+      <main id="pane-history" role="tabpanel" aria-labelledby="tab-history" hidden>
+        <h2 class="section-title">Moje nákupy</h2>
+      </main>
+
+      <main id="pane-discover" role="tabpanel" aria-labelledby="tab-discover" hidden>
+        <h2 class="section-title">Potenciální nové investice</h2>
+        <label class="range" for="range-select">
+          <span>Změna za</span>
+          <select id="range-select" aria-label="Za jak dlouho se má změna ukázat">
+            <option value="10y">10 let</option>
+            <option value="5y">5 let</option>
+            <option value="1y" selected>1 rok</option>
+            <option value="genesis">Od genesis bloku</option>
+          </select>
+        </label>
+        <ul class="list" id="discover-list"></ul>
+      </main>
+    </div>
+
+    <div class="spacer"></div>
+
+    <footer class="total" id="total-bar" aria-live="polite" hidden>
+      <span class="total-icon" id="total-icon" aria-hidden="true"></span>
+      <span class="total-label">Celkem</span>
+      <span class="total-value" id="total">…</span>
+    </footer>
+
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Sekce" hidden></nav>
+  </div>
+</body>
 </html>

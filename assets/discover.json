@@ -6,7 +6,8 @@
       "symbol": "SPYx",
       "note": "500 největších firem USA v jednom balíčku",
       "logo": "../assets/logos/discover/sp500.png",
-      "group": "indexes"
+      "group": "indexes",
+      "yahoo": "SPY"
     },
     {
       "id": "nasdaq-xstock",
@@ -14,7 +15,8 @@
       "symbol": "QQQx",
       "note": "100 největších technologických firem USA",
       "logo": "../assets/logos/discover/nasdaq.png",
-      "group": "indexes"
+      "group": "indexes",
+      "yahoo": "QQQ"
     },
     {
       "id": "bitcoin",
@@ -22,7 +24,8 @@
       "symbol": "BTC",
       "note": "digitální zlato, nejznámější kryptoměna",
       "logo": "../assets/logos/discover/bitcoin.png",
-      "group": "crypto"
+      "group": "crypto",
+      "yahoo": "BTC-USD"
     },
     {
       "id": "ethereum",
@@ -30,7 +33,8 @@
       "symbol": "ETH",
       "note": "síť, na které běží spousta aplikací",
       "logo": "../assets/logos/discover/ethereum.png",
-      "group": "crypto"
+      "group": "crypto",
+      "yahoo": "ETH-USD"
     },
     {
       "id": "solana",
@@ -38,7 +42,8 @@
       "symbol": "SOL",
       "note": "rychlá síť, běží na ní i tokenizované akcie",
       "logo": "../assets/logos/discover/solana.png",
-      "group": "crypto"
+      "group": "crypto",
+      "yahoo": "SOL-USD"
     },
     {
       "id": "pax-gold",
@@ -46,7 +51,8 @@
       "symbol": "PAXG",
       "note": "1 token = 1 unce zlata, spíš uchovatel hodnoty",
       "logo": "../assets/logos/discover/paxg.png",
-      "group": "crypto"
+      "group": "crypto",
+      "yahoo": "GC=F"
     },
     {
       "id": "nvidia-xstock",
@@ -54,7 +60,8 @@
       "symbol": "NVDAx",
       "note": "čipy pro umělou inteligenci a hry",
       "logo": "../assets/logos/discover/nvidia.png",
-      "group": "stocks"
+      "group": "stocks",
+      "yahoo": "NVDA"
     },
     {
       "id": "apple-xstock",
@@ -62,7 +69,8 @@
       "symbol": "AAPLx",
       "note": "iPhone, Mac a spol.",
       "logo": "../assets/logos/discover/apple.png",
-      "group": "stocks"
+      "group": "stocks",
+      "yahoo": "AAPL"
     },
     {
       "id": "amazon-xstock",
@@ -70,7 +78,8 @@
       "symbol": "AMZNx",
       "note": "internetový obchod a cloud (AWS)",
       "logo": "../assets/logos/discover/amazon.png",
-      "group": "stocks"
+      "group": "stocks",
+      "yahoo": "AMZN"
     },
     {
       "id": "meta-xstock",
@@ -78,7 +87,8 @@
       "symbol": "METAx",
       "note": "Facebook, Instagram a WhatsApp",
       "logo": "../assets/logos/discover/meta.png",
-      "group": "stocks"
+      "group": "stocks",
+      "yahoo": "META"
     },
     {
       "id": "alphabet-xstock",
@@ -86,7 +96,42 @@
       "symbol": "GOOGLx",
       "note": "vyhledávač, YouTube a Android",
       "logo": "../assets/logos/discover/google.png",
-      "group": "stocks"
+      "group": "stocks",
+      "yahoo": "GOOGL"
+    },
+    {
+      "id": "microsoft-xstock",
+      "name": "Microsoft",
+      "symbol": "MSFTx",
+      "note": "Windows, Office, Xbox a cloud Azure",
+      "group": "stocks",
+      "yahoo": "MSFT",
+      "logo": "../assets/logos/discover/microsoft.png"
+    },
+    {
+      "id": "tesla-xstock",
+      "name": "Tesla",
+      "symbol": "TSLAx",
+      "note": "elektromobily, energie a roboty",
+      "group": "stocks",
+      "yahoo": "TSLA",
+      "logo": "../assets/logos/tesla.png"
+    },
+    {
+      "id": "openai-prestocks-2",
+      "name": "OpenAI",
+      "symbol": "OPENAI",
+      "note": "ChatGPT, zatím není na burze",
+      "group": "upcoming",
+      "logo": "../assets/logos/discover/openai.png"
+    },
+    {
+      "id": "anthropic-prestocks-2",
+      "name": "Anthropic",
+      "symbol": "ANTHROPIC",
+      "note": "Claude, zatím není na burze",
+      "group": "upcoming",
+      "logo": "../assets/logos/discover/anthropic.png"
     }
   ]
 }

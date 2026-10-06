@@ -3198,12 +3198,86 @@ body {
   }
 }
 
-/* Objevuj: no prices, just a small arrow that the row opens something */
-.disc-go {
-  font-size: 1.8rem;
-  line-height: 1;
+/* Objevuj: how much each thing is up or down over the chosen time, no prices */
+.range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 6px 14px;
+  color: var(--on-bg);
+  font-size: calc(var(--base-size) * 0.9);
   font-weight: 700;
-  color: var(--muted);
+  text-shadow: var(--on-bg-shadow, none);
+}
+
+.range span {
+  flex: none;
+}
+
+.range select {
+  appearance: none;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 9px 38px 9px 14px;
+  font: inherit;
+  font-weight: 800;
+  color: var(--btn-text);
+  background-color: var(--btn-bg);
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 20px) 55%, calc(100% - 14px) 55%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  border: var(--btn-border);
+  border-radius: min(var(--btn-radius), 18px);
+  box-shadow: var(--btn-shadow);
+  text-shadow: none;
+  cursor: pointer;
+}
+
+.range select:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.disc-change {
+  padding: 3px 10px;
+  border: var(--chip-border, 0);
+  border-radius: 999px;
+  font-family: var(--font);
+  font-size: calc(var(--base-size) * 0.86);
+  font-weight: 800;
+  white-space: nowrap;
+  background: var(--flat-bg);
+  color: var(--flat);
+}
+
+.disc-change.is-up {
+  background: var(--gain-bg);
+  color: var(--gain);
+}
+
+.disc-change.is-down {
+  background: var(--loss-bg);
+  color: var(--loss);
+}
+
+.disc-change .arr {
+  margin-right: 0.3em;
+}
+
+.disc-change.is-soon {
+  font-size: calc(var(--base-size) * 0.72);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--pill-bg);
+  color: var(--pill-text);
+}
+
+:root[data-theme="minecraft"] .disc-change {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  font-size: 0.5rem;
 }
 
 /* a long title can wrap on a narrow screen: keep it clear of the first row */

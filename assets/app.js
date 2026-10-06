@@ -434,7 +434,7 @@
 
   function formatPct(ratio, { signed = true } = {}) {
     const abs = Math.abs(ratio * 100);
-    const digits = abs < 1 ? 2 : 1;
+    const digits = abs < 1 ? 2 : abs < 1000 ? 1 : 0;
     const text = nf({ minimumFractionDigits: digits, maximumFractionDigits: digits }).format(abs);
     const sign = !signed ? "" : ratio * 100 >= 0.005 ? "+" : ratio * 100 <= -0.005 ? MINUS : "";
     return `${sign}${text} %`;
@@ -520,6 +520,7 @@
     { id: "crypto", label: "Crypto" },
     { id: "stocks", label: "Akcie" },
     { id: "indexes", label: "Indexy" },
+    { id: "upcoming", label: "Upcoming" },
   ];
   const groupRank = (h) => {
     const i = GROUPS.findIndex((g) => g.id === h.group);
@@ -951,6 +952,7 @@
   /* ---------- Discover: things worth a look (a short description of each, no prices, nothing to buy here) ---------- */
 
   let discoverItems = null;
+  let discoverRows = [];
 
   async function buildDiscover() {
     const list = $("discover-list");
@@ -961,6 +963,7 @@
       discoverItems = [];
     }
     list.replaceChildren();
+    discoverRows = [];
     discoverItems = discoverItems.map((d, i) => [d, i]).sort((a, b) => groupRank(a[0]) - groupRank(b[0]) || a[1] - b[1]).map(([d]) => d);
     let lastGroup = null;
     for (const d of discoverItems) {
@@ -981,9 +984,59 @@
       const sub = el("small", "", d.symbol);
       sub.append(el("span", "disc-note", ` · ${d.note}`));
       name.append(el("strong", "", d.name), sub);
-      a.append(logoNode(d), name, el("span", "disc-go", "›"));
+      const change = el("span", d.group === "upcoming" ? "disc-change is-soon" : "disc-change", d.group === "upcoming" ? "brzy" : "…");
+      a.append(logoNode(d), name, change);
       li.append(a);
       list.append(li);
+      discoverRows.push({ d, change });
+    }
+    const select = $("range-select");
+    const saved = store.get("range");
+    if (saved && [...select.options].some((o) => o.value === saved)) select.value = saved;
+    select.addEventListener("change", () => {
+      store.set("range", select.value);
+      paintChanges();
+    });
+    loadChanges();
+  }
+
+  /* The change of every asset since the chosen moment: the live price against the old price from assets/discover-history.json. */
+  let discoverHistory = null;
+  let livePrices = null;
+  async function loadChanges() {
+    try {
+      const res = await fetch("../assets/discover-history.json", { cache: "no-cache" });
+      discoverHistory = await res.json();
+    } catch {
+      discoverHistory = null;
+    }
+    const ids = discoverRows.filter((r) => r.d.group !== "upcoming").map((r) => r.d.id);
+    try {
+      const data = await getJson(`${COINGECKO}/simple/price?vs_currencies=usd&ids=${ids.join(",")}`);
+      livePrices = Object.fromEntries(ids.map((id) => [id, data[id]?.usd]).filter(([, v]) => isPrice(v)));
+    } catch {
+      livePrices = null;
+    }
+    paintChanges();
+  }
+
+  function paintChanges() {
+    const range = $("range-select").value;
+    for (const { d, change } of discoverRows) {
+      if (d.group === "upcoming") continue;
+      const row = discoverHistory?.items?.[d.id];
+      const then = row?.[range];
+      const now = livePrices?.[d.id] ?? row?.last;
+      change.className = "disc-change";
+      change.title = "";
+      if (!isPrice(then) || !isPrice(now)) {
+        change.textContent = "—";
+        change.title = discoverHistory ? "Za tu dobu o tom nejsou údaje" : "Údaje se nepodařilo načíst";
+        continue;
+      }
+      const r = now / then - 1;
+      change.classList.add(`is-${trend(r)}`);
+      change.replaceChildren(el("i", "arr", ARROW[trend(r)]), document.createTextNode(formatPct(r)));
     }
   }
 
