@@ -7,6 +7,10 @@
  *   node tools/discover-history.mjs                     genesis day = startDate of p1/config.json
  *   node tools/discover-history.mjs --genesis 2026-10-07
  *
+ * Also the "cash" row (Czech crowns): how much value the crown lost over each horizon, from two sides that are shown separately
+ * (they overlap, so they are not added up): inflation (Eurostat HICP for the Czech Republic: a window of the same length that ends with the latest
+ * published month; for the genesis day the last 12-month rate spread over the days) and debasement (how much less gold one crown buys: gold in USD from Yahoo x USD/CZK from Yahoo).
+ *
  * An item in assets/discover.json needs "yahoo": "<ticker>" to get the long horizons (no ticker: only the genesis day).
  * An asset that did not exist yet 5 or 10 years ago gets null (the page shows a dash).
  * Run it again whenever the genesis day changes, and now and then to refresh the 1 / 5 / 10 year dates.
@@ -20,7 +24,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
 const flag = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
 
-const items = JSON.parse(fs.readFileSync(path.join(ROOT, "assets/discover.json"), "utf8")).items.filter((i) => i.group !== "upcoming");
+const items = JSON.parse(fs.readFileSync(path.join(ROOT, "assets/discover.json"), "utf8")).items.filter((i) => i.group !== "upcoming" && !i.cash);
 const genesis = flag("--genesis") ?? JSON.parse(fs.readFileSync(path.join(ROOT, "p1/config.json"), "utf8")).startDate.slice(0, 10);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -90,5 +94,39 @@ for (const it of items) {
   console.log(it.id.padEnd(18), JSON.stringify(row));
   await sleep(2500);
 }
+/* ---------- the Czech crown: inflation and debasement ---------- */
+const goldUsd = await yahooSeries("GC=F");
+const usdCzk = await yahooSeries("USDCZK=X");
+const goldCzkOn = (date) => {
+  const g = priceOn(goldUsd, date);
+  const f = priceOn(usdCzk, date);
+  return g && f ? g * f : null;
+};
+const lastOf = (series) => series[series.length - 1][1];
+const goldCzkNow = lastOf(goldUsd) * lastOf(usdCzk);
+
+const hicp = await getJson("https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_midx?format=JSON&lang=EN&geo=CZ&coicop=CP00&unit=I15&sinceTimePeriod=2015-01");
+const months = Object.entries(hicp.dimension.time.category.index).sort((a, b) => a[1] - b[1]).map(([m, i]) => [m, hicp.value[String(i)]]).filter(([, v]) => v > 0);
+const idx = Object.fromEntries(months);
+const [lastMonth, lastIdx] = months[months.length - 1];
+const monthsBack = (m, n) => {
+  const [y, mo] = m.split("-").map(Number);
+  const t = y * 12 + (mo - 1) - n;
+  return `${Math.floor(t / 12)}-${String((t % 12) + 1).padStart(2, "0")}`;
+};
+const yoy = lastIdx / idx[monthsBack(lastMonth, 12)] - 1; // the last 12-month inflation
+const cash = {};
+for (const [key, date] of Object.entries(horizons)) {
+  // inflation: the window of the same length that ends with the latest month Eurostat has published
+  const then = idx[monthsBack(lastMonth, 12 * Number(key.slice(0, -1)))];
+  const g = goldCzkOn(date);
+  cash[key] = { inflation: then ? then / lastIdx - 1 : null, debasement: g ? g / goldCzkNow - 1 : null };
+}
+const days = (today - new Date(genesis)) / 86400000;
+const gGen = goldCzkOn(genesis);
+cash.genesis = { inflation: (1 + yoy) ** (-days / 365) - 1, debasement: gGen ? gGen / goldCzkNow - 1 : null };
+out.cash = { ...cash, inflationYoY: yoy, inflationAsOf: lastMonth };
+console.log("cash", JSON.stringify(out.cash));
+
 fs.writeFileSync(path.join(ROOT, "assets/discover-history.json"), JSON.stringify(out, null, 1) + "\n");
 console.log(`written assets/discover-history.json (genesis ${genesis}, as of ${out.asOf})`);

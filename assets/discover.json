@@ -132,6 +132,15 @@
       "note": "Claude, zatím není na burze",
       "group": "upcoming",
       "logo": "../assets/logos/discover/anthropic.png"
+    },
+    {
+      "id": "czk",
+      "name": "Koruny",
+      "symbol": "CZK",
+      "note": "ceny rostou (inflace) a za koruny koupíš míň zlata (debasement)",
+      "group": "cash",
+      "cash": true,
+      "logo": "../assets/logos/discover/czk.png"
     }
   ]
 }
