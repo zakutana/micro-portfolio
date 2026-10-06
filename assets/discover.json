@@ -55,6 +55,15 @@
       "yahoo": "GC=F"
     },
     {
+      "id": "kinesis-silver",
+      "name": "Stříbro",
+      "symbol": "KAG",
+      "note": "1 token = 1 unce stříbra, kov pro průmysl i uchování hodnoty",
+      "group": "commodities",
+      "yahoo": "SI=F",
+      "logo": "../assets/logos/discover/silver.png"
+    },
+    {
       "id": "nvidia-xstock",
       "name": "NVIDIA",
       "symbol": "NVDAx",
