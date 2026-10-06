@@ -551,6 +551,10 @@
     ["Crypto", "Digitální peníze a žetony, které existují jen na internetu, třeba Bitcoin, Sui nebo COTI. Obchoduje se s nimi pořád, i v noci a o víkendu, a cena umí poskočit nebo spadnout o desítky procent za den."],
     ["Akcie", "Malý kousek firmy. Když se firmě daří, hodnota její akcie může růst, a když ne, může klesat. U nás jsou to digitální kopie skutečných akcií, takže se s nimi dá obchodovat i o víkendu."],
     ["Indexy", "Balíček stovek firem najednou, třeba S&P 500 je 500 největších firem USA. Když koupíš index, rozložíš peníze do spousty firem a jedna špatná zpráva ti tolik neublíží. Většinou kolísá míň než jedna akcie."],
+    ["Genesis blok", "Úplně první nákup, od kterého se počítá růst. Každý další nákup je další blok. Když v Objevuj zvolíš „Od genesis bloku“, uvidíš, o kolik se věc změnila od dne, kdy jste začali."],
+    ["Komodity", "Suroviny, které se těží nebo pěstují, třeba zlato, stříbro nebo ropa. Jejich cena se mění podle toho, kolik jich lidé potřebují a kolik se jich najde. Zlato a stříbro lidé odpradávna používají jako uchovatele hodnoty, ropa je spíš surovina pro průmysl a dopravu a její cena kolísá víc."],
+    ["Měny", "Peníze, které používá nějaký stát, třeba koruna nebo dolar. Hodnotu jim nedává zlato ani žádný kov, ale důvěra v ně. Státy a banky je můžou tisknout skoro bez omezení, a proto všechny měny časem ztrácejí hodnotu. V Objevuj vidíš, o kolik za zvolenou dobu přišla koruna."],
+    ["Upcoming", "Firmy, které se zatím nedají koupit na burze, ale lidé čekají, že tam jednou vstoupí (to se říká IPO). Zatím u nich nejsou ceny, jen štítek „brzy“."],
   ];
 
   let rowRefs = [];
