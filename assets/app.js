@@ -546,7 +546,7 @@
     ["Tržní kapitalizace", "Kolik by stála všechna ta mince nebo všechny akcie firmy dohromady. Větší je obvykle stabilnější a menší může kolísat víc."],
     ["Podíl", "Kolik procent celého portfolia tvoří tahle položka. Když je peníze rozložené do víc věcí, jedna špatná zpráva nepokazí všechno."],
     ["Inflace", "O kolik se zdražilo. Když ceny stoupnou o 10 %, koupíš za stejné koruny o desetinu míň věcí. Koruny v peněžence ani na účtu tedy pomalu ztrácejí sílu, i když jejich číslo zůstává stejné."],
-    ["Debasement", "Postupné ředění peněz: stát a banky vytvářejí víc a víc nových peněz, takže každá koruna znamená míň. Nejlépe to vidíš na zlatě: dřív sis za sto korun koupil víc zlata než dnes. V Objevuj u měn spojujeme inflaci a debasement do jednoho čísla."],
+    ["Debasement", "Postupné ředění peněz: stát a banky vytvářejí víc a víc nových peněz (peněžní zásoba v Česku roste zhruba o 7 % ročně), takže každá koruna znamená míň. V Objevuj u měn počítáme inflaci a debasement jedno po druhém, jako kdyby ti každý rok z těch zbylých peněz oba ubrali svůj kus."],
     ["Crypto", "Digitální peníze a žetony, které existují jen na internetu, třeba Bitcoin, Sui nebo COTI. Obchoduje se s nimi pořád, i v noci a o víkendu, a cena umí poskočit nebo spadnout o desítky procent za den."],
     ["Akcie", "Malý kousek firmy. Když se firmě daří, hodnota její akcie může růst, a když ne, může klesat. U nás jsou to digitální kopie skutečných akcií, takže se s nimi dá obchodovat i o víkendu."],
     ["Indexy", "Balíček stovek firem najednou, třeba S&P 500 je 500 největších firem USA. Když koupíš index, rozložíš peníze do spousty firem a jedna špatná zpráva ti tolik neublíží. Většinou kolísá míň než jedna akcie."],

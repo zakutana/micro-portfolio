@@ -7,9 +7,10 @@
  *   node tools/discover-history.mjs                     genesis day = startDate of p1/config.json
  *   node tools/discover-history.mjs --genesis 2026-10-07
  *
- * Also the "cash" row (Czech crowns): how much value the crown lost over each horizon, from two sides that are shown separately
- * (the page shows one number, "combined": what a crown buys of a basket that is half everyday goods and half gold): inflation (Eurostat HICP for the Czech Republic: a window of the same length that ends with the latest
- * published month; for the genesis day the last 12-month rate spread over the days) and debasement (how much less gold one crown buys: gold in USD from Yahoo x USD/CZK from Yahoo).
+ * Also the "cash" row (Czech crowns): how much value the crown lost over each horizon. Inflation (Eurostat HICP for the Czech Republic) and
+ * debasement (growth of the money supply M2, World Bank) are counted one after the other: (1 + inflation) x (1 + debasement) - 1, the way
+ * a yearly loss is compounded. Both use a window of the same length that ends with the latest published month / year; for the genesis day
+ * the last yearly rates are spread over the days.
  *
  * An item in assets/discover.json needs "yahoo": "<ticker>" to get the long horizons (no ticker: only the genesis day).
  * An asset that did not exist yet 5 or 10 years ago gets null (the page shows a dash).
@@ -95,16 +96,7 @@ for (const it of items) {
   await sleep(2500);
 }
 /* ---------- the Czech crown: inflation and debasement ---------- */
-const goldUsd = await yahooSeries("GC=F");
-const usdCzk = await yahooSeries("USDCZK=X");
-const goldCzkOn = (date) => {
-  const g = priceOn(goldUsd, date);
-  const f = priceOn(usdCzk, date);
-  return g && f ? g * f : null;
-};
-const lastOf = (series) => series[series.length - 1][1];
-const goldCzkNow = lastOf(goldUsd) * lastOf(usdCzk);
-
+// inflation: Eurostat HICP (monthly); debasement: how much the money supply grew (World Bank, broad money M2 in crowns, yearly)
 const hicp = await getJson("https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_midx?format=JSON&lang=EN&geo=CZ&coicop=CP00&unit=I15&sinceTimePeriod=2015-01");
 const months = Object.entries(hicp.dimension.time.category.index).sort((a, b) => a[1] - b[1]).map(([m, i]) => [m, hicp.value[String(i)]]).filter(([, v]) => v > 0);
 const idx = Object.fromEntries(months);
@@ -115,22 +107,29 @@ const monthsBack = (m, n) => {
   return `${Math.floor(t / 12)}-${String((t % 12) + 1).padStart(2, "0")}`;
 };
 const yoy = lastIdx / idx[monthsBack(lastMonth, 12)] - 1; // the last 12-month inflation
-/* One number for the page: what one crown buys of a basket that is half everyday goods (inflation) and half gold (debasement). */
+
+const wb = await getJson("https://api.worldbank.org/v2/country/CZ/indicator/FM.LBL.BMNY.CN?format=json&per_page=60&date=2010:2030");
+const m2 = Object.fromEntries(wb[1].filter((r) => r.value > 0).map((r) => [Number(r.date), r.value]));
+const m2Year = Math.max(...Object.keys(m2).map(Number));
+const m2Growth = m2[m2Year] / m2[m2Year - 1] - 1; // the last yearly growth of the money supply
+
+/* One number for the page: both losses of value one after the other, like a yearly loss that is compounded
+   (1 000 Kc -> 1 000 x (1 - inflation) x (1 - debasement) ...). The two overlap in theory, but the page counts both. */
 const withCombined = (c) => ({
   ...c,
-  combined: c.inflation === null || c.debasement === null ? null : 1 / (0.5 / (1 + c.inflation) + 0.5 / (1 + c.debasement)) - 1,
+  combined: c.inflation === null || c.debasement === null ? null : (1 + c.inflation) * (1 + c.debasement) - 1,
 });
 const cash = {};
-for (const [key, date] of Object.entries(horizons)) {
-  // inflation: the window of the same length that ends with the latest month Eurostat has published
-  const then = idx[monthsBack(lastMonth, 12 * Number(key.slice(0, -1)))];
-  const g = goldCzkOn(date);
-  cash[key] = withCombined({ inflation: then ? then / lastIdx - 1 : null, debasement: g ? g / goldCzkNow - 1 : null });
+for (const key of Object.keys(horizons)) {
+  const n = Number(key.slice(0, -1));
+  // a window of the same length that ends with the latest published month / year
+  const thenIdx = idx[monthsBack(lastMonth, 12 * n)];
+  const thenM2 = m2[m2Year - n];
+  cash[key] = withCombined({ inflation: thenIdx ? thenIdx / lastIdx - 1 : null, debasement: thenM2 ? thenM2 / m2[m2Year] - 1 : null });
 }
 const days = (today - new Date(genesis)) / 86400000;
-const gGen = goldCzkOn(genesis);
-cash.genesis = withCombined({ inflation: (1 + yoy) ** (-days / 365) - 1, debasement: gGen ? gGen / goldCzkNow - 1 : null });
-out.cash = { ...cash, inflationYoY: yoy, inflationAsOf: lastMonth };
+cash.genesis = withCombined({ inflation: (1 + yoy) ** (-days / 365) - 1, debasement: (1 + m2Growth) ** (-days / 365) - 1 });
+out.cash = { ...cash, inflationYoY: yoy, inflationAsOf: lastMonth, moneySupplyGrowth: m2Growth, moneySupplyAsOf: String(m2Year) };
 console.log("cash", JSON.stringify(out.cash));
 
 fs.writeFileSync(path.join(ROOT, "assets/discover-history.json"), JSON.stringify(out, null, 1) + "\n");
