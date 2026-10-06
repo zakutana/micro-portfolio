@@ -46,6 +46,32 @@
       "yahoo": "SOL-USD"
     },
     {
+      "id": "near",
+      "name": "NEAR",
+      "symbol": "NEAR",
+      "note": "rychlá blockchainová síť, na které se dají stavět aplikace",
+      "group": "crypto",
+      "yahoo": "NEAR-USD",
+      "logo": "../assets/logos/discover/near.png"
+    },
+    {
+      "id": "hyperliquid",
+      "name": "Hyperliquid",
+      "symbol": "HYPE",
+      "note": "burza, kde se obchoduje bez prostředníka",
+      "group": "crypto",
+      "logo": "../assets/logos/discover/hyperliquid.png"
+    },
+    {
+      "id": "dogecoin",
+      "name": "Dogecoin",
+      "symbol": "DOGE",
+      "note": "kryptoměna, která vznikla jako vtip se psem Shibou",
+      "group": "crypto",
+      "yahoo": "DOGE-USD",
+      "logo": "../assets/logos/discover/dogecoin.png"
+    },
+    {
       "id": "pax-gold",
       "name": "Zlato",
       "symbol": "PAXG",

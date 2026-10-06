@@ -80,7 +80,16 @@ for (const it of items) {
     const series = await yahooSeries(it.yahoo);
     for (const [key, date] of Object.entries(horizons)) row[key] = priceOn(series, date);
   } else {
+    // no Yahoo ticker (e.g. a coin that is not listed there): only what CoinGecko's free history reaches, about a year back
     for (const key of Object.keys(horizons)) row[key] = null;
+    try {
+      const [y1, m1, d1] = horizons["1y"].split("-");
+      const h1 = await getJson(`https://api.coingecko.com/api/v3/coins/${it.id}/history?date=${d1}-${m1}-${y1}&localization=false`);
+      row["1y"] = h1.market_data?.current_price?.usd ?? null;
+    } catch {
+      row["1y"] = null;
+    }
+    await sleep(2500);
   }
   // the genesis day: the token itself, from CoinGecko (one call per asset, with pauses because of the rate limit)
   const [y, m, d] = genesis.split("-");
