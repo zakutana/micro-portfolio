@@ -985,13 +985,14 @@
       a.setAttribute("aria-label", `${d.name} – otevřít web`);
       const name = el("span", "name");
       const sub = el("small", "", d.symbol);
-      sub.append(el("span", "disc-note", ` · ${d.note}`));
+      const noteEl = el("span", "disc-note", ` · ${d.note}`);
+      sub.append(noteEl);
       name.append(el("strong", "", d.name), sub);
       const change = el("span", d.group === "upcoming" ? "disc-change is-soon" : "disc-change", d.group === "upcoming" ? "brzy" : "…");
       a.append(logoNode(d), name, change);
       li.append(a);
       list.append(li);
-      discoverRows.push({ d, change });
+      discoverRows.push({ d, change, noteEl });
     }
     const select = $("range-select");
     const saved = store.get("range");
@@ -1025,8 +1026,14 @@
 
   function paintChanges() {
     const range = $("range-select").value;
-    for (const { d, change } of discoverRows) {
+    for (const { d, change, noteEl } of discoverRows) {
       if (d.group === "upcoming") continue;
+      if (d.cash) {
+        // roughly how much per year the crown loses, from the 10 year figure (the yearly loss that compounds to it)
+        const ten = discoverHistory?.cash?.["10y"]?.combined;
+        const perYear = typeof ten === "number" ? 1 - (1 + ten) ** (1 / 10) : null;
+        noteEl.textContent = ` · ${d.note}${perYear ? `. Koruna tak ztrácí zhruba ${nf({ maximumFractionDigits: 0 }).format(perYear * 100)} % ročně` : ""}`;
+      }
       change.className = "disc-change";
       change.title = "";
       if (d.cash) {
