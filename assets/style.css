@@ -3265,26 +3265,6 @@ body {
   margin-right: 0.3em;
 }
 
-.disc-stack {
-  grid-column: 2 / -1; /* under the text, there is not enough room beside it */
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding-bottom: 4px;
-}
-
-.disc-stack .disc-change {
-  padding: 2px 8px;
-  font-size: calc(var(--base-size) * 0.76);
-}
-
-.disc-change small {
-  margin-right: 0.45em;
-  font-size: 0.82em;
-  font-weight: 700;
-  opacity: 0.8;
-}
-
 .disc-change.is-soon {
   font-size: calc(var(--base-size) * 0.72);
   letter-spacing: 0.06em;

@@ -517,7 +517,7 @@
   }
 
   const GROUPS = [
-    { id: "cash", label: "Koruny" },
+    { id: "cash", label: "Měny" },
     { id: "crypto", label: "Crypto" },
     { id: "stocks", label: "Akcie" },
     { id: "indexes", label: "Indexy" },
@@ -546,7 +546,7 @@
     ["Tržní kapitalizace", "Kolik by stála všechna ta mince nebo všechny akcie firmy dohromady. Větší je obvykle stabilnější a menší může kolísat víc."],
     ["Podíl", "Kolik procent celého portfolia tvoří tahle položka. Když je peníze rozložené do víc věcí, jedna špatná zpráva nepokazí všechno."],
     ["Inflace", "O kolik se zdražilo. Když ceny stoupnou o 10 %, koupíš za stejné koruny o desetinu míň věcí. Koruny v peněžence ani na účtu tedy pomalu ztrácejí sílu, i když jejich číslo zůstává stejné."],
-    ["Debasement", "Postupné ředění peněz: stát a banky vytvářejí víc a víc nových peněz, takže každá koruna znamená míň. Nejlépe to vidíš na zlatě: dřív sis za sto korun koupil víc zlata než dnes. Inflace a debasement spolu souvisejí, ale nejsou totéž, proto je ukazujeme zvlášť."],
+    ["Debasement", "Postupné ředění peněz: stát a banky vytvářejí víc a víc nových peněz, takže každá koruna znamená míň. Nejlépe to vidíš na zlatě: dřív sis za sto korun koupil víc zlata než dnes. V Objevuj u měn spojujeme inflaci a debasement do jednoho čísla."],
     ["Crypto", "Digitální peníze a žetony, které existují jen na internetu, třeba Bitcoin, Sui nebo COTI. Obchoduje se s nimi pořád, i v noci a o víkendu, a cena umí poskočit nebo spadnout o desítky procent za den."],
     ["Akcie", "Malý kousek firmy. Když se firmě daří, hodnota její akcie může růst, a když ne, může klesat. U nás jsou to digitální kopie skutečných akcií, takže se s nimi dá obchodovat i o víkendu."],
     ["Indexy", "Balíček stovek firem najednou, třeba S&P 500 je 500 největších firem USA. Když koupíš index, rozložíš peníze do spousty firem a jedna špatná zpráva ti tolik neublíží. Většinou kolísá míň než jedna akcie."],
@@ -987,7 +987,7 @@
       const sub = el("small", "", d.symbol);
       sub.append(el("span", "disc-note", ` · ${d.note}`));
       name.append(el("strong", "", d.name), sub);
-      const change = d.cash ? el("span", "disc-stack") : el("span", d.group === "upcoming" ? "disc-change is-soon" : "disc-change", d.group === "upcoming" ? "brzy" : "…");
+      const change = el("span", d.group === "upcoming" ? "disc-change is-soon" : "disc-change", d.group === "upcoming" ? "brzy" : "…");
       a.append(logoNode(d), name, change);
       li.append(a);
       list.append(li);
@@ -1027,29 +1027,22 @@
     const range = $("range-select").value;
     for (const { d, change } of discoverRows) {
       if (d.group === "upcoming") continue;
+      change.className = "disc-change";
+      change.title = "";
       if (d.cash) {
-        // the crown: how much value it lost, seen as inflation (prices went up) and as debasement (less gold for one crown)
-        const row = discoverHistory?.cash?.[range];
-        change.replaceChildren();
-        for (const [key, label] of [["inflation", "inflace"], ["debasement", "debasement"]]) {
-          const pill = el("span", "disc-change");
-          const r = row?.[key];
-          if (typeof r !== "number") {
-            pill.textContent = `${label} —`;
-          } else {
-            pill.classList.add(`is-${trend(r)}`);
-            const lbl = el("small", "", label);
-            pill.append(lbl, el("i", "arr", ARROW[trend(r)]), document.createTextNode(formatPct(r)));
-          }
-          change.append(pill);
+        // money: how much value it lost (inflation and debasement in one number, see tools/discover-history.mjs)
+        const r = discoverHistory?.cash?.[range]?.combined;
+        if (typeof r !== "number") {
+          change.textContent = "—";
+        } else {
+          change.classList.add(`is-${trend(r)}`);
+          change.replaceChildren(el("i", "arr", ARROW[trend(r)]), document.createTextNode(formatPct(r)));
         }
         continue;
       }
       const row = discoverHistory?.items?.[d.id];
       const then = row?.[range];
       const now = livePrices?.[d.id] ?? row?.last;
-      change.className = "disc-change";
-      change.title = "";
       if (!isPrice(then) || !isPrice(now)) {
         change.textContent = "—";
         change.title = discoverHistory ? "Za tu dobu o tom nejsou údaje" : "Údaje se nepodařilo načíst";

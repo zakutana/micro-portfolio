@@ -8,7 +8,7 @@
  *   node tools/discover-history.mjs --genesis 2026-10-07
  *
  * Also the "cash" row (Czech crowns): how much value the crown lost over each horizon, from two sides that are shown separately
- * (they overlap, so they are not added up): inflation (Eurostat HICP for the Czech Republic: a window of the same length that ends with the latest
+ * (the page shows one number, "combined": what a crown buys of a basket that is half everyday goods and half gold): inflation (Eurostat HICP for the Czech Republic: a window of the same length that ends with the latest
  * published month; for the genesis day the last 12-month rate spread over the days) and debasement (how much less gold one crown buys: gold in USD from Yahoo x USD/CZK from Yahoo).
  *
  * An item in assets/discover.json needs "yahoo": "<ticker>" to get the long horizons (no ticker: only the genesis day).
@@ -115,16 +115,21 @@ const monthsBack = (m, n) => {
   return `${Math.floor(t / 12)}-${String((t % 12) + 1).padStart(2, "0")}`;
 };
 const yoy = lastIdx / idx[monthsBack(lastMonth, 12)] - 1; // the last 12-month inflation
+/* One number for the page: what one crown buys of a basket that is half everyday goods (inflation) and half gold (debasement). */
+const withCombined = (c) => ({
+  ...c,
+  combined: c.inflation === null || c.debasement === null ? null : 1 / (0.5 / (1 + c.inflation) + 0.5 / (1 + c.debasement)) - 1,
+});
 const cash = {};
 for (const [key, date] of Object.entries(horizons)) {
   // inflation: the window of the same length that ends with the latest month Eurostat has published
   const then = idx[monthsBack(lastMonth, 12 * Number(key.slice(0, -1)))];
   const g = goldCzkOn(date);
-  cash[key] = { inflation: then ? then / lastIdx - 1 : null, debasement: g ? g / goldCzkNow - 1 : null };
+  cash[key] = withCombined({ inflation: then ? then / lastIdx - 1 : null, debasement: g ? g / goldCzkNow - 1 : null });
 }
 const days = (today - new Date(genesis)) / 86400000;
 const gGen = goldCzkOn(genesis);
-cash.genesis = { inflation: (1 + yoy) ** (-days / 365) - 1, debasement: gGen ? gGen / goldCzkNow - 1 : null };
+cash.genesis = withCombined({ inflation: (1 + yoy) ** (-days / 365) - 1, debasement: gGen ? gGen / goldCzkNow - 1 : null });
 out.cash = { ...cash, inflationYoY: yoy, inflationAsOf: lastMonth };
 console.log("cash", JSON.stringify(out.cash));
 

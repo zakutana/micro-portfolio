@@ -137,7 +137,7 @@
       "id": "czk",
       "name": "Spoření v korunách",
       "symbol": "CZK",
-      "note": "ceny rostou (inflace) a za koruny koupíš míň zlata (debasement)",
+      "note": "všechny měny časem ztrácejí hodnotu, protože se dají donekonečna tisknout",
       "group": "cash",
       "cash": true,
       "logo": "../assets/logos/discover/czk.png"
