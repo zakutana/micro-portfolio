@@ -522,6 +522,7 @@
     { id: "crypto", label: "Crypto" },
     { id: "stocks", label: "Akcie" },
     { id: "indexes", label: "Indexy" },
+    { id: "collectibles", label: "Collectibles" },
     { id: "upcoming", label: "Upcoming" },
   ];
   const groupRank = (h) => {
@@ -554,6 +555,8 @@
     ["Genesis blok", "Úplně první nákup, od kterého se počítá růst. Každý další nákup je další blok. Když v Objevuj zvolíš „Od genesis bloku“, uvidíš, o kolik se věc změnila od dne, kdy jste začali."],
     ["Komodity", "Suroviny, které se těží nebo pěstují, třeba zlato, stříbro nebo ropa. Jejich cena se mění podle toho, kolik jich lidé potřebují a kolik se jich najde. Zlato a stříbro lidé odpradávna používají jako uchovatele hodnoty, ropa je spíš surovina pro průmysl a dopravu a její cena kolísá víc."],
     ["Měny", "Peníze, které používá nějaký stát, třeba koruna nebo dolar. Hodnotu jim nedává zlato ani žádný kov, ale důvěra v ně. Státy a banky je můžou tisknout skoro bez omezení, a proto všechny měny časem ztrácejí hodnotu. V Objevuj vidíš, o kolik za zvolenou dobu přišla koruna."],
+    ["Collectibles", "Sběratelské věci, které mají cenu proto, že jich je málo a lidé je chtějí, třeba vzácné Pokémon karty. Cena závisí na tom, jak je karta vzácná, kolik jí zbylo a v jakém je stavu. Na rozdíl od akcií nic nevydělávají, hodnota je jen v tom, že za ně někdo jednou zaplatí víc."],
+    ["PSA 10", "Nejvyšší známka, jakou může karta dostat od firmy PSA, která karty prověřuje a zapouzdří do plastu. 10 znamená skoro dokonalý stav. Karta v téhle známce stojí i několikanásobně víc než stejná karta s drobnými vadami."],
     ["Upcoming", "Firmy, které se zatím nedají koupit na burze, ale lidé čekají, že tam jednou vstoupí (to se říká IPO). Zatím u nich nejsou ceny, jen štítek „brzy“."],
   ];
 
@@ -1019,7 +1022,7 @@
     } catch {
       discoverHistory = null;
     }
-    const ids = discoverRows.filter((r) => r.d.group !== "upcoming").map((r) => r.d.id);
+    const ids = discoverRows.filter((r) => r.d.group !== "upcoming" && !r.d.pricecharting).map((r) => r.d.id); // cards have no live price, only the monthly one from the file
     try {
       const data = await getJson(`${COINGECKO}/simple/price?vs_currencies=usd&ids=${ids.join(",")}`);
       livePrices = Object.fromEntries(ids.map((id) => [id, data[id]?.usd]).filter(([, v]) => isPrice(v)));

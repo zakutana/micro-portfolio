@@ -25,7 +25,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
 const flag = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
 
-const items = JSON.parse(fs.readFileSync(path.join(ROOT, "assets/discover.json"), "utf8")).items.filter((i) => i.group !== "upcoming" && !i.cash);
+const items = JSON.parse(fs.readFileSync(path.join(ROOT, "assets/discover.json"), "utf8")).items.filter((i) => i.group !== "upcoming" && !i.cash && !i.pricecharting);
+const cards = JSON.parse(fs.readFileSync(path.join(ROOT, "assets/discover.json"), "utf8")).items.filter((i) => i.pricecharting);
 const genesis = flag("--genesis") ?? JSON.parse(fs.readFileSync(path.join(ROOT, "p1/config.json"), "utf8")).startDate.slice(0, 10);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -50,7 +51,7 @@ const yearsAgo = (n) => {
   d.setUTCFullYear(d.getUTCFullYear() - n);
   return d;
 };
-const horizons = { "10y": iso(yearsAgo(10)), "5y": iso(yearsAgo(5)), "1y": iso(yearsAgo(1)) };
+const horizons = { "10y": iso(yearsAgo(10)), "5y": iso(yearsAgo(5)), "3y": iso(yearsAgo(3)), "1y": iso(yearsAgo(1)) };
 
 /* Yahoo: daily closes; the first trading day on or after the date (null if the asset did not exist yet then) */
 async function yahooSeries(symbol) {
@@ -104,6 +105,25 @@ for (const it of items) {
   console.log(it.id.padEnd(18), JSON.stringify(row));
   await sleep(2500);
 }
+/* ---------- collectible cards: PriceCharting (monthly prices from its public chart, in USD; "PSA 10" = the best condition) ---------- */
+const sinceMonth = (date) => date.slice(0, 7);
+for (const card of cards) {
+  const html = await (await fetch(`https://www.pricecharting.com/game/${card.pricecharting}`, { headers: { "User-Agent": "Mozilla/5.0" } })).text();
+  const m = html.match(/VGPC\.chart_data\s*=\s*(\{.*?\});/s);
+  const series = m ? JSON.parse(m[1]).manualonly : null; // the PSA 10 price
+  const points = (series ?? []).filter(([, v]) => v > 0).map(([ts, v]) => [iso(new Date(ts)).slice(0, 7), v / 100]);
+  const at = (date) => {
+    if (!points.length) return null;
+    const hit = points.find(([mo]) => mo >= sinceMonth(date));
+    return hit && points[0][0] <= sinceMonth(date) ? hit[1] : null; // null: the public chart does not go back that far
+  };
+  const row = { last: points.length ? points[points.length - 1][1] : null, "10y": null, genesis: null };
+  for (const key of ["5y", "3y", "1y"]) row[key] = at(horizons[key]);
+  out.items[card.id] = row;
+  console.log(card.id.padEnd(18), JSON.stringify(row));
+  await sleep(2000);
+}
+
 /* ---------- the Czech crown: inflation and debasement ---------- */
 // inflation: Eurostat HICP (monthly); debasement: how much the money supply grew (World Bank, broad money M2 in crowns, yearly)
 const hicp = await getJson("https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_midx?format=JSON&lang=EN&geo=CZ&coicop=CP00&unit=I15&sinceTimePeriod=2015-01");

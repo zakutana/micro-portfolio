@@ -185,6 +185,42 @@
       "group": "cash",
       "cash": true,
       "logo": "../assets/logos/discover/czk.png"
+    },
+    {
+      "id": "pc-charizard-1st",
+      "name": "Charizard (1. edice, 1999)",
+      "symbol": "PSA 10",
+      "note": "nejslavnější Pokémon karta z úplně první sady, v nejlepším stavu",
+      "group": "collectibles",
+      "pricecharting": "pokemon-base-set/charizard-1st-edition-4",
+      "logo": "../assets/logos/discover/charizard-1st.png"
+    },
+    {
+      "id": "pc-mewtwo-1st",
+      "name": "Mewtwo (1. edice, 1999)",
+      "symbol": "PSA 10",
+      "note": "vzácný Mewtwo z první sady, v nejlepším stavu",
+      "group": "collectibles",
+      "pricecharting": "pokemon-base-set/mewtwo-1st-edition-10",
+      "logo": "../assets/logos/discover/mewtwo-1st.png"
+    },
+    {
+      "id": "pc-umbreon-vmax",
+      "name": "Umbreon VMAX (2021)",
+      "symbol": "PSA 10",
+      "note": "nová oblíbená karta s alternativní kresbou, v nejlepším stavu",
+      "group": "collectibles",
+      "pricecharting": "pokemon-evolving-skies/umbreon-vmax-215",
+      "logo": "../assets/logos/discover/umbreon-vmax.png"
+    },
+    {
+      "id": "pc-pikachu-base",
+      "name": "Pikachu (Base Set, 1999)",
+      "symbol": "PSA 10",
+      "note": "první Pikachu karta z roku 1999, v nejlepším stavu",
+      "group": "collectibles",
+      "pricecharting": "pokemon-base-set/pikachu-58",
+      "logo": "../assets/logos/discover/pikachu-base.png"
     }
   ]
 }
