@@ -4038,3 +4038,197 @@ body.has-lightbox {
   display: flex;
   gap: 10px;
 }
+
+/* Příručka: passive income */
+.pc-row {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  grid-template-areas: "e l k" "e t k";
+  gap: 2px 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px dashed var(--line);
+}
+
+.pc-row:first-of-type {
+  border-top: 0;
+}
+
+.pc-emoji {
+  grid-area: e;
+  font-size: 1.7rem;
+  line-height: 1;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.pc-label {
+  grid-area: l;
+  font-weight: 700;
+  font-size: calc(var(--base-size) * 0.9);
+  line-height: 1.25;
+}
+
+.pc-kc {
+  grid-area: k;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.pc-track {
+  grid-area: t;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--pill-bg);
+  overflow: hidden;
+}
+
+.pc-fill {
+  display: block;
+  height: 100%;
+  width: var(--w);
+  border-radius: 999px;
+  background: var(--a3, var(--btn-active-bg));
+  transform-origin: left;
+  animation: bar-grow 0.8s ease-out both;
+}
+
+.pc-total {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 2px solid var(--line);
+  font-weight: 800;
+}
+
+.pc-total b {
+  font-size: calc(var(--base-size) * 1.35);
+  color: var(--text);
+}
+
+.pc-total small {
+  margin-left: auto;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.pcalc-text {
+  margin: 0 0 10px;
+  line-height: 1.45;
+}
+
+.pcalc-formula {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  font-weight: 800;
+}
+
+.pcalc-formula i {
+  font-style: normal;
+  font-size: 1.3rem;
+  color: var(--muted);
+}
+
+.passive-calc input[type="range"] {
+  width: 100%;
+  accent-color: var(--btn-active-bg);
+}
+
+.pcalc-result {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: min(var(--row-radius), 14px);
+  background: var(--gain-bg);
+  line-height: 1.4;
+}
+
+.pcalc-result strong {
+  font-family: var(--display);
+  font-size: calc(var(--base-size) * 1.5);
+  color: var(--gain-big, #16a36a);
+}
+
+.pm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.pm-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 2px;
+  border-radius: min(var(--row-radius), 12px);
+  background: var(--pill-bg);
+  text-align: center;
+}
+
+.pm-cell small {
+  color: var(--muted);
+  font-weight: 700;
+  font-size: calc(var(--base-size) * 0.72);
+}
+
+.pm-cell b {
+  font-size: calc(var(--base-size) * 0.8);
+  white-space: nowrap;
+}
+
+.pm-coin {
+  font-size: 1.4rem;
+  line-height: 1.1;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.pm-grid.is-pop .pm-cell {
+  animation: coin-drop 0.5s ease-out both;
+  animation-delay: var(--d);
+}
+
+.pm-sum {
+  margin: 0 0 10px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.ps-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0;
+  border-top: 1px dashed var(--line);
+}
+
+.ps-row:first-child {
+  border-top: 0;
+}
+
+.passive-warn p {
+  margin: 0 0 8px;
+  line-height: 1.45;
+}
+
+@keyframes coin-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.8);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-fill,
+  .pm-grid.is-pop .pm-cell {
+    animation: none;
+  }
+}

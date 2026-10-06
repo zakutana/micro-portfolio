@@ -547,6 +547,7 @@
     ["Za 24 hodin", "O kolik se cena změnila za poslední den. Jeden špatný den ještě nic neznamená."],
     ["Tržní kapitalizace", "Kolik by stála všechna ta mince nebo všechny akcie firmy dohromady. Větší je obvykle stabilnější a menší může kolísat víc."],
     ["Podíl", "Kolik procent celého portfolia tvoří tahle položka. Když je peníze rozložené do víc věcí, jedna špatná zpráva nepokazí všechno."],
+    ["Pasivní příjem", "Peníze, které ti přijdou, aniž bys za ně musel pracovat, třeba výnos z investic. Aby ti pasivní příjem pokryl měsíční výdaje, potřebuješ mít investovanou určitou částku. V Příručce si ji můžeš spočítat."],
     ["Inflace", "O kolik se zdražilo. Když ceny stoupnou o 10 %, koupíš za stejné koruny o desetinu míň věcí. Koruny v peněžence ani na účtu tedy pomalu ztrácejí sílu, i když jejich číslo zůstává stejné."],
     ["Debasement", "Postupné ředění peněz: stát a banky vytvářejí víc a víc nových peněz (peněžní zásoba v Česku roste zhruba o 7 % ročně), takže každá koruna znamená míň. V Objevuj u měn počítáme inflaci a debasement jedno po druhém, jako kdyby ti každý rok z těch zbylých peněz oba ubrali svůj kus."],
     ["Crypto", "Digitální peníze a žetony, které existují jen na internetu, třeba Bitcoin, Sui nebo COTI. Obchoduje se s nimi pořád, i v noci a o víkendu, a cena umí poskočit nebo spadnout o desítky procent za den."],
@@ -1220,7 +1221,7 @@
   ];
 
   const timesText = (mult) => `×${nf({ maximumFractionDigits: 2 }).format(mult)}`;
-  const guideState = { section: "money", sliderValue: 100, capPrice: 100 };
+  const guideState = { section: "money", sliderValue: 100, capPrice: 100, yield: 10 };
   let guideRefs = null;
 
   function sectionIntro(text) {
@@ -1240,6 +1241,7 @@
     const sections = [
       ["money", "Hodnota peněz", buildMoneyGuide],
       ["growth", "Růst o 100 %", buildGrowthGuide],
+      ["passive", "Pasivní příjem", buildPassiveGuide],
       ["cap", "Market cap", buildCapGuide],
       ["glossary", "Slovníček", buildGlossaryGuide],
     ];
@@ -1272,6 +1274,7 @@
   /* each section plays its little animation again whenever it is opened */
   function playGuide(id) {
     if (id === "growth") playGrowthDemo();
+    if (id === "passive") playPassiveDemo();
     if (id === "cap") playCapDemo();
     if (id === "money") {
       for (const row of guideRefs.bodies.money.querySelectorAll(".money-row")) {
@@ -1457,6 +1460,131 @@
     } catch {
       /* no file, no examples */
     }
+  }
+
+  /* ---- 2b. passive income: how much money has to work so that nobody has to go to work ---- */
+
+  const LIVING = [
+    ["🍽️", "Jídlo", 5000],
+    ["🏠", "Nájem", 15000],
+    ["⛽", "Benzín, restaurace, kosmetika a další", 5000],
+  ];
+  const MONTHS = ["leden", "únor", "březen", "duben", "květen", "červen", "červenec", "srpen", "září", "říjen", "listopad", "prosinec"];
+
+  function buildPassiveGuide(box) {
+    box.append(sectionIntro("Peníze umí pracovat za tebe. Když je máš investované, přinášejí pravidelný příjem, i když zrovna spíš. Tomu se říká pasivní příjem."));
+
+    const monthly = LIVING.reduce((a, r) => a + r[2], 0);
+    const yearly = monthly * 12;
+
+    const costs = el("section", "panel passive-costs");
+    costs.append(el("h3", "guide-h", "Kolik stojí jeden měsíc života"));
+    for (const [emoji, label, kc] of LIVING) {
+      const row = el("div", "pc-row");
+      row.append(el("span", "pc-emoji", emoji), el("span", "pc-label", label));
+      const track = el("span", "pc-track");
+      const fill = el("span", "pc-fill");
+      fill.style.setProperty("--w", `${(kc / monthly) * 100}%`);
+      track.append(fill);
+      row.append(track, el("b", "pc-kc", formatCzk(kc)));
+      costs.append(row);
+    }
+    const total = el("div", "pc-total");
+    total.append(el("span", "", "Dohromady měsíčně"), el("b", "", formatCzk(monthly)), el("small", "", `za rok ${formatCzk(yearly)}`));
+    costs.append(total);
+    box.append(costs);
+
+    const calc = el("section", "panel passive-calc");
+    calc.append(el("h3", "guide-h", "Kolik peněz musí pracovat"));
+    const yieldLine = el("p", "pcalc-text");
+    const formula = el("div", "pcalc-formula");
+    const slider = el("input");
+    slider.type = "range";
+    slider.min = "2";
+    slider.max = "15";
+    slider.step = "1";
+    slider.value = String(guideState.yield);
+    slider.setAttribute("aria-label", "Výnos za rok v procentech");
+    const result = el("div", "pcalc-result");
+    const paint = () => {
+      const y = Number(slider.value);
+      guideState.yield = y;
+      const capital = yearly / (y / 100);
+      yieldLine.replaceChildren(document.createTextNode("Když peníze vydělají "), el("b", "", `${y} % ročně`), document.createTextNode(", potřebuješ na rok:"));
+      formula.replaceChildren(
+        el("span", "cf-chip is-price", `${formatCzk(yearly)} za rok`),
+        el("i", "", "÷"),
+        el("span", "cf-chip is-count", `${y} %`),
+        el("i", "", "="),
+        el("b", "cf-chip is-cap", formatCzk(capital)),
+      );
+      result.replaceChildren(
+        el("strong", "", formatCzk(capital)),
+        el("span", "", `Kdyby tolik měly investované s výnosem ${y} % ročně, vydělají ti ${formatCzk(monthly)} měsíčně a do práce chodit nemusíš.`),
+      );
+      paintSaving(capital, y);
+    };
+    slider.addEventListener("input", paint);
+    calc.append(yieldLine, formula, el("p", "pcalc-text", "Posuň si výnos a uvidíš, kolik je potřeba:"), slider, result);
+    box.append(calc);
+
+    const months = el("section", "panel passive-months");
+    months.append(el("h3", "guide-h", "Tak by to vypadalo"));
+    const grid = el("div", "pm-grid");
+    MONTHS.forEach((m, i) => {
+      const cell = el("div", "pm-cell");
+      cell.style.setProperty("--d", `${i * 90}ms`);
+      cell.append(el("span", "pm-coin", "🪙"), el("small", "", m), el("b", "", formatCzk(monthly)));
+      grid.append(cell);
+    });
+    months.append(el("p", "pcalc-text", "Každý měsíc přijde na účet výnos z investic:"), grid, el("p", "pm-sum", `${formatCzk(monthly)} × 12 = ${formatCzk(yearly)} za rok. Bez práce, jen z peněz, které pracují.`));
+    const again = el("button", "guide-btn", "Přehrát znovu");
+    again.type = "button";
+    again.addEventListener("click", playPassiveDemo);
+    months.append(again);
+    box.append(months);
+
+    const saving = el("section", "panel passive-saving");
+    saving.append(el("h3", "guide-h", "Jak si to našetřit"));
+    saving.append(el("p", "pcalc-text", "Kolik by sis musel měsíčně odkládat a investovat, aby ses k té částce za určitou dobu dostal:"));
+    const table = el("div", "ps-table");
+    saving.append(table);
+    savingTable = table;
+    box.append(saving);
+
+    const warn = el("section", "panel passive-warn");
+    warn.append(el("h3", "guide-h", "Pozor, 10 % je jen příklad"));
+    warn.append(
+      el("p", "", "Výnos kolísá. Jeden rok může být +40 % a další −20 %. Nikdo ti těch 10 % ročně nezaručí. Opatrnější lidé počítají spíš se 4 % a pak je potřeba víc peněz: "),
+    );
+    warn.lastChild.append(el("b", "", formatCzk(yearly / 0.04)), document.createTextNode("."));
+    warn.append(el("p", "", "Ceny navíc rostou, takže za 20 let nebude 25\u00a0000\u00a0Kč stačit na stejný život. Podívej se do Objevuj na sekci Měny: koruna ztrácí zhruba 11\u00a0% ročně. Výnos tedy musí tuhle ztrátu překonat."));
+    box.append(warn);
+
+    paintSavingInit = paint;
+    paint();
+  }
+
+  let savingTable = null;
+  let paintSavingInit = null;
+  function paintSaving(capital, yieldPct) {
+    if (!savingTable) return;
+    const i = yieldPct / 100 / 12;
+    savingTable.replaceChildren();
+    for (const years of [10, 20, 30]) {
+      const n = years * 12;
+      const pmt = (capital * i) / ((1 + i) ** n - 1);
+      const row = el("div", "ps-row");
+      row.append(el("span", "ps-years", `za ${years} let`), el("b", "", `${formatCzk(Math.round(pmt / 10) * 10)} měsíčně`));
+      savingTable.append(row);
+    }
+  }
+
+  function playPassiveDemo() {
+    const grid = guideRefs.bodies.passive.querySelector(".pm-grid");
+    grid.classList.remove("is-pop");
+    void grid.offsetWidth;
+    grid.classList.add("is-pop");
   }
 
   /* ---- 3. market cap ---- */
