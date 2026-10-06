@@ -694,16 +694,6 @@
     pane.append(box);
   }
 
-  function buildGlossary() {
-    const box = el("details", "panel glossary pro-only");
-    box.append(el("summary", "", "Slovníček investora"));
-    const dl = el("dl");
-    for (const [term, def] of GLOSSARY) dl.append(el("dt", "", term), el("dd", "", def));
-    dl.append(el("dt", "", "Pozor"), el("dd", "", "Ceny kolísají nahoru i dolů. Že to dnes roste, neznamená, že poroste i zítra."));
-    box.append(dl);
-    $("content").append(box);
-  }
-
   function showPrices({ items, allLive, cachedAt }) {
     // Growth only counts from the start date in config.json (before that: just the plain values).
     const startDate = /^\d{4}-\d{2}-\d{2}/.test(cfg.startDate ?? "") ? cfg.startDate.slice(0, 10) : null;
@@ -876,11 +866,13 @@
     ["portfolio", "Portfolio", "content"],
     ["history", "Historie", "pane-history"],
     ["discover", "Objevuj", "pane-discover"],
+    ["guide", "Příručka", "pane-guide"],
   ];
   const TAB_ICONS = {
     portfolio: '<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5V12h8.5"/>',
     history: '<path d="M5 6.5h14M5 12h14M5 17.5h8.5"/>',
     discover: '<circle cx="12" cy="12" r="8.5"/><path d="M15.8 8.2l-2.1 5.5-5.5 2.1 2.1-5.5z"/>',
+    guide: '<path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v15H7.5A2.5 2.5 0 0 0 5 20.5z"/><path d="M5 20.5A2.5 2.5 0 0 1 7.5 18H19"/>',
   };
   let activeTab = "portfolio";
 
@@ -1144,6 +1136,435 @@
     }
   }
 
+  /* ---------- Příručka: pictures and animations that explain money, growth and market cap, plus the glossary ---------- */
+
+  const MONEY_STEPS = [
+    {
+      amount: 1_000,
+      word: "tisíc",
+      zeros: 3,
+      seconds: "17 minut",
+      items: [
+        ["🍕", "2 pizzy"],
+        ["🎬", "4 lístky do kina"],
+        ["🃏", "5 balíčků Pokémon karet"],
+        ["🧱", "malá sada LEGO"],
+      ],
+    },
+    {
+      amount: 100_000,
+      word: "sto tisíc",
+      zeros: 5,
+      seconds: "1 den a 4 hodiny",
+      items: [
+        ["📱", "3 nové telefony"],
+        ["🚲", "dobré elektrokolo"],
+        ["🏖️", "dovolená u moře pro celou rodinu"],
+        ["🖥️", "herní počítač s monitorem"],
+      ],
+    },
+    {
+      amount: 1_000_000,
+      word: "milion",
+      zeros: 6,
+      seconds: "11 a půl dne",
+      items: [
+        ["🚗", "nové malé auto"],
+        ["🏕️", "malá chata na vesnici"],
+        ["🎓", "rok studia v zahraničí"],
+        ["🏍️", "velká motorka"],
+      ],
+    },
+    {
+      amount: 100_000_000,
+      word: "sto milionů",
+      zeros: 8,
+      seconds: "3 roky a 2 měsíce",
+      items: [
+        ["🏡", "vila s bazénem"],
+        ["🏎️", "sportovní auto"],
+        ["🛥️", "motorová jachta"],
+      ],
+    },
+    {
+      amount: 1_000_000_000,
+      word: "miliarda",
+      zeros: 9,
+      seconds: "31 a tři čtvrtě roku",
+      items: [
+        ["🏰", "zámek s parkem"],
+        ["🏟️", "menší fotbalový stadion"],
+        ["✈️", "soukromý tryskáč"],
+      ],
+    },
+    {
+      amount: 1_000_000_000_000,
+      word: "bilion",
+      zeros: 12,
+      seconds: "31 700 let",
+      items: [
+        ["💸", "zhruba 90 000 Kč pro každého obyvatele Česka"],
+        ["🏛️", "státní rozpočet Česka asi na 5 měsíců"],
+        ["🏢", "asi 250 000 bytů"],
+      ],
+    },
+  ];
+
+  const GROWTH_ROWS = [
+    [-50, "klesla na polovinu"],
+    [0, "stejná"],
+    [50, "o polovinu víc"],
+    [100, "dvakrát tolik"],
+    [200, "třikrát tolik"],
+    [300, "čtyřikrát tolik"],
+  ];
+
+  const timesText = (mult) => `×${nf({ maximumFractionDigits: 2 }).format(mult)}`;
+  const guideState = { section: "money", sliderValue: 100, capPrice: 100 };
+  let guideRefs = null;
+
+  function sectionIntro(text) {
+    return el("p", "guide-intro", text);
+  }
+
+  function buildGuide() {
+    const pane = el("main");
+    pane.id = "pane-guide";
+    pane.hidden = true;
+    pane.setAttribute("role", "tabpanel");
+    pane.setAttribute("aria-labelledby", "tab-guide");
+    pane.append(el("h2", "section-title", "Příručka"));
+
+    const nav = el("nav", "guide-tabs");
+    nav.setAttribute("aria-label", "Části příručky");
+    const sections = [
+      ["money", "Hodnota peněz", buildMoneyGuide],
+      ["growth", "Růst o 100 %", buildGrowthGuide],
+      ["cap", "Market cap", buildCapGuide],
+      ["glossary", "Slovníček", buildGlossaryGuide],
+    ];
+    const bodies = {};
+    for (const [id, label, builder] of sections) {
+      const btn = el("button", "guide-tab", label);
+      btn.type = "button";
+      btn.dataset.section = id;
+      btn.addEventListener("click", () => showGuideSection(id));
+      nav.append(btn);
+      const body = el("section", `guide-body guide-${id}`);
+      body.hidden = true;
+      builder(body);
+      bodies[id] = body;
+    }
+    pane.append(nav, ...Object.values(bodies));
+    $("stage").append(pane);
+    guideRefs = { nav, bodies };
+    showGuideSection(guideState.section, { silent: true });
+  }
+
+  function showGuideSection(id, { silent = false } = {}) {
+    guideState.section = id;
+    for (const btn of guideRefs.nav.children) btn.setAttribute("aria-pressed", String(btn.dataset.section === id));
+    for (const [key, body] of Object.entries(guideRefs.bodies)) body.hidden = key !== id;
+    if (!silent) window.scrollTo({ top: 0 });
+    playGuide(id);
+  }
+
+  /* each section plays its little animation again whenever it is opened */
+  function playGuide(id) {
+    if (id === "growth") playGrowthDemo();
+    if (id === "cap") playCapDemo();
+    if (id === "money") {
+      for (const row of guideRefs.bodies.money.querySelectorAll(".money-row")) {
+        row.classList.remove("is-in");
+        void row.offsetWidth; // restart the animation
+        row.classList.add("is-in");
+      }
+    }
+  }
+
+  /* ---- 1. the value of money ---- */
+
+  function buildMoneyGuide(box) {
+    box.append(sectionIntro("Kolik je které množství peněz a co by se za něj dalo koupit. Ceny jsou jen přibližné, v korunách."));
+    let previous = null;
+    MONEY_STEPS.forEach((step, i) => {
+      if (previous) {
+        const times = step.amount / previous.amount;
+        box.append(el("div", "money-times", `${timesText(times).replace("×", "× ")} víc`));
+      }
+      previous = step;
+      const row = el("section", "panel money-row");
+      row.style.setProperty("--i", String(i));
+      const head = el("div", "money-head");
+      const big = el("strong", "money-amount");
+      big.append(document.createTextNode(nf({ maximumFractionDigits: 0 }).format(step.amount).replace(/ /g, " ")), el("span", "cur", " Kč"));
+      head.append(big, el("span", "money-word", step.word));
+      const zeros = el("div", "money-zeros");
+      zeros.append(el("span", "", `${step.zeros} ${step.zeros === 3 ? "nuly" : step.zeros < 5 ? "nuly" : "nul"}`));
+      for (let z = 0; z < step.zeros; z++) zeros.append(el("i", "money-zero"));
+      const items = el("div", "money-items");
+      for (const [emoji, label] of step.items) {
+        const chip = el("div", "money-item");
+        chip.append(el("span", "money-emoji", emoji), el("span", "money-label", label));
+        items.append(chip);
+      }
+      const secs = el("p", "money-secs");
+      secs.append(document.createTextNode("Kdyby to byly vteřiny, trvalo by to "), el("b", "", step.seconds), document.createTextNode("."));
+      row.append(head, zeros, items, secs);
+      box.append(row);
+    });
+    box.append(el("p", "guide-note", "Bilion je v češtině tisíc miliard, tedy 1 a dvanáct nul. V angličtině se mu říká „trillion“."));
+  }
+
+  /* ---- 2. growth of 100 % means twice the price ---- */
+
+  function buildGrowthGuide(box) {
+    box.append(sectionIntro("Růst o 100 % neznamená, že je to o sto korun víc. Znamená to, že je to dvakrát tolik."));
+
+    const demo = el("section", "panel growth-demo");
+    demo.innerHTML =
+      '<div class="gd-bars">' +
+      '<div class="gd-col"><div class="gd-bar gd-before"><span class="gd-val">100 Kč</span></div><small>před</small></div>' +
+      '<div class="gd-arrow" aria-hidden="true"><b>+100 %</b><i>→</i></div>' +
+      '<div class="gd-col"><div class="gd-bar gd-after"><span class="gd-val">100 Kč</span></div><small>po růstu</small></div>' +
+      "</div>" +
+      '<p class="gd-eq"><span class="gd-eq-main">100 Kč &times; 2 = <b>200 Kč</b></span></p>';
+    const replay = el("button", "guide-btn", "Přehrát znovu");
+    replay.type = "button";
+    replay.addEventListener("click", playGrowthDemo);
+    demo.append(replay);
+    box.append(demo);
+
+    const table = el("section", "panel growth-table");
+    table.append(el("h3", "guide-h", "Kolik vyjde z 1 000 Kč"));
+    for (const [pct, text] of GROWTH_ROWS) {
+      const mult = 1 + pct / 100;
+      const row = el("div", `gt-row${pct < 0 ? " is-down" : pct > 0 ? " is-up" : ""}`);
+      const label = el("span", "gt-pct", `${pct > 0 ? "+" : pct < 0 ? MINUS : ""}${Math.abs(pct)} %`);
+      const track = el("span", "gt-track");
+      const fill = el("span", "gt-fill");
+      fill.style.setProperty("--w", `${(mult / 4) * 100}%`);
+      track.append(fill);
+      const value = el("span", "gt-val");
+      value.append(el("b", "", formatCzk(1000 * mult)), el("small", "", ` ${text} (${timesText(mult)})`));
+      row.append(label, track, value);
+      table.append(row);
+    }
+    box.append(table);
+
+    const slider = el("section", "panel growth-slider");
+    slider.append(el("h3", "guide-h", "Vyzkoušej si to"));
+    const range = el("input");
+    range.type = "range";
+    range.min = "-90";
+    range.max = "1000";
+    range.step = "10";
+    range.value = String(guideState.sliderValue);
+    range.setAttribute("aria-label", "O kolik procent cena vzrostla");
+    const out = el("div", "gs-out");
+    const paint = () => {
+      const pct = Number(range.value);
+      const mult = 1 + pct / 100;
+      out.replaceChildren();
+      const sign = pct > 0 ? "+" : pct < 0 ? MINUS : "";
+      out.append(
+        el("span", `gs-pct ${pct > 0 ? "is-up" : pct < 0 ? "is-down" : ""}`, `${sign}${Math.abs(pct)} %`),
+        el("span", "gs-eq", `1 000 Kč → `),
+        el("b", "gs-res", formatCzk(1000 * mult)),
+        el("small", "", ` (${timesText(mult)})`),
+      );
+    };
+    range.addEventListener("input", () => {
+      guideState.sliderValue = Number(range.value);
+      paint();
+    });
+    paint();
+    slider.append(out, range);
+    box.append(slider);
+
+    const trap = el("section", "panel growth-trap");
+    trap.append(el("h3", "guide-h", "Pozor na pád"));
+    trap.append(
+      el("p", "", "Když cena klesne o 50 %, nestačí, aby pak vzrostla o 50 %. Z 1 000 Kč je po pádu 500 Kč. Aby bylo zase 1 000 Kč, musí vzrůst o 100 %."),
+    );
+    const steps = el("div", "trap-steps");
+    for (const [text, kc] of [["začátek", "1 000 Kč"], ["−50 %", "500 Kč"], ["+100 %", "1 000 Kč"]]) {
+      const s = el("div", "trap-step");
+      s.append(el("small", "", text), el("b", "", kc));
+      steps.append(s);
+    }
+    trap.append(steps);
+    box.append(trap);
+
+    const live = el("section", "panel growth-live");
+    live.hidden = true;
+    box.append(live);
+    loadGrowthExamples(live);
+  }
+
+  function playGrowthDemo() {
+    const demo = guideRefs.bodies.growth.querySelector(".growth-demo");
+    const bar = demo.querySelector(".gd-after");
+    const val = bar.querySelector(".gd-val");
+    const eq = demo.querySelector(".gd-eq-main");
+    demo.classList.remove("is-playing");
+    bar.style.setProperty("--h", "50%");
+    val.textContent = "100 Kč";
+    eq.classList.remove("is-shown");
+    void demo.offsetWidth;
+    demo.classList.add("is-playing");
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const start = performance.now() + 500;
+    const dur = reduce ? 0 : 1400;
+    const step = (now) => {
+      const t = dur ? Math.min(1, Math.max(0, (now - start) / dur)) : 1;
+      const eased = 1 - (1 - t) ** 3;
+      const kc = 100 + 100 * eased;
+      bar.style.setProperty("--h", `${50 + 50 * eased}%`);
+      val.textContent = `${Math.round(kc)} Kč`;
+      if (t < 1) requestAnimationFrame(step);
+      else eq.classList.add("is-shown");
+    };
+    requestAnimationFrame(step);
+  }
+
+  /* a few real examples from the Objevuj file: how much 1 000 Kč would have become */
+  async function loadGrowthExamples(box) {
+    try {
+      const res = await fetch("../assets/discover-history.json", { cache: "no-cache" });
+      const data = await res.json();
+      const wanted = [
+        ["pc-charizard-1st", "5y", "Karta Charizard (PSA 10)", "5 let"],
+        ["nasdaq-xstock", "5y", "Nasdaq 100", "5 let"],
+        ["bitcoin", "1y", "Bitcoin", "1 rok"],
+      ];
+      const rows = [];
+      for (const [id, key, name, when] of wanted) {
+        const row = data.items?.[id];
+        if (row && isPrice(row[key]) && isPrice(row.last)) rows.push([name, when, row.last / row[key] - 1]);
+      }
+      if (!rows.length) return;
+      box.append(el("h3", "guide-h", "Skutečné příklady z Objevuj"));
+      for (const [name, when, ratio] of rows) {
+        const line = el("div", "live-row");
+        line.append(
+          el("b", "", name),
+          el("span", "", `za ${when} ${formatPct(ratio)} → z 1 000 Kč by dnes bylo ${formatCzk(1000 * (1 + ratio))}`),
+        );
+        box.append(line);
+      }
+      box.hidden = false;
+    } catch {
+      /* no file, no examples */
+    }
+  }
+
+  /* ---- 3. market cap ---- */
+
+  function buildCapGuide(box) {
+    box.append(sectionIntro("Tržní kapitalizace (market cap) říká, kolik je firma celá „stojí“. Počítá se jednoduše:"));
+
+    const formula = el("section", "panel cap-formula");
+    formula.innerHTML =
+      '<div class="cf-line"><span class="cf-chip is-price">cena 1 akcie</span><i>×</i><span class="cf-chip is-count">počet akcií</span><i>=</i><span class="cf-chip is-cap">tržní kapitalizace</span></div>';
+    box.append(formula);
+
+    const demo = el("section", "panel cap-demo");
+    demo.append(el("h3", "guide-h", "Příklad: pekárna Micro"));
+    demo.append(el("p", "cd-text", "Pekárnu si rozdělíme na 20 stejných dílků, kterým říkáme akcie. Každý dílek má svou cenu. Zkus ji měnit:"));
+    const grid = el("div", "cd-grid");
+    grid.setAttribute("aria-hidden", "true");
+    for (let i = 0; i < 20; i++) {
+      const cell = el("span", "cd-cell", "🥖");
+      cell.style.setProperty("--d", `${i * 25}ms`);
+      grid.append(cell);
+    }
+    const controls = el("div", "cd-controls");
+    const minus = el("button", "guide-btn", "− cena");
+    const plus = el("button", "guide-btn", "+ cena");
+    minus.type = plus.type = "button";
+    const eq = el("div", "cd-eq");
+    const buttons = el("div", "cd-buttons");
+    buttons.append(minus, plus);
+    controls.append(eq, buttons);
+    const paint = () => {
+      eq.replaceChildren();
+      eq.append(
+        el("span", "cf-chip is-price", `${guideState.capPrice} Kč`),
+        el("i", "", "×"),
+        el("span", "cf-chip is-count", "20 ks"),
+        el("i", "", "="),
+        el("b", "cf-chip is-cap", formatCzk(guideState.capPrice * 20)),
+      );
+      grid.classList.remove("is-pop");
+      void grid.offsetWidth;
+      grid.classList.add("is-pop");
+    };
+    minus.addEventListener("click", () => {
+      guideState.capPrice = Math.max(10, guideState.capPrice - 10);
+      paint();
+    });
+    plus.addEventListener("click", () => {
+      guideState.capPrice = Math.min(500, guideState.capPrice + 10);
+      paint();
+    });
+    demo.append(grid, controls);
+    box.append(demo);
+    guideRefs_capPaint = paint;
+
+    const compare = el("section", "panel cap-compare");
+    compare.append(el("h3", "guide-h", "Proč nestačí koukat na cenu akcie"));
+    compare.append(el("p", "cd-text", "Která firma je větší? Akcie A stojí 5 000 Kč, akcie B jen 50 Kč. Bez počtu akcií to nevíš."));
+    const firms = [
+      ["Firma A", 5000, 1_000, 10],
+      ["Firma B", 50, 1_000_000, 100],
+    ];
+    for (const [name, price, count, width] of firms) {
+      const f = el("div", "cc-firm");
+      const head = el("div", "cc-head");
+      head.append(el("b", "", name), el("small", "", `${nf({ maximumFractionDigits: 0 }).format(price)} Kč × ${nf({ maximumFractionDigits: 0 }).format(count)} ks`));
+      const track = el("div", "cc-track");
+      const fill = el("div", "cc-fill");
+      fill.style.setProperty("--w", `${width}%`);
+      fill.append(el("span", "", formatCzk(price * count)));
+      track.append(fill);
+      f.append(head, track);
+      compare.append(f);
+    }
+    compare.append(el("p", "cd-text", "Akcie B je 100× levnější, ale firma B je 10× větší. Proto se firmy porovnávají podle tržní kapitalizace, ne podle ceny jedné akcie."));
+    box.append(compare);
+
+    const real = el("section", "panel cap-real");
+    real.append(el("h3", "guide-h", "Skutečný příklad"));
+    const rows = [
+      ["Tesla", "asi 3,2 mld. akcií", "× asi 8 100 Kč", "≈ 26 bilionů Kč"],
+      ["RoboStrategy", "24,4 mil. akcií", "× asi 630 Kč", "≈ 15 mld. Kč"],
+    ];
+    for (const [name, count, price, cap] of rows) {
+      const r = el("div", "cr-row");
+      r.append(el("b", "", name), el("span", "", `${count} ${price}`), el("strong", "", cap));
+      real.append(r);
+    }
+    real.append(el("p", "guide-note", "Čísla jsou zaokrouhlená podle cen z počátku října 2026. Cena se mění každou chvíli. V Portfoliu ji u každé položky najdeš v Pro režimu."));
+    box.append(real);
+  }
+  let guideRefs_capPaint = null;
+  function playCapDemo() {
+    if (guideRefs_capPaint) guideRefs_capPaint();
+  }
+
+  /* ---- 4. the glossary ---- */
+
+  function buildGlossaryGuide(box) {
+    box.append(sectionIntro("Slova, na která při investování narazíš."));
+    const list = el("section", "panel glossary");
+    const dl = el("dl");
+    for (const [term, def] of GLOSSARY) dl.append(el("dt", "", term), el("dd", "", def));
+    dl.append(el("dt", "", "Pozor"), el("dd", "", "Ceny kolísají nahoru i dolů. Že to dnes roste, neznamená, že poroste i zítra."));
+    list.append(dl);
+    box.append(list);
+  }
+
   /* ---------- Pro mode ---------- */
 
   function applyPro(on) {
@@ -1249,7 +1670,7 @@
     setHero(true);
     buildList();
     buildHistory();
-    buildGlossary();
+    buildGuide();
     buildTabs();
     buildDiscover();
 

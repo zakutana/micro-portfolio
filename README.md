@@ -100,6 +100,10 @@ Slavnostní úvodní obrazovka (dárek, konfety, „Všechno nejlepší“) se u
 
 `node tools/pages.mjs off` udělá z `p1/index.html` a `p2/index.html` prázdné stránky, takže po naskenování QR kódu se nezobrazí nic. Skutečné stránky se schovají do `tools/paused/`. `node tools/pages.mjs on` je vrátí zpátky, `status` ukáže, v jakém jsou stavu. Po každé změně je potřeba push na `main`; nasazení trvá minutu dvě a telefon si starou stránku může chvíli pamatovat. Datové soubory (`config.json`, `assets/`) zůstávají na místě. Úplně offline jsou stránky, až když vypneš GitHub Pages v nastavení repozitáře.
 
+## Příručka
+
+Čtvrtá záložka v dolní liště. Uvnitř jsou čtyři části (přepínají se tlačítky nahoře): **Hodnota peněz** (1 000 Kč, 100 000 Kč, milion, sto milionů, miliarda a bilion, u každého obrázky, co by se za to dalo koupit, a kolik by to bylo vteřin), **Růst o 100 %** (animace, že 100 % růst znamená dvojnásobek, tabulka a posuvník, upozornění na pád o 50 % a skutečné příklady ze souboru Objevuj), **Market cap** (cena akcie × počet akcií, na příkladu pekárny, srovnání dvou firem a skutečný příklad) a **Slovníček** (dřív byl v Portfoliu v Pro režimu, teď je vždy v Příručce). Všechno je v `assets/app.js` (`MONEY_STEPS`, `buildGuide`); texty a obrázky (emoji) se upravují tam. Ceny v „Hodnotě peněz“ a čísla v příkladu s Teslou jsou ruční a přibližné.
+
 ## Motivy
 
 Minecraft, Kirby, Waddle Dee, Pokémon, Make-up, Fotbal, Trader, Klavír, Kytara, Wednesday, Potter, 6 7, Vesmír, Roboti (sci-fi HUD), Anime, KPop. Motiv se mění kulatým tlačítkem vpravo nahoře (otevře se výběr se všemi motivy) a ukládá se do telefonu (`localStorage`), takže zůstane i po zavření stránky. `p2` začíná s Kirby (růžová), `p1` s Waddle Dee (modrá s oranžovou). Výchozí motiv je atribut `data-theme` v `index.html` stránky.
