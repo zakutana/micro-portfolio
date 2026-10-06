@@ -135,7 +135,7 @@
     },
     {
       "id": "czk",
-      "name": "Koruny",
+      "name": "Spoření v korunách",
       "symbol": "CZK",
       "note": "ceny rostou (inflace) a za koruny koupíš míň zlata (debasement)",
       "group": "cash",
