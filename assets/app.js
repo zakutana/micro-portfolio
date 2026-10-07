@@ -1622,7 +1622,7 @@
         el("small", "sb-lbl", "Tvoje investice"),
         el("strong", "", formatCzk(Math.round(value / 10) * 10)),
         el("small", "sb-lbl", "a dává ti měsíčně"),
-        el("strong", "sb-income", formatCzk(Math.round(income / 10) * 10)),
+        el("strong", "sb-income", `${nf({ maximumFractionDigits: 0 }).format(Math.round(income))}\u00a0Kč`),
       );
       fill.style.width = `${ratio * 100}%`;
       const free = value >= goal - 0.5;
@@ -1863,7 +1863,7 @@
       t.append(el("span", "invest-theme-ico", emoji), el("span", "", label));
       themes.append(t);
     }
-    risky.append(themes, el("p", "cd-text", "Mají velký potenciál, a když to vyjde, může se to vyplatit. Najdeš je v záložce Objevuj."));
+    risky.append(themes, el("p", "cd-text", "Mají velký potenciál, a když to vyjde, může se to vyplatit."));
     box.append(risky);
     box.append(discoverCta());
 
