@@ -6,6 +6,7 @@
  *
  *   node tools/discover-history.mjs                     genesis day = startDate of p1/config.json
  *   node tools/discover-history.mjs --genesis 2026-10-07
+ *   node tools/discover-history.mjs --benchmarks-only    only the S&P 500 / Nasdaq 20 year figures (for the Příručka), merged into the existing file
  *
  * Also the "cash" row (Czech crowns): how much value the crown lost over each horizon. Inflation (Eurostat HICP for the Czech Republic) and
  * debasement (growth of the money supply M2, World Bank) are counted one after the other: (1 + inflation) x (1 + debasement) - 1, the way
@@ -73,6 +74,44 @@ const ids = items.map((i) => i.id);
 const last = {};
 const simple = await getJson(`https://api.coingecko.com/api/v3/simple/price?vs_currencies=usd&ids=${ids.join(",")}`);
 for (const id of ids) last[id] = simple[id]?.usd ?? null;
+
+/* ---------- benchmarks for the Příručka: how much the S&P 500 and the Nasdaq 100 grew per year over the last 20 years (with dividends) ---------- */
+async function benchmarks() {
+  const result = { years: 20, asOf: iso(today) };
+  for (const [key, symbol] of [["sp500", "SPY"], ["nasdaq", "QQQ"]]) {
+    const from = Math.floor(yearsAgo(26).getTime() / 1000);
+    const data = await getJson(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?period1=${from}&period2=${Math.floor(today.getTime() / 1000) + 86400}&interval=1mo`);
+    const r = data.chart.result[0];
+    const adj = r.indicators.adjclose[0].adjclose; // adjusted for dividends
+    const pts = r.timestamp.map((t, i) => [new Date(t * 1000), adj[i]]).filter(([, v]) => v > 0);
+    const end = pts[pts.length - 1];
+    const target = yearsAgo(20);
+    const start = pts.reduce((best, p) => (Math.abs(p[0] - target) < Math.abs(best[0] - target) ? p : best));
+    const years = (end[0] - start[0]) / (365.25 * 86400000);
+    // worst calendar year: last month of a year against the last month of the year before
+    const lastOfYear = {};
+    for (const [d, v] of pts) lastOfYear[d.getUTCFullYear()] = v;
+    let worst = null;
+    for (const y of Object.keys(lastOfYear).map(Number)) {
+      if (y >= today.getUTCFullYear() || !lastOfYear[y - 1]) continue;
+      const ret = lastOfYear[y] / lastOfYear[y - 1] - 1;
+      if (!worst || ret < worst.ret) worst = { year: y, ret };
+    }
+    result[key] = { cagr: (end[1] / start[1]) ** (1 / years) - 1, multiple: end[1] / start[1], worst };
+    console.log(key, JSON.stringify(result[key]));
+    await sleep(1500);
+  }
+  return result;
+}
+
+if (args.includes("--benchmarks-only")) {
+  const file = path.join(ROOT, "assets/discover-history.json");
+  const existing = JSON.parse(fs.readFileSync(file, "utf8"));
+  existing.benchmarks = await benchmarks();
+  fs.writeFileSync(file, JSON.stringify(existing, null, 1) + "\n");
+  console.log("benchmarks merged into assets/discover-history.json");
+  process.exit(0);
+}
 
 const out = { asOf: iso(today), genesis, horizons, items: {} };
 for (const it of items) {
@@ -161,5 +200,6 @@ cash.genesis = withCombined({ inflation: (1 + yoy) ** (-days / 365) - 1, debasem
 out.cash = { ...cash, inflationYoY: yoy, inflationAsOf: lastMonth, moneySupplyGrowth: m2Growth, moneySupplyAsOf: String(m2Year) };
 console.log("cash", JSON.stringify(out.cash));
 
+out.benchmarks = await benchmarks();
 fs.writeFileSync(path.join(ROOT, "assets/discover-history.json"), JSON.stringify(out, null, 1) + "\n");
 console.log(`written assets/discover-history.json (genesis ${genesis}, as of ${out.asOf})`);
