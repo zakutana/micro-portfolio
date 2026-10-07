@@ -1200,11 +1200,22 @@
       items: [
         ["💸", "zhruba 90 000 Kč pro každého obyvatele Česka"],
         ["🏢", "asi 250 000 bytů"],
-        ["../assets/logos/discover/apple.png", "Apple: hodnota firmy asi 105 bilionů Kč"],
-        ["../assets/logos/discover/nvidia.png", "NVIDIA: hodnota firmy asi 125 bilionů Kč"],
-        ["../assets/logos/discover/microsoft.png", "Microsoft: hodnota firmy asi 85 bilionů Kč"],
       ],
-      note: "Největší firmy světa jsou hodnotné desítky až stovky bilionů korun. Je to jejich tržní kapitalizace (cena akcie × počet akcií), zaokrouhlená podle cen z počátku října 2026.",
+      note: "Bilion je tisíc miliard (anglicky „trillion“).",
+    },
+    {
+      amount: 100_000_000_000_000,
+      word: "sto bilionů",
+      zeros: 14,
+      items: [
+        ["../assets/logos/discover/apple.png", "Apple, asi 105 bilionů"],
+        ["../assets/logos/discover/nvidia.png", "NVIDIA, asi 125 bilionů"],
+        ["../assets/logos/discover/microsoft.png", "Microsoft, asi 85 bilionů"],
+        ["../assets/logos/discover/google.png", "Google, asi 90 bilionů"],
+        ["../assets/logos/discover/amazon.png", "Amazon, asi 60 bilionů"],
+        ["../assets/logos/discover/meta.png", "Meta, asi 40 bilionů"],
+      ],
+      note: "Tolik stojí největší firmy světa (říjen 2026, zaokrouhleno).",
     },
   ];
 
@@ -1231,22 +1242,25 @@
     pane.hidden = true;
     pane.setAttribute("role", "tabpanel");
     pane.setAttribute("aria-labelledby", "tab-guide");
-    pane.append(el("h2", "section-title", "Příručka"));
 
     const nav = el("nav", "guide-tabs");
     nav.setAttribute("aria-label", "Části příručky");
     const sections = [
-      ["money", "Hodnota peněz", buildMoneyGuide],
-      ["growth", "Růst o 100 %", buildGrowthGuide],
-      ["passive", "Pasivní příjem", buildPassiveGuide],
-      ["cap", "Market cap", buildCapGuide],
-      ["invest", "Do čeho investovat", buildInvestGuide],
-      ["glossary", "Slovníček", buildGlossaryGuide],
+      ["money", "💰", "Peníze", "Hodnota peněz", buildMoneyGuide],
+      ["growth", "📈", "Růst", "Růst o 100 %", buildGrowthGuide],
+      ["passive", "🏖️", "Příjem", "Pasivní příjem", buildPassiveGuide],
+      ["cap", "🏢", "Cap", "Market cap", buildCapGuide],
+      ["age", "🎂", "Věk", "Výhoda věku", buildAgeGuide],
+      ["invest", "🧭", "Tipy", "Do čeho investovat", buildInvestGuide],
+      ["glossary", "📖", "Slovník", "Slovníček", buildGlossaryGuide],
     ];
     const bodies = {};
-    for (const [id, label, builder] of sections) {
-      const btn = el("button", "guide-tab", label);
+    for (const [id, emoji, label, title, builder] of sections) {
+      const btn = el("button", "guide-tab");
+      btn.append(el("span", "guide-tab-ico", emoji), el("span", "guide-tab-label", label));
       btn.type = "button";
+      btn.title = title;
+      btn.setAttribute("aria-label", title);
       btn.dataset.section = id;
       btn.addEventListener("click", () => showGuideSection(id));
       nav.append(btn);
@@ -1272,7 +1286,6 @@
   /* each section plays its little animation again whenever it is opened */
   function playGuide(id) {
     if (id === "growth") playGrowthDemo();
-    if (id === "cap") playCapDemo();
     if (id === "money") {
       for (const row of guideRefs.bodies.money.querySelectorAll(".money-row")) {
         row.classList.remove("is-in");
@@ -1296,7 +1309,7 @@
       const row = el("section", "panel money-row");
       row.style.setProperty("--i", String(i));
       const head = el("div", "money-head");
-      const big = el("strong", "money-amount");
+      const big = el("strong", `money-amount${step.zeros >= 12 ? " is-long" : ""}`);
       big.append(document.createTextNode(nf({ maximumFractionDigits: 0 }).format(step.amount).replace(/ /g, " ")), el("span", "cur", " Kč"));
       head.append(big, el("span", "money-word", step.word));
       const zeros = el("div", "money-zeros");
@@ -1322,7 +1335,6 @@
       if (step.note) row.append(el("p", "money-secs", step.note));
       box.append(row);
     });
-    box.append(el("p", "guide-note", "Bilion je v češtině tisíc miliard, tedy 1 a dvanáct nul. V angličtině se mu říká „trillion“."));
   }
 
   /* ---- 2. growth of 100 % means twice the price ---- */
@@ -1331,14 +1343,13 @@
     box.append(sectionIntro("Růst o 100 % neznamená, že je to o sto korun víc. Znamená to, že je to dvakrát tolik."));
 
     const rule = el("section", "panel growth-rule");
-    rule.append(el("h3", "guide-h", "Pravidlo: k procentům přičti 100"));
     const chips = el("div", "gr-chips");
     for (const [pct, word] of [[100, "dvojnásobek"], [200, "trojnásobek"], [300, "čtyřnásobek"], [900, "desetinásobek"]]) {
       const c = el("div", "gr-chip");
       c.append(el("b", "", `+${pct} %`), el("span", "", `= ${word}`), el("small", "", `×${pct / 100 + 1}`));
       chips.append(c);
     }
-    rule.append(chips, el("p", "guide-note", "Růst o 100 % je dvojnásobek, o 200 % trojnásobek, o 300 % čtyřnásobek a tak dál. Vždy je to o jedno víc, než kolik je stovek procent."));
+    rule.append(chips);
     box.append(rule);
 
     const demo = el("section", "panel growth-demo");
@@ -1450,33 +1461,30 @@
 
   /* a few real examples from the Objevuj file: how much 1 000 Kč would have become */
   async function loadGrowthExamples(box) {
-    try {
-      const res = await fetch("../assets/discover-history.json", { cache: "no-cache" });
-      const data = await res.json();
-      const wanted = [
-        ["pc-charizard-1st", "5y", "Karta Charizard (PSA 10)", "5 let"],
-        ["nasdaq-xstock", "5y", "Nasdaq 100", "5 let"],
-        ["bitcoin", "1y", "Bitcoin", "1 rok"],
-      ];
-      const rows = [];
-      for (const [id, key, name, when] of wanted) {
-        const row = data.items?.[id];
-        if (row && isPrice(row[key]) && isPrice(row.last)) rows.push([name, when, row.last / row[key] - 1]);
-      }
-      if (!rows.length) return;
-      box.append(el("h3", "guide-h", "Skutečné příklady z Objevuj"));
-      for (const [name, when, ratio] of rows) {
-        const line = el("div", "live-row");
-        line.append(
-          el("b", "", name),
-          el("span", "", `za ${when} ${formatPct(ratio)} → z 1 000 Kč by dnes bylo ${formatCzk(1000 * (1 + ratio))}`),
-        );
-        box.append(line);
-      }
-      box.hidden = false;
-    } catch {
-      /* no file, no examples */
+    const data = await guideData();
+    if (!data) return;
+    const wanted = [
+      ["pc-charizard-1st", "5y", "Karta Charizard", "5 let", "../assets/logos/discover/charizard-1st.png"],
+      ["nasdaq-xstock", "5y", "Nasdaq 100", "5 let", "../assets/logos/discover/nasdaq.png"],
+      ["bitcoin", "1y", "Bitcoin", "1 rok", "../assets/logos/discover/bitcoin.png"],
+    ];
+    let any = false;
+    for (const [id, key, name, when, logo] of wanted) {
+      const ratio = histChange(data, id, key);
+      if (ratio === null) continue;
+      if (!any) box.append(el("h3", "guide-h", "Skutečné příklady"));
+      any = true;
+      const line = el("div", "live-row");
+      const img = document.createElement("img");
+      img.src = logo;
+      img.alt = "";
+      img.loading = "lazy";
+      const text = el("div", "live-text");
+      text.append(el("b", "", `${name}, ${when}`), el("span", "", `1 000 Kč → ${formatCzk(1000 * (1 + ratio))} (${formatPct(ratio)})`));
+      line.append(img, text);
+      box.append(line);
     }
+    box.hidden = !any;
   }
 
   /* ---- 2b. passive income: what a month costs, what money can earn, and the snowball that grows until nobody has to go to work ---- */
@@ -1509,7 +1517,7 @@
   const wholePct = (ratio) => `${nf({ maximumFractionDigits: 0 }).format(Math.abs(ratio) * 100)} %`;
 
   function buildPassiveGuide(box) {
-    box.append(sectionIntro("Peníze umí pracovat za tebe. Když je máš investované, přinášejí pravidelný příjem, i když zrovna spíš. Tomu se říká pasivní příjem."));
+    box.append(sectionIntro("Peníze umí pracovat za tebe: když jsou investované, vydělávají, i když spíš."));
 
     const monthly = LIVING.reduce((a, r) => a + r[2], 0);
     const yearly = monthly * 12;
@@ -1533,75 +1541,54 @@
     costs.append(total);
     box.append(costs);
 
-    /* what money can earn: the two best known indexes over the last 20 years */
+    /* what has to be earned: short */
     const earn = el("section", "panel passive-earn");
-    earn.append(el("h3", "guide-h", "Kolik se dá vydělat"));
-    earn.append(
-      el(
-        "p",
-        "pcalc-text",
-        "Když si koupíš celý index, tedy balíček stovek největších firem, a necháš ho dlouho růst, vychází to historicky zhruba na 10 % ročně nebo i víc. Takhle rostly dva nejznámější indexy za posledních 20 let:",
-      ),
-    );
-    const benchBox = el("div", "pe-bench");
-    const benchNote = el("p", "guide-note");
-    const renderBench = (b) => {
-      benchBox.replaceChildren();
-      for (const [name, key] of [["S&P 500", "sp500"], ["Nasdaq 100", "nasdaq"]]) {
-        const row = el("div", "pe-row");
-        const head = el("div", "pe-head");
-        head.append(el("b", "", name), el("span", "", `asi ${wholePct(b[key].cagr)} ročně`));
-        const track = el("div", "pe-track");
-        const fill = el("div", "pe-fill");
-        fill.style.setProperty("--w", `${Math.min(100, (b[key].cagr / 0.2) * 100)}%`);
-        track.append(fill);
-        row.append(head, track, el("small", "", `Za ${b.years} let by z 1 000 Kč bylo ${formatCzk(1000 * b[key].multiple)}.`));
-        benchBox.append(row);
-      }
-      const w1 = b.sp500.worst;
-      const w2 = b.nasdaq.worst;
-      benchNote.textContent =
-        `Jsou to čísla z minulosti, v dolarech a před daněmi, a minulost nic nezaručuje. I tyhle indexy někdy padají: v roce ${w1.year} klesl S&P 500 o ${wholePct(w1.ret)}` +
-        `${w2.year === w1.year ? " a" : ` a v roce ${w2.year}`} Nasdaq 100 o ${wholePct(w2.ret)}. Vyplatí se mít trpělivost.`;
-    };
-    renderBench(BENCH_FALLBACK);
-    guideData().then((d) => {
-      if (d?.benchmarks?.sp500 && d.benchmarks.nasdaq) renderBench(d.benchmarks);
-    });
-    earn.append(benchBox);
-    earn.append(el("p", "pcalc-text", `Počítejme proto opatrně s ${PASSIVE_YIELD * 100} % ročně. Aby ti výnos pokryl život, potřebuješ:`));
+    earn.append(el("h3", "guide-h", "Aby nemusely do práce"));
+    earn.append(el("p", "pcalc-text", `Potřebují ${formatCzk(yearly)} ročně, tedy ${formatCzk(monthly)} měsíčně. Při výnosu ${PASSIVE_YIELD * 100} % ročně na to potřebují:`));
     const formula = el("div", "pcalc-formula");
     formula.append(
-      el("span", "cf-chip is-price", `${formatCzk(yearly)} za rok`),
+      el("span", "cf-chip is-price", `${formatCzk(yearly)}`),
       el("i", "", "÷"),
       el("span", "cf-chip is-count", `${PASSIVE_YIELD * 100} %`),
       el("i", "", "="),
       el("b", "cf-chip is-cap", formatCzk(goal)),
     );
-    earn.append(
-      formula,
-      el("p", "pcalc-text", `Z ${formatCzk(goal)} ti ${PASSIVE_YIELD * 100} % ročně dá ${formatCzk(yearly)}, tedy ${formatCzk(monthly)} měsíčně. Z toho zaplatíš jídlo, nájem i zbytek a do práce chodit nemusíš.`),
-      benchNote,
-    );
+    earn.append(formula, el("p", "pcalc-text", "Tolik se dá vydělat třeba s indexy:"));
+    const chips = el("div", "pe-chips");
+    const chipRefs = {};
+    for (const [name, key, logo] of [["S&P 500", "sp500", "../assets/logos/discover/sp500.png"], ["Nasdaq 100", "nasdaq", "../assets/logos/discover/nasdaq.png"]]) {
+      const chip = el("div", "pe-chip");
+      const img = document.createElement("img");
+      img.src = logo;
+      img.alt = "";
+      const rate = el("span", "");
+      chip.append(img, el("b", "", name), rate);
+      chips.append(chip);
+      chipRefs[key] = rate;
+    }
+    const showRates = (b) => {
+      for (const key of Object.keys(chipRefs)) chipRefs[key].textContent = `asi ${wholePct(b[key].cagr)} ročně`;
+    };
+    showRates(BENCH_FALLBACK);
+    guideData().then((d) => {
+      if (d?.benchmarks?.sp500 && d.benchmarks.nasdaq) showRates(d.benchmarks);
+    });
+    earn.append(chips, el("small", "pe-note", "posledních 20 let, bez záruky"));
     box.append(earn);
 
     buildSnowball(box, monthly, goal);
   }
 
-  /* the snowball: one slider makes it bigger; when it reaches the goal the banner flips to "no work needed".
-     Nobody knows when an investment takes off, so there is no time on it, only the size. */
-  function buildSnowball(box, monthly, goal) {
-    const MAX_VALUE = goal * 1.4;
-    const valueAt = (pos) => START_AMOUNT * (MAX_VALUE / START_AMOUNT) ** (pos / 100); // a log scale: from the start to a bit over the goal
+  /* the snowball: one slider makes it bigger, up to the money that gives 100 000 Kč a month; when it reaches the goal the banner flips to
+     "no work needed". Nobody knows when an investment takes off, so there is no time on it, only the size. */
+  function buildSnowball(box, monthlyNeed, goal) {
+    const MAX_VALUE = (100_000 * 12) / PASSIVE_YIELD;
+    const valueAt = (pos) => START_AMOUNT * (MAX_VALUE / START_AMOUNT) ** (pos / 100); // a log scale: from the start to 100 000 Kč a month
 
     const card = el("section", "panel snowball");
     card.append(el("h3", "guide-h", "Sněhová koule"));
     card.append(
-      el(
-        "p",
-        "pcalc-text",
-        `Začínáš s ${formatCzk(START_AMOUNT)}. Když budeš investovat dál a výnos ${PASSIVE_YIELD * 100} % ročně se bude přičítat k celé koule, nabaluje se jako sníh. Posuň posuvník a sleduj, jak koule roste a kdy ti bude stačit na život.`,
-      ),
+      el("p", "pcalc-text", `Začínáš s ${formatCzk(START_AMOUNT)} a koule se nabaluje. Posuň posuvník a uvidíš, kolik musí mít, aby ti dávala měsíčně víc.`),
     );
 
     const stage = el("div", "sb-stage");
@@ -1620,8 +1607,12 @@
     const amount = el("div", "sb-amount");
     const track = el("div", "sb-track");
     const fill = el("div", "sb-fill");
-    track.append(fill);
-    const progress = el("p", "sb-progress");
+    const mark = el("span", "sb-mark");
+    mark.style.left = `${(goal / MAX_VALUE) * 100}%`;
+    mark.title = `cíl ${formatCzk(goal)}`;
+    track.append(fill, mark);
+    const marks = el("p", "sb-progress");
+    marks.append(el("span", "", `cíl ${formatCzk(goal)}`), el("span", "", formatCzk(MAX_VALUE)));
     const banner = el("div", "sb-banner is-work");
     banner.setAttribute("role", "status");
     banner.setAttribute("aria-live", "polite");
@@ -1640,26 +1631,19 @@
     let wasFree = false;
     const paint = () => {
       const value = valueAt(Number(input.value));
-      const ratio = Math.min(1, value / goal);
+      const ratio = value / MAX_VALUE;
       const size = 56 + 150 * Math.sqrt(ratio);
       ball.style.width = ball.style.height = `${size}px`;
       ballIcon.style.fontSize = `${size * 0.5}px`;
-      amount.replaceChildren(el("strong", "", formatCzk(Math.round(value / 10) * 10)));
-      fill.style.width = `${ratio * 100}%`;
-      progress.textContent = `${nf({ maximumFractionDigits: 0 }).format(Math.floor(ratio * 100))} % cíle ${formatCzk(goal)}`;
       const income = (value * PASSIVE_YIELD) / 12;
+      amount.replaceChildren(el("strong", "", formatCzk(Math.round(value / 10) * 10)), el("small", "", ` = ${formatCzk(Math.round(income / 10) * 10)} měsíčně`));
+      fill.style.width = `${ratio * 100}%`;
       const free = value >= goal - 0.5;
       banner.classList.toggle("is-free", free);
       banner.classList.toggle("is-work", !free);
       banner.replaceChildren(
         el("span", "sb-banner-icon", free ? "🏖️" : "💼"),
-        el(
-          "span",
-          "",
-          free
-            ? `Hotovo! Koule ti dává ${formatCzk(income)} měsíčně. Do práce chodit nemusíš.`
-            : `Zatím musíš chodit do práce. Koule ti dává ${formatCzk(income)} měsíčně z potřebných ${formatCzk(monthly)}.`,
-        ),
+        el("span", "", free ? "Hotovo! Do práce chodit nemusíš." : `Zatím musíš do práce. Potřebuješ ${formatCzk(monthlyNeed)} měsíčně.`),
       );
       if (free && !wasFree) {
         banner.classList.remove("flash");
@@ -1670,107 +1654,122 @@
     };
     input.addEventListener("input", paint);
 
-    card.append(stage, amount, track, progress, banner, wrap);
+    card.append(stage, amount, track, marks, banner, wrap);
     box.append(card);
     paint();
   }
 
-  /* ---- 3. market cap ---- */
+  /* ---- 3. market cap: short, with pictures ---- */
+
+  function logoImg(src, cls = "") {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = "";
+    img.loading = "lazy";
+    if (cls) img.className = cls;
+    return img;
+  }
 
   function buildCapGuide(box) {
-    box.append(sectionIntro("Tržní kapitalizace (market cap) říká, kolik je firma celá „stojí“. Počítá se jednoduše:"));
+    box.append(sectionIntro("Market cap říká, jak velká je firma nebo mince. Podle něj poznáš, kolik ještě může vyrůst."));
 
     const formula = el("section", "panel cap-formula");
     formula.innerHTML =
-      '<div class="cf-line"><span class="cf-chip is-price">cena 1 akcie</span><i>×</i><span class="cf-chip is-count">počet akcií</span><i>=</i><span class="cf-chip is-cap">tržní kapitalizace</span></div>';
+      '<div class="cf-line"><span class="cf-chip is-price">cena 1 akcie</span><i>×</i><span class="cf-chip is-count">počet akcií</span><i>=</i><span class="cf-chip is-cap">market cap</span></div>';
     box.append(formula);
 
-    const demo = el("section", "panel cap-demo");
-    demo.append(el("h3", "guide-h", "Příklad: pekárna Micro"));
-    demo.append(el("p", "cd-text", "Pekárnu si rozdělíme na 20 stejných dílků, kterým říkáme akcie. Každý dílek má svou cenu. Zkus ji měnit:"));
-    const grid = el("div", "cd-grid");
-    grid.setAttribute("aria-hidden", "true");
-    for (let i = 0; i < 20; i++) {
-      const cell = el("span", "cd-cell", "🥖");
-      cell.style.setProperty("--d", `${i * 25}ms`);
-      grid.append(cell);
+    const pot = el("section", "panel cap-potential");
+    pot.append(el("h3", "guide-h", "Kolik může ještě vyrůst"));
+    pot.append(el("p", "cd-text", "Dáš 1 000 Kč. Velká věc už nemá kam moc růst, malá může vyrůst mnohonásobně."));
+    for (const [pic, name, size, mult] of [
+      [logoImg("../assets/logos/discover/bitcoin.png", "pot-logo"), "Bitcoin", "už je velký, asi 37 bilionů Kč", 5],
+      [el("span", "pot-logo pot-seed", "🌱"), "Malá firma", "je malá, asi 1 miliarda Kč", 100],
+    ]) {
+      const row = el("div", "pot-row");
+      const text = el("div", "pot-text");
+      text.append(el("b", "", name), el("small", "", size));
+      const track = el("div", "pot-track");
+      const f = el("div", "pot-fill");
+      f.style.setProperty("--w", `${mult}%`);
+      track.append(f);
+      const res = el("div", "pot-res");
+      res.append(el("b", "", `třeba ×${mult}`), el("span", "", `1 000 Kč → ${formatCzk(1000 * mult)}`));
+      row.append(pic, text, track, res);
+      pot.append(row);
     }
-    const controls = el("div", "cd-controls");
-    const minus = el("button", "guide-btn", "− cena");
-    const plus = el("button", "guide-btn", "+ cena");
-    minus.type = plus.type = "button";
-    const eq = el("div", "cd-eq");
-    const buttons = el("div", "cd-buttons");
-    buttons.append(minus, plus);
-    controls.append(eq, buttons);
-    const paint = () => {
-      eq.replaceChildren();
-      eq.append(
-        el("span", "cf-chip is-price", `${guideState.capPrice} Kč`),
-        el("i", "", "×"),
-        el("span", "cf-chip is-count", "20 ks"),
-        el("i", "", "="),
-        el("b", "cf-chip is-cap", formatCzk(guideState.capPrice * 20)),
-      );
-      grid.classList.remove("is-pop");
-      void grid.offsetWidth;
-      grid.classList.add("is-pop");
-    };
-    minus.addEventListener("click", () => {
-      guideState.capPrice = Math.max(10, guideState.capPrice - 10);
-      paint();
-    });
-    plus.addEventListener("click", () => {
-      guideState.capPrice = Math.min(500, guideState.capPrice + 10);
-      paint();
-    });
-    demo.append(grid, controls);
-    box.append(demo);
-    guideRefs_capPaint = paint;
-
-    const compare = el("section", "panel cap-compare");
-    compare.append(el("h3", "guide-h", "Proč nestačí koukat na cenu akcie"));
-    compare.append(el("p", "cd-text", "Která firma je větší? Akcie A stojí 5 000 Kč, akcie B jen 50 Kč. Bez počtu akcií to nevíš."));
-    const firms = [
-      ["Firma A", 5000, 1_000, 10],
-      ["Firma B", 50, 1_000_000, 100],
-    ];
-    for (const [name, price, count, width] of firms) {
-      const f = el("div", "cc-firm");
-      const head = el("div", "cc-head");
-      head.append(el("b", "", name), el("small", "", `${nf({ maximumFractionDigits: 0 }).format(price)} Kč × ${nf({ maximumFractionDigits: 0 }).format(count)} ks`));
-      const track = el("div", "cc-track");
-      const fill = el("div", "cc-fill");
-      fill.style.setProperty("--w", `${width}%`);
-      fill.append(el("span", "", formatCzk(price * count)));
-      track.append(fill);
-      f.append(head, track);
-      compare.append(f);
-    }
-    compare.append(el("p", "cd-text", "Akcie B je 100× levnější, ale firma B je 10× větší. Proto se firmy porovnávají podle tržní kapitalizace, ne podle ceny jedné akcie."));
-    box.append(compare);
+    box.append(pot);
 
     const real = el("section", "panel cap-real");
-    real.append(el("h3", "guide-h", "Skutečný příklad"));
-    const rows = [
-      ["Tesla", "asi 3,2 mld. akcií", "× asi 8 100 Kč", "≈ 26 bilionů Kč"],
-      ["RoboStrategy", "24,4 mil. akcií", "× asi 630 Kč", "≈ 15 mld. Kč"],
-    ];
-    for (const [name, count, price, cap] of rows) {
+    real.append(el("h3", "guide-h", "Příklady"));
+    for (const [logo, name, calc, cap] of [
+      ["../assets/logos/discover/apple.png", "Apple", "asi 14,7 mld. akcií × asi 7 300 Kč", "≈ 107 bilionů Kč"],
+      ["../assets/logos/tesla.png", "Tesla", "asi 3,2 mld. akcií × asi 8 100 Kč", "≈ 26 bilionů Kč"],
+      ["../assets/logos/bot.png", "RoboStrategy", "24,4 mil. akcií × asi 630 Kč", "≈ 15 mld. Kč"],
+    ]) {
       const r = el("div", "cr-row");
-      r.append(el("b", "", name), el("span", "", `${count} ${price}`), el("strong", "", cap));
+      const text = el("div", "cr-text");
+      text.append(el("b", "", name), el("small", "", calc), el("strong", "", cap));
+      r.append(logoImg(logo, "cr-logo"), text);
       real.append(r);
     }
-    real.append(el("p", "guide-note", "Čísla jsou zaokrouhlená podle cen z počátku října 2026. Cena se mění každou chvíli. V Portfoliu ji u každé položky najdeš v Pro režimu."));
+    real.append(el("small", "guide-note", "Zaokrouhleno, říjen 2026."));
     box.append(real);
-    buildYouthGuide(box);
-  }
-  let guideRefs_capPaint = null;
-  function playCapDemo() {
-    if (guideRefs_capPaint) guideRefs_capPaint();
   }
 
-  /* ---- 3b. young people can afford a risk (the end of the market cap part) ---- */
+  /* ---- 3b. the advantage of being young ---- */
+
+  function buildAgeGuide(box) {
+    box.append(sectionIntro("Mladí si mohou dovolit riskovat. Dospělí to tak snadno nemají."));
+
+    const lose = el("section", "panel age-lose");
+    lose.append(el("h3", "guide-h", "Nemáš o co přijít"));
+    for (const [emoji, text] of [
+      ["🪙", `V nejhorším přijdeš o ${formatCzk(START_AMOUNT)}.`],
+      ["🏠", "Bydlíš u rodičů, nemáš nájem ani půjčky."],
+      ["💼", "V nejhorším budeš ve 25 letech chodit do práce, kam bys šel stejně."],
+    ]) {
+      const row = el("div", "yg-lose");
+      row.append(el("span", "pc-emoji", emoji), el("span", "", text));
+      lose.append(row);
+    }
+    box.append(lose);
+
+    const time = el("section", "panel age-time");
+    time.append(el("h3", "guide-h", "Čas je tvoje výhoda"));
+    const bar = el("div", "yg-timeline");
+    bar.append(el("span", "yg-seg is-now", `${KID_AGE} let`), el("span", "yg-seg is-exp", "15 let experimentu"), el("span", "yg-seg is-after", "25 let"));
+    time.append(bar, el("p", "cd-text", `${formatCzk(START_AMOUNT)} za 15 let, když věc roste ročně o:`));
+    for (const r of [0.1, 0.2, 0.3]) {
+      const row = el("div", "ps-row");
+      row.append(el("span", "", `${r * 100} %`), el("b", "", formatCzk(START_AMOUNT * (1 + r) ** 15)));
+      time.append(row);
+    }
+    time.append(el("small", "guide-note", "Příklad, ne slib."));
+    box.append(time);
+
+    const early = el("section", "panel age-early");
+    early.append(el("h3", "guide-h", "Kdo je u toho brzo, vydělá nejvíc"));
+    early.append(el("p", "cd-text", "1 000 Kč, které by byly:"));
+    const rows = el("div", "yg-rows");
+    early.append(rows);
+    guideData().then((d) => {
+      for (const [id, key, name, when, logo] of [
+        ["nvidia-xstock", "10y", "NVIDIA", "před 10 lety", "../assets/logos/discover/nvidia.png"],
+        ["bitcoin", "10y", "Bitcoin", "před 10 lety", "../assets/logos/discover/bitcoin.png"],
+        ["dogecoin", "1y", "Dogecoin", "před rokem", "../assets/logos/discover/dogecoin.png"],
+      ]) {
+        const ratio = histChange(d, id, key);
+        if (ratio === null) continue;
+        const row = el("div", "live-row");
+        const text = el("div", "live-text");
+        text.append(el("b", "", `${name}, ${when}`), el("span", "", `1 000 Kč → ${formatCzk(1000 * (1 + ratio))} (${formatPct(ratio)})`));
+        row.append(logoImg(logo), text);
+        rows.append(row);
+      }
+    });
+    early.append(el("small", "guide-note", "Ne každá sázka vyjde, proto ne všechno na jednu věc."));
+    box.append(early);
+  }
 
   function pill(ratio, label) {
     const p = el("span", `disc-change is-${trend(ratio)}`);
@@ -1779,162 +1778,52 @@
     return p;
   }
 
-  function buildYouthGuide(box) {
-    box.append(el("h2", "section-title guide-sub", "Mladí si mohou dovolit riskovat"));
-
-    const small = el("section", "panel youth-small");
-    small.append(el("h3", "guide-h", "Proč nás zajímá malý market cap"));
-    small.append(
-      el(
-        "p",
-        "cd-text",
-        "Velká firma už je velká. Aby Apple zdvojnásobila svou hodnotu, musí přibýt dalších asi 105 bilionů Kč. Malé firmě nebo malé kryptoměně stačí přibýt pár miliard. Proto mají malé věci největší šanci vyrůst několikanásobně.",
-      ),
-    );
-    for (const [emoji, name, cap, need, w] of [
-      ["🍎", "Apple", "asi 105 bilionů Kč", "k zdvojnásobení musí přibýt asi 105 bilionů Kč", 100],
-      ["🌱", "Malá firma", "asi 1 miliarda Kč", "k zdvojnásobení stačí přibýt 1 miliarda Kč", 1],
-    ]) {
-      const row = el("div", "cc-firm");
-      const head = el("div", "cc-head");
-      head.append(el("b", "", `${emoji} ${name}`), el("small", "", cap));
-      const trackEl = el("div", "cc-track");
-      const f = el("div", "cc-fill");
-      f.style.setProperty("--w", `${w}%`);
-      f.style.minWidth = "0.7em";
-      trackEl.append(f);
-      row.append(head, trackEl, el("small", "yg-need", need));
-      small.append(row);
-    }
-    small.append(el("p", "guide-note", "Má to i druhou stranu: malé věci častěji padnou a některé úplně zaniknou. Čím větší šance, tím větší riziko."));
-    box.append(small);
-
-    const early = el("section", "panel youth-early");
-    early.append(el("h3", "guide-h", "Nejvíc vydělá ten, kdo je u toho brzo"));
-    early.append(
-      el(
-        "p",
-        "cd-text",
-        "Největší zisky si odnesou ti, kdo koupí něco dřív, než to vyroste. Kdo koupí až po růstu, platí už vysokou cenu. Takhle by dopadlo 1 000 Kč:",
-      ),
-    );
-    const earlyRows = el("div", "yg-rows");
-    early.append(earlyRows);
-    guideData().then((d) => {
-      for (const [id, key, name, when] of [
-        ["nvidia-xstock", "10y", "NVIDIA", "před 10 lety"],
-        ["bitcoin", "10y", "Bitcoin", "před 10 lety"],
-        ["dogecoin", "1y", "Dogecoin", "před rokem"],
-      ]) {
-        const ratio = histChange(d, id, key);
-        if (ratio === null) continue;
-        const row = el("div", "live-row");
-        row.append(el("b", "", `${name}, koupeno ${when}`), el("span", "", `z 1 000 Kč by dnes bylo ${formatCzk(1000 * (1 + ratio))} (${formatPct(ratio)})`));
-        earlyRows.append(row);
-      }
-    });
-    early.append(el("p", "guide-note", "Ne každá sázka vyjde: kryptoměna Dogecoin za rok ztratila většinu hodnoty. Proto se nesází všechno na jednu věc."));
-    box.append(early);
-
-    const lose = el("section", "panel youth-lose");
-    lose.append(el("h3", "guide-h", "Co můžeš ztratit?"));
-    for (const [emoji, text] of [
-      ["🪙", `V nejhorším přijdeš o ${formatCzk(START_AMOUNT)}, kterými začínáš.`],
-      ["🏠", "Bydlíš u rodičů. Nemáš nájem, účty ani půjčky."],
-      ["💼", "V nejhorším budeš ve 25 letech chodit do práce. A tam bys chodil stejně, i kdybys neriskoval."],
-    ]) {
-      const row = el("div", "yg-lose");
-      row.append(el("span", "pc-emoji", emoji), el("span", "", text));
-      lose.append(row);
-    }
-    box.append(lose);
-
-    const time = el("section", "panel youth-time");
-    time.append(el("h3", "guide-h", "Tvoje největší výhoda je čas"));
-    time.append(
-      el(
-        "p",
-        "cd-text",
-        `Je ti ${KID_AGE}. Do 25 let je to 15 let, kdy můžeš zkoušet, chybovat a učit se a peníze mají čas růst. Dospělý, který přijde o peníze v padesáti, takový čas nemá.`,
-      ),
-    );
-    const bar = el("div", "yg-timeline");
-    bar.append(el("span", "yg-seg is-now", `${KID_AGE} let`), el("span", "yg-seg is-exp", "15 let experimentu"), el("span", "yg-seg is-after", "25 let"));
-    time.append(bar);
-    time.append(el("p", "cd-text", `Kolik by z ${formatCzk(START_AMOUNT)} bylo za 15 let, kdyby věc rostla ročně o:`));
-    for (const r of [0.1, 0.2, 0.3]) {
-      const row = el("div", "ps-row");
-      row.append(el("span", "", `${r * 100} % ročně`), el("b", "", formatCzk(START_AMOUNT * (1 + r) ** 15)));
-      time.append(row);
-    }
-    time.append(el("p", "guide-note", "Jsou to jen příklady výpočtu, ne sliby. Čím víc procent, tím víc štěstí je potřeba."));
-    box.append(time);
-  }
-
-  /* ---- 3c. what to invest in ---- */
+  /* ---- 3c. what to invest in: big rows, only the 10 year change ---- */
 
   function buildInvestGuide(box) {
-    box.append(sectionIntro("Nikdo nevidí do budoucna. Dá se ale rozlišit, co je bezpečnější a co riskantnější, ale s větším potenciálem."));
+    box.append(sectionIntro("Bezpečnější základ a riskantnější věci s větším potenciálem."));
 
     const slots = [];
-    const group = (title, intro, rows) => {
+    const group = (title, rows) => {
       const card = el("section", "panel invest-card");
-      card.append(el("h3", "guide-h", title), el("p", "cd-text", intro));
+      card.append(el("h3", "guide-h", title));
       for (const [logo, name, note, id] of rows) {
         const row = el("div", "inv-row");
-        const img = document.createElement("img");
-        img.src = logo;
-        img.alt = "";
-        img.loading = "lazy";
         const text = el("div", "inv-text");
         text.append(el("b", "", name), el("small", "", note));
         const chg = el("div", "inv-chg");
-        row.append(img, text, chg);
-        if (id) slots.push({ id, chg });
+        row.append(logoImg(logo), text, chg);
+        slots.push({ id, chg });
         card.append(row);
       }
       box.append(card);
-      return card;
     };
 
-    group("Základ: nejbezpečnější z celého seznamu", "Největší a nejznámější věci ve svých skupinách. Nejsou bez rizika, ale je to nejlepší místo, kde začít.", [
-      ["../assets/logos/discover/sp500.png", "S&P 500", "500 největších firem USA v jednom balíčku", "sp500-xstock"],
+    group("Základ: nejbezpečnější", [
+      ["../assets/logos/discover/sp500.png", "S&P 500", "500 největších firem USA", "sp500-xstock"],
       ["../assets/logos/discover/nasdaq.png", "Nasdaq 100", "100 největších technologických firem USA", "nasdaq-xstock"],
       ["../assets/logos/discover/bitcoin.png", "Bitcoin", "nejstarší a největší kryptoměna", "bitcoin"],
     ]);
 
-    group("Riskantnější, ale s větším potenciálem: AI, roboti a vesmír", "Firmy, které staví umělou inteligenci, roboty a rakety. Mohou vyrůst nejvíc, ale také nejvíc kolísat.", [
+    group("Riskantnější, větší potenciál: AI, roboti, vesmír", [
       ["../assets/logos/discover/nvidia.png", "NVIDIA", "čipy pro umělou inteligenci", "nvidia-xstock"],
-      ["../assets/logos/tesla.png", "Tesla", "elektromobily, energie a roboty", "tesla-xstock"],
-      ["../assets/logos/bot.png", "RoboStrategy", "fond na roboty a umělou inteligenci", null],
-      ["../assets/logos/spacex.png", "SpaceX", "rakety a internet Starlink, tedy vesmír", null],
+      ["../assets/logos/tesla.png", "Tesla", "elektromobily a roboty", "tesla-xstock"],
+      ["../assets/logos/bot.png", "RoboStrategy", "fond na roboty a umělou inteligenci", "robostrategy"],
+      ["../assets/logos/spacex.png", "SpaceX", "rakety a vesmír", "spacex"],
     ]);
 
     const story = el("section", "panel invest-story");
-    story.append(el("h3", "guide-h", "Příběh: nejdřív umělá inteligence, teď roboti"));
-    const storyText = el("p", "cd-text");
-    story.append(storyText);
-    story.append(
-      el(
-        "p",
-        "cd-text",
-        "Přesně to samé se podle mnoha lidí čeká u robotů. Stejně jako dřív chytré chatboty, i roboty lidé teprve začínají používat v továrnách, ve skladech i doma. Nikdo ale neví jistě, kdy ani jestli, proto do toho dávej jen tolik, kolik si můžeš dovolit ztratit.",
-      ),
-    );
+    story.append(el("h3", "guide-h", "Nejdřív umělá inteligence, teď roboti"));
+    story.append(el("p", "cd-text", "Nedávno byl boom kolem umělé inteligence a ChatGPT. Podle mnoha lidí to samé čeká roboty. Nikdo to ale neví jistě."));
     box.append(story);
 
-    const base = "Nedávno byl velký boom kolem umělé inteligence a ChatGPT. Kdo včas koupil firmy, které umělou inteligenci vyrábějí, třeba NVIDIA, vydělal.";
-    storyText.textContent = base;
     guideData().then((d) => {
       for (const { id, chg } of slots) {
         chg.replaceChildren();
-        for (const [key, label] of [["1y", "1 rok"], ["5y", "5 let"]]) {
-          const r = histChange(d, id, key);
-          if (r !== null) chg.append(pill(r, label));
-        }
+        const r = histChange(d, id, "10y");
+        if (r !== null) chg.append(pill(r, "10 let"));
+        else chg.append(el("small", "inv-none", "méně než 10 let dat"));
       }
-      const nv = histChange(d, "nvidia-xstock", "5y");
-      if (nv !== null) storyText.textContent = `${base} NVIDIA za 5 let ${formatPct(nv)}, z 1 000 Kč by dnes bylo ${formatCzk(1000 * (1 + nv))}.`;
     });
   }
 

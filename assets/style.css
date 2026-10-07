@@ -3404,27 +3404,46 @@ body.has-lightbox {
 /* ---------- Příručka (guide): money, growth, market cap, glossary ---------- */
 
 .guide-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 2px 0 14px;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  margin: 0 0 14px;
+  padding: 4px;
+  border-radius: min(var(--btn-radius), 22px);
+  background: var(--btn-bg);
+  border: var(--btn-border);
+  box-shadow: var(--btn-shadow);
 }
 
 .guide-tab {
   appearance: none;
-  flex: 1 1 auto;
-  padding: 9px 12px;
+  min-width: 0;
+  padding: 6px 0 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
   font: inherit;
-  font-size: calc(var(--base-size) * 0.86);
-  font-weight: 800;
-  white-space: nowrap;
   color: var(--btn-text);
-  background: var(--btn-bg);
-  border: var(--btn-border);
-  border-radius: var(--btn-radius);
-  box-shadow: var(--btn-shadow);
+  background: transparent;
+  border: 0;
+  border-radius: min(var(--btn-radius), 16px);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+}
+
+.guide-tab-ico {
+  font-size: 1.25rem;
+  line-height: 1.2;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.guide-tab-label {
+  font-size: calc(var(--base-size) * 0.6);
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .guide-tab[aria-pressed="true"] {
@@ -3438,9 +3457,9 @@ body.has-lightbox {
   outline-offset: 2px;
 }
 
-:root[data-theme="minecraft"] .guide-tab {
-  font-size: 0.5rem;
-  padding: 9px 8px;
+:root[data-theme="minecraft"] .guide-tab-label {
+  font-size: 0.28rem;
+  overflow-wrap: normal;
 }
 
 .guide-body {
@@ -4565,4 +4584,229 @@ body.has-lightbox {
   .sb-banner.flash {
     animation: none;
   }
+}
+
+/* Příručka, version 3: compact, with pictures */
+.money-amount.is-long {
+  font-size: clamp(0.95rem, 5vw, 1.45rem);
+}
+
+:root[data-theme="minecraft"] .money-amount {
+  font-size: 0.8rem;
+}
+
+:root[data-theme="minecraft"] .money-amount.is-long {
+  font-size: 0.55rem;
+}
+
+.money-logo,
+.live-row img,
+.cr-logo,
+.pot-logo {
+  object-fit: cover;
+  background: #fff;
+}
+
+.live-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+
+.live-row img {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
+
+.live-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.pe-chips {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.pe-chip {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  grid-template-areas: "i n" "i r";
+  gap: 0 8px;
+  align-items: center;
+  padding: 8px;
+  border-radius: min(var(--row-radius), 14px);
+  background: var(--pill-bg);
+}
+
+.pe-chip img {
+  grid-area: i;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+}
+
+.pe-chip b {
+  grid-area: n;
+}
+
+.pe-chip span {
+  grid-area: r;
+  font-size: calc(var(--base-size) * 0.8);
+  font-weight: 800;
+  color: var(--gain-big, #16a36a);
+}
+
+.pe-note {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+}
+
+.sb-track {
+  position: relative;
+  overflow: visible;
+}
+
+.sb-mark {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 3px;
+  margin-left: -1px;
+  border-radius: 2px;
+  background: var(--text);
+}
+
+.sb-progress {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.sb-amount small {
+  font-size: calc(var(--base-size) * 0.85);
+}
+
+/* market cap */
+.pot-row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  grid-template-areas: "l t" "b b" "r r";
+  gap: 4px 10px;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.pot-logo {
+  grid-area: l;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+}
+
+.pot-seed {
+  display: grid;
+  place-items: center;
+  font-size: 1.8rem;
+  background: var(--pill-bg);
+}
+
+.pot-text {
+  grid-area: t;
+  display: flex;
+  flex-direction: column;
+}
+
+.pot-text small {
+  color: var(--muted);
+}
+
+.pot-track {
+  grid-area: b;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--pill-bg);
+  overflow: hidden;
+}
+
+.pot-fill {
+  height: 100%;
+  width: var(--w);
+  min-width: 10px;
+  border-radius: 999px;
+  background: var(--gain-big, #16a36a);
+  transform-origin: left;
+  animation: bar-grow 0.8s ease-out both;
+}
+
+.pot-res {
+  grid-area: r;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px 10px;
+}
+
+.pot-res b {
+  color: var(--gain-big, #16a36a);
+  font-size: calc(var(--base-size) * 1.05);
+}
+
+.cr-row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+
+.cr-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+}
+
+.cr-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.cr-text small {
+  color: var(--muted);
+}
+
+/* what to invest in: big */
+.inv-row {
+  grid-template-columns: 68px minmax(0, 1fr);
+  gap: 4px 14px;
+  padding: 12px 0;
+}
+
+.inv-row img {
+  width: 68px;
+  height: 68px;
+  border-radius: 16px;
+}
+
+.inv-text b {
+  font-size: calc(var(--base-size) * 1.25);
+}
+
+.inv-text small {
+  font-size: calc(var(--base-size) * 0.9);
+}
+
+.inv-chg .disc-change {
+  padding: 3px 12px;
+  font-size: calc(var(--base-size) * 1.05);
+}
+
+.inv-none {
+  color: var(--muted);
+  font-weight: 700;
 }
