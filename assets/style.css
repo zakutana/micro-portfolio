@@ -5042,3 +5042,51 @@ body.has-lightbox {
   font-size: calc(var(--base-size) * 1.05);
   white-space: nowrap;
 }
+
+/* Příručka: cheat sheet */
+.cheat-head {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.cheat-head .guide-h {
+  margin: 0;
+}
+
+.cheat-emoji {
+  font-size: 1.6rem;
+  line-height: 1;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.cheat-open {
+  appearance: none;
+  padding: 5px 12px;
+  font: inherit;
+  font-size: calc(var(--base-size) * 0.8);
+  font-weight: 800;
+  color: var(--btn-text);
+  background: var(--pill-bg);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.cheat-open:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.cheat-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--text);
+  line-height: 1.45;
+}
+
+.cheat-list li {
+  margin: 3px 0;
+}

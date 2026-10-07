@@ -546,26 +546,6 @@
     ["share", "Podíl"],
     ["cap", "Tržní kapitalizace"],
   ];
-  const GLOSSARY = [
-    ["Cena za kus", "Kolik stojí jedna jednotka právě teď. Mění se každou chvíli."],
-    ["Nákupní cena", "Průměrná cena, za kterou byly ty kusy koupené. Když nakoupíš ve dvou dnech za různé ceny, spočítá se průměr."],
-    ["Zisk / ztráta", "Rozdíl mezi dnešní hodnotou a tím, co sis do toho vložila. Plus znamená, že to roste, minus, že je to teď míň. Dokud nic neprodáš, je to jen na papíře."],
-    ["Za 24 hodin", "O kolik se cena změnila za poslední den. Jeden špatný den ještě nic neznamená."],
-    ["Tržní kapitalizace", "Kolik by stála všechna ta mince nebo všechny akcie firmy dohromady. Větší je obvykle stabilnější a menší může kolísat víc."],
-    ["Podíl", "Kolik procent celého portfolia tvoří tahle položka. Když je peníze rozložené do víc věcí, jedna špatná zpráva nepokazí všechno."],
-    ["Pasivní příjem", "Peníze, které ti přijdou, aniž bys za ně musel pracovat, třeba výnos z investic. Aby ti pasivní příjem pokryl měsíční výdaje, potřebuješ mít investovanou určitou částku. V Příručce si ji můžeš spočítat."],
-    ["Inflace", "O kolik se zdražilo. Když ceny stoupnou o 10 %, koupíš za stejné koruny o desetinu míň věcí. Koruny v peněžence ani na účtu tedy pomalu ztrácejí sílu, i když jejich číslo zůstává stejné."],
-    ["Debasement", "Postupné ředění peněz: stát a banky vytvářejí víc a víc nových peněz (peněžní zásoba v Česku roste zhruba o 7 % ročně), takže každá koruna znamená míň. V Objevuj u měn počítáme inflaci a debasement jedno po druhém, jako kdyby ti každý rok z těch zbylých peněz oba ubrali svůj kus."],
-    ["Crypto", "Digitální peníze a žetony, které existují jen na internetu, třeba Bitcoin, Sui nebo COTI. Obchoduje se s nimi pořád, i v noci a o víkendu, a cena umí poskočit nebo spadnout o desítky procent za den."],
-    ["Akcie", "Malý kousek firmy. Když se firmě daří, hodnota její akcie může růst, a když ne, může klesat. U nás jsou to digitální kopie skutečných akcií, takže se s nimi dá obchodovat i o víkendu."],
-    ["Indexy", "Balíček stovek firem najednou, třeba S&P 500 je 500 největších firem USA. Když koupíš index, rozložíš peníze do spousty firem a jedna špatná zpráva ti tolik neublíží. Většinou kolísá míň než jedna akcie."],
-    ["Genesis blok", "Úplně první nákup, od kterého se počítá růst. Každý další nákup je další blok. Když v Objevuj zvolíš „Od genesis bloku“, uvidíš, o kolik se věc změnila od dne, kdy jste začali."],
-    ["Komodity", "Suroviny, které se těží, třeba zlato nebo stříbro. Jejich cena se mění podle toho, kolik jich lidé potřebují a kolik se jich najde. Lidé je odpradávna používají jako uchovatele hodnoty."],
-    ["Měny", "Peníze, které používá nějaký stát, třeba koruna nebo dolar. Hodnotu jim nedává zlato ani žádný kov, ale důvěra v ně. Státy a banky je můžou tisknout skoro bez omezení, a proto všechny měny časem ztrácejí hodnotu. V Objevuj vidíš, o kolik za zvolenou dobu přišla koruna."],
-    ["Collectibles", "Sběratelské věci, které mají cenu proto, že jich je málo a lidé je chtějí, třeba vzácné Pokémon karty. Cena závisí na tom, jak je karta vzácná, kolik jí zbylo a v jakém je stavu. Na rozdíl od akcií nic nevydělávají, hodnota je jen v tom, že za ně někdo jednou zaplatí víc."],
-    ["PSA 10", "Nejvyšší známka, jakou může karta dostat od firmy PSA, která karty prověřuje a zapouzdří do plastu. 10 znamená skoro dokonalý stav. Karta v téhle známce stojí i několikanásobně víc než stejná karta s drobnými vadami."],
-    ["Upcoming", "Firmy, které se zatím nedají koupit na burze, ale lidé čekají, že tam jednou vstoupí (to se říká IPO). Zatím u nich nejsou ceny, jen štítek „brzy“."],
-  ];
 
   let rowRefs = [];
   let perfRefs = null;
@@ -1024,12 +1004,8 @@
       discoverRows.push({ d, change, noteEl, price });
     }
     const select = $("range-select");
-    const saved = store.get("range");
-    if (saved && [...select.options].some((o) => o.value === saved)) select.value = saved;
-    select.addEventListener("change", () => {
-      store.set("range", select.value);
-      paintChanges();
-    });
+    select.value = "3y"; // it always opens on the last 3 years
+    select.addEventListener("change", paintChanges);
     loadChanges();
   }
 
@@ -1257,7 +1233,7 @@
       ["passive", "🏖️", "Příjem", "Pasivní příjem", buildPassiveGuide],
       ["cap", "🏢", "Cap", "Market cap", buildCapGuide],
       ["invest", "🧭", "Tipy", "Do čeho investovat", buildInvestGuide],
-      ["glossary", "📖", "Slovník", "Slovníček", buildGlossaryGuide],
+      ["cheat", "📝", "Tahák", "Tahák: rychlý přehled", buildCheatGuide],
     ];
     const bodies = {};
     for (const [id, emoji, label, title, builder] of sections) {
@@ -1883,16 +1859,49 @@
     });
   }
 
-  /* ---- 4. the glossary ---- */
+  /* ---- 4. the cheat sheet: the whole guide on one page ---- */
 
-  function buildGlossaryGuide(box) {
-    box.append(sectionIntro("Slova, na která při investování narazíš."));
-    const list = el("section", "panel glossary");
-    const dl = el("dl");
-    for (const [term, def] of GLOSSARY) dl.append(el("dt", "", term), el("dd", "", def));
-    dl.append(el("dt", "", "Pozor"), el("dd", "", "Ceny kolísají nahoru i dolů. Že to dnes roste, neznamená, že poroste i zítra."));
-    list.append(dl);
-    box.append(list);
+  function buildCheatGuide(box) {
+    box.append(sectionIntro("Celá příručka v kostce."));
+    const goal = (LIVING.reduce((a, r) => a + r[2], 0) * 12) / PASSIVE_YIELD;
+    const rows = [
+      ["💰", "Peníze", "money", [
+        "1 000 Kč jsou 2 pizzy, milion je malé auto.",
+        "Bilion je tisíc miliard.",
+      ]],
+      ["📈", "Růst o 100 %", "growth", [
+        "K procentům přičti 100: +100 % je dvojnásobek, +200 % trojnásobek.",
+        "Když cena klesne o 50 %, musí pak vzrůst o 100 %.",
+      ]],
+      ["🏖️", "Pasivní příjem", "passive", [
+        `Abys nemusela pracovat, potřebuješ ${formatCzk(25000)} měsíčně, tedy ${formatCzk(300000)} ročně.`,
+        `Při 10 % ročně na to potřebuješ ${formatCzk(goal)}. S&P 500 a Nasdaq 100 dávaly za 20 let 11 až 16 % ročně.`,
+      ]],
+      ["🏢", "Market cap", "cap", [
+        "Market cap je cena akcie × počet akcií.",
+        "Čím menší firma, tím větší riziko, ale zároveň větší potenciál na růst.",
+        "Jsi mladá a máš asi 15 let na riskování.",
+      ]],
+      ["🧭", "Do čeho investovat", "invest", [
+        "Bezpečný základ: S&P 500, Nasdaq 100 a Bitcoin.",
+        "Riskantnější: malé firmy a krypto zaměřené na AI, roboty, vesmír a biotechnologie.",
+        "Kolik kam dáš, rozhoduješ ty.",
+      ]],
+    ];
+    for (const [emoji, title, section, lines] of rows) {
+      const card = el("section", "panel cheat-card");
+      const head = el("div", "cheat-head");
+      head.append(el("span", "cheat-emoji", emoji), el("h3", "guide-h", title));
+      const open = el("button", "cheat-open", "Otevřít");
+      open.type = "button";
+      open.setAttribute("aria-label", `Otevřít: ${title}`);
+      open.addEventListener("click", () => showGuideSection(section));
+      head.append(open);
+      const list = el("ul", "cheat-list");
+      for (const line of lines) list.append(el("li", "", line));
+      card.append(head, list);
+      box.append(card);
+    }
   }
 
   /* ---------- Pro mode ---------- */
