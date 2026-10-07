@@ -1199,9 +1199,10 @@
       zeros: 12,
       items: [
         ["💸", "zhruba 90 000 Kč pro každého obyvatele Česka"],
-        ["🍎", "Apple: hodnota firmy asi 105 bilionů Kč"],
-        ["🟩", "NVIDIA: hodnota firmy asi 125 bilionů Kč"],
-        ["🪟", "Microsoft: hodnota firmy asi 85 bilionů Kč"],
+        ["🏢", "asi 250 000 bytů"],
+        ["../assets/logos/discover/apple.png", "Apple: hodnota firmy asi 105 bilionů Kč"],
+        ["../assets/logos/discover/nvidia.png", "NVIDIA: hodnota firmy asi 125 bilionů Kč"],
+        ["../assets/logos/discover/microsoft.png", "Microsoft: hodnota firmy asi 85 bilionů Kč"],
       ],
       note: "Největší firmy světa jsou hodnotné desítky až stovky bilionů korun. Je to jejich tržní kapitalizace (cena akcie × počet akcií), zaokrouhlená podle cen z počátku října 2026.",
     },
@@ -1304,7 +1305,17 @@
       const items = el("div", "money-items");
       for (const [emoji, label] of step.items) {
         const chip = el("div", "money-item");
-        chip.append(el("span", "money-emoji", emoji), el("span", "money-label", label));
+        let pic;
+        if (emoji.startsWith("../")) {
+          pic = document.createElement("img"); // a company logo instead of an emoji
+          pic.className = "money-logo";
+          pic.src = emoji;
+          pic.alt = "";
+          pic.loading = "lazy";
+        } else {
+          pic = el("span", "money-emoji", emoji);
+        }
+        chip.append(pic, el("span", "money-label", label));
         items.append(chip);
       }
       row.append(head, zeros, items);
@@ -1577,16 +1588,11 @@
     buildSnowball(box, monthly, goal);
   }
 
-  /* the snowball: sliders for the years and for the monthly saving; when the goal is reached the banner flips to "no work needed" */
+  /* the snowball: one slider makes it bigger; when it reaches the goal the banner flips to "no work needed".
+     Nobody knows when an investment takes off, so there is no time on it, only the size. */
   function buildSnowball(box, monthly, goal) {
-    const i = PASSIVE_YIELD / 12;
-    const state = { years: 0, add: 2000 };
-    let anim = null;
-    const valueAt = (years, add) => {
-      const g = (1 + i) ** (years * 12);
-      return START_AMOUNT * g + (add * (g - 1)) / i;
-    };
-    const monthsToGoal = (add) => Math.log((goal * i + add) / (START_AMOUNT * i + add)) / Math.log(1 + i);
+    const MAX_VALUE = goal * 1.4;
+    const valueAt = (pos) => START_AMOUNT * (MAX_VALUE / START_AMOUNT) ** (pos / 100); // a log scale: from the start to a bit over the goal
 
     const card = el("section", "panel snowball");
     card.append(el("h3", "guide-h", "Sněhová koule"));
@@ -1594,20 +1600,20 @@
       el(
         "p",
         "pcalc-text",
-        `Začínáš s ${formatCzk(START_AMOUNT)}. Když ji budeš každý měsíc zvětšovat a výnos ${PASSIVE_YIELD * 100} % ročně se bude přičítat k celé koule, nabaluje se jako sníh. Posouvej posuvníky a sleduj, kdy ti to bude stačit na život.`,
+        `Začínáš s ${formatCzk(START_AMOUNT)}. Když budeš investovat dál a výnos ${PASSIVE_YIELD * 100} % ročně se bude přičítat k celé koule, nabaluje se jako sníh. Posuň posuvník a sleduj, jak koule roste a kdy ti bude stačit na život.`,
       ),
     );
 
     const stage = el("div", "sb-stage");
     stage.setAttribute("aria-hidden", "true");
     for (let k = 0; k < 7; k++) {
-      const flake = el("span", "sb-flake", "❄️");
+      const flake = el("span", "sb-flake", "$");
       flake.style.setProperty("--x", `${8 + k * 14}%`);
       flake.style.setProperty("--d", `${(k * 0.7).toFixed(1)}s`);
       stage.append(flake);
     }
     const ball = el("div", "sb-ball");
-    const ballIcon = el("span", "sb-ballicon", "❄️");
+    const ballIcon = el("span", "sb-ballicon", "$");
     ball.append(ballIcon);
     stage.append(ball);
 
@@ -1620,39 +1626,27 @@
     banner.setAttribute("role", "status");
     banner.setAttribute("aria-live", "polite");
 
-    const mkSlider = (label, min, max, step, value) => {
-      const wrap = el("label", "sb-slider");
-      const text = el("span", "", label);
-      const input = el("input");
-      input.type = "range";
-      input.min = String(min);
-      input.max = String(max);
-      input.step = String(step);
-      input.value = String(value);
-      wrap.append(text, input);
-      return { wrap, input, text };
-    };
-    const yearsSlider = mkSlider("", 0, 40, 1, 0);
-    const addSlider = mkSlider("", 500, 5000, 500, state.add);
-    yearsSlider.input.setAttribute("aria-label", "Kolik let uplyne");
-    addSlider.input.setAttribute("aria-label", "Kolik měsíčně přidáš");
-    const goalLine = el("p", "guide-note sb-goal");
-    const play = el("button", "guide-btn", "▶ Spustit");
-    play.type = "button";
+    const wrap = el("label", "sb-slider");
+    const label = el("span", "", "Velikost koule");
+    const input = el("input");
+    input.type = "range";
+    input.min = "0";
+    input.max = "100";
+    input.step = "0.5";
+    input.value = "0";
+    input.setAttribute("aria-label", "Jak velká je koule");
+    wrap.append(label, input);
 
     let wasFree = false;
-    const paint = (years) => {
-      state.years = years;
-      const value = valueAt(years, state.add);
+    const paint = () => {
+      const value = valueAt(Number(input.value));
       const ratio = Math.min(1, value / goal);
       const size = 56 + 150 * Math.sqrt(ratio);
       ball.style.width = ball.style.height = `${size}px`;
-      ballIcon.style.fontSize = `${size * 0.42}px`;
-      amount.replaceChildren(el("strong", "", formatCzk(value)), el("small", "", ` ve věku ${KID_AGE + Math.floor(years)} let`));
+      ballIcon.style.fontSize = `${size * 0.5}px`;
+      amount.replaceChildren(el("strong", "", formatCzk(Math.round(value / 10) * 10)));
       fill.style.width = `${ratio * 100}%`;
       progress.textContent = `${nf({ maximumFractionDigits: 0 }).format(Math.floor(ratio * 100))} % cíle ${formatCzk(goal)}`;
-      yearsSlider.text.textContent = `Uplyne: ${Math.round(years)} let`;
-      addSlider.text.textContent = `Měsíčně přidáš: ${formatCzk(state.add)}`;
       const income = (value * PASSIVE_YIELD) / 12;
       const free = value >= goal - 0.5;
       banner.classList.toggle("is-free", free);
@@ -1674,47 +1668,11 @@
       }
       wasFree = free;
     };
-    const paintGoal = () => {
-      const total = Math.ceil(monthsToGoal(state.add));
-      const y = Math.floor(total / 12);
-      const m = total % 12;
-      goalLine.textContent = `Při ${formatCzk(state.add)} měsíčně dosáhneš cíle za ${y} let${m ? ` a ${m} měsíců` : ""}, ve věku ${KID_AGE + y} let.`;
-      return total / 12;
-    };
-    const stop = () => {
-      if (anim) cancelAnimationFrame(anim);
-      anim = null;
-    };
-    yearsSlider.input.addEventListener("input", () => {
-      stop();
-      paint(Number(yearsSlider.input.value));
-    });
-    addSlider.input.addEventListener("input", () => {
-      stop();
-      state.add = Number(addSlider.input.value);
-      paintGoal();
-      paint(Number(yearsSlider.input.value));
-    });
-    play.addEventListener("click", () => {
-      stop();
-      const end = Math.min(40, Math.ceil(paintGoal()) + 1);
-      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const t0 = performance.now();
-      const dur = reduce ? 0 : 6500;
-      const step = (now) => {
-        const t = dur ? Math.min(1, (now - t0) / dur) : 1;
-        const years = end * t;
-        yearsSlider.input.value = String(Math.round(years));
-        paint(years);
-        anim = t < 1 ? requestAnimationFrame(step) : null;
-      };
-      anim = requestAnimationFrame(step);
-    });
+    input.addEventListener("input", paint);
 
-    card.append(stage, amount, track, progress, banner, yearsSlider.wrap, addSlider.wrap, goalLine, play);
+    card.append(stage, amount, track, progress, banner, wrap);
     box.append(card);
-    paintGoal();
-    paint(0);
+    paint();
   }
 
   /* ---- 3. market cap ---- */
