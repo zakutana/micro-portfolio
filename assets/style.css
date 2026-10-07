@@ -3405,7 +3405,7 @@ body.has-lightbox {
 
 .guide-tabs {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 4px;
   margin: 0 0 14px;
   padding: 4px;
@@ -4809,4 +4809,36 @@ body.has-lightbox {
 .inv-none {
   color: var(--muted);
   font-weight: 700;
+}
+
+.af-row {
+  margin: 8px 0;
+}
+
+.af-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.af-track {
+  margin-top: 3px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--pill-bg);
+  overflow: hidden;
+}
+
+.af-fill {
+  height: 100%;
+  width: var(--w);
+  border-radius: 999px;
+  background: var(--gain-big, #16a36a);
+  transform-origin: left;
+  animation: bar-grow 0.8s ease-out both;
+}
+
+.af-row:first-of-type .af-fill {
+  background: var(--flat);
 }
