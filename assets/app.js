@@ -266,8 +266,14 @@
   }
 
   /* The figure looking over the top of the first card only makes sense while that card is there. */
+  let heroWanted = false;
   function setHero(on) {
-    $("stage").classList.toggle("has-hero", on);
+    heroWanted = on;
+    applyHero();
+  }
+  /* the figure belongs to the Portfolio tab only: late price updates must not bring it back on the other tabs */
+  function applyHero() {
+    $("stage").classList.toggle("has-hero", heroWanted && activeTab === "portfolio");
   }
 
   /* ---------- Prices (all converted to CZK) ---------- */
@@ -894,7 +900,7 @@
     });
     $("total-bar").hidden = id !== "portfolio";
     $("app").dataset.tab = id;
-    setHero(id === "portfolio");
+    applyHero();
     if (!instant) window.scrollTo({ top: 0 });
   }
 
