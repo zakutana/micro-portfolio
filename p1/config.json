@@ -1,6 +1,6 @@
 {
   "passHash": "6fbce96cf9d4c15ae5a63a5a42dccd959466e3fc75f27bd74bcf3ae11ba55f9c",
-  "startDate": "2026-10-02",
+  "startDate": "2026-10-01",
   "holdings": [
     {
       "name": "Collector Crypt",
@@ -13,12 +13,12 @@
       },
       "lots": [
         {
-          "date": "2026-10-02T12:00:00.000Z",
-          "qty": 36.514556,
-          "price": 5.477268
+          "date": "2026-10-01T12:00:00.000Z",
+          "qty": 45.915242,
+          "price": 4.355852
         }
       ],
-      "qty": 36.514556,
+      "qty": 45.915242,
       "note": "sběratelské karty a předměty na blockchainu",
       "group": "crypto"
     },
@@ -34,12 +34,12 @@
       },
       "lots": [
         {
-          "date": "2026-10-02T12:00:00.000Z",
-          "qty": 0.315322,
-          "price": 634.27141
+          "date": "2026-10-01T12:00:00.000Z",
+          "qty": 0.345166,
+          "price": 579.431558
         }
       ],
-      "qty": 0.315322,
+      "qty": 0.345166,
       "sharesOutstanding": 24400000,
       "note": "fond na roboty a umělou inteligenci",
       "group": "stocks"
@@ -55,12 +55,12 @@
       },
       "lots": [
         {
-          "date": "2026-10-02T12:00:00.000Z",
-          "qty": 8.194649,
-          "price": 24.406171
+          "date": "2026-10-01T12:00:00.000Z",
+          "qty": 7.914599,
+          "price": 25.269759
         }
       ],
-      "qty": 8.194649,
+      "qty": 7.914599,
       "note": "kryptoměna rychlé blockchainové sítě",
       "group": "crypto"
     },
@@ -75,12 +75,12 @@
       },
       "lots": [
         {
-          "date": "2026-10-02T12:00:00.000Z",
-          "qty": 1661.075166,
-          "price": 0.30101
+          "date": "2026-10-01T12:00:00.000Z",
+          "qty": 1730.63078,
+          "price": 0.288912
         }
       ],
-      "qty": 1661.075166,
+      "qty": 1730.63078,
       "note": "kryptoměna, která chrání soukromí dat na blockchainu",
       "group": "crypto"
     },
@@ -89,7 +89,7 @@
       "symbol": "TSLA",
       "logo": "../assets/logos/tesla.png",
       "url": "https://www.tesla.com",
-      "qty": 0.012312,
+      "qty": 0.012867,
       "source": {
         "type": "dexscreener",
         "chain": "solana",
@@ -98,9 +98,9 @@
       "sharesOutstanding": 3237000000,
       "lots": [
         {
-          "date": "2026-10-02T12:00:00.000Z",
-          "qty": 0.012312,
-          "price": 8122.245419
+          "date": "2026-10-01T12:00:00.000Z",
+          "qty": 0.012867,
+          "price": 7771.750116
         }
       ],
       "note": "elektromobily, energie a roboty",
@@ -111,7 +111,7 @@
       "symbol": "SPCX",
       "logo": "../assets/logos/spacex.png",
       "url": "https://www.spacex.com",
-      "qty": 0.029076,
+      "qty": 0.030617,
       "source": {
         "type": "dexscreener",
         "chain": "solana",
@@ -120,9 +120,9 @@
       "sharesOutstanding": 13570000000,
       "lots": [
         {
-          "date": "2026-10-02T12:00:00.000Z",
-          "qty": 0.029076,
-          "price": 3439.27258
+          "date": "2026-10-01T12:00:00.000Z",
+          "qty": 0.030617,
+          "price": 3266.173942
         }
       ],
       "note": "firma zaměřená na vesmír: rakety a internet Starlink",
@@ -141,7 +141,7 @@
       },
       "lots": [
         {
-          "date": "2026-10-02T12:00:00.000Z",
+          "date": "2026-10-01T12:00:00.000Z",
           "qty": 100000,
           "price": 0.0217
         }

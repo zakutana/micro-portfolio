@@ -5011,7 +5011,13 @@ body.has-lightbox {
 }
 
 .cr-row {
-  grid-template-columns: 48px minmax(0, 1fr) auto;
+  grid-template-columns: 48px minmax(0, 1fr);
+}
+
+.cr-risk {
+  margin: 10px 0 0;
+  font-weight: 800;
+  line-height: 1.4;
 }
 
 .cr-pot {

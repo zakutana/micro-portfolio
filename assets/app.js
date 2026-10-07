@@ -1693,26 +1693,24 @@
     box.append(pot);
 
     const real = el("section", "panel cap-real");
-    real.append(el("h3", "guide-h", "Kolik má market cap a jaký potenciál"));
-    for (const [logo, name, cap, mult] of [
-      ["../assets/logos/discover/apple.png", "Apple", "asi 5 trilionů $", 2],
-      ["../assets/logos/discover/bitcoin.png", "Bitcoin", "asi 1,7 trilionu $", 5],
-      ["../assets/logos/tesla.png", "Tesla", "asi 1,2 trilionu $", 3],
-      ["../assets/logos/discover/solana.png", "Solana", "asi 70 miliard $", 20],
-      ["../assets/logos/sui.png", "Sui", "asi 4,7 miliardy $", 50],
-      ["../assets/logos/bot.png", "RoboStrategy", "asi 700 milionů $", 100],
-      ["../assets/logos/cards.png", "Collector Crypt", "asi 250 milionů $", 100],
-      ["../assets/logos/cymetica.jpg", "Cymetica", "asi 1 milion $", 1000],
+    real.append(el("h3", "guide-h", "Kolik má market cap"));
+    for (const [logo, name, cap] of [
+      ["../assets/logos/discover/apple.png", "Apple", "asi 5 trilionů $"],
+      ["../assets/logos/discover/bitcoin.png", "Bitcoin", "asi 1,7 trilionu $"],
+      ["../assets/logos/tesla.png", "Tesla", "asi 1,2 trilionu $"],
+      ["../assets/logos/discover/solana.png", "Solana", "asi 70 miliard $"],
+      ["../assets/logos/sui.png", "Sui", "asi 4,7 miliardy $"],
+      ["../assets/logos/bot.png", "RoboStrategy", "asi 700 milionů $"],
+      ["../assets/logos/cards.png", "Collector Crypt", "asi 250 milionů $"],
+      ["../assets/logos/cymetica.jpg", "Cymetica", "asi 1 milion $"],
     ]) {
       const r = el("div", "cr-row");
       const text = el("div", "cr-text");
       text.append(el("b", "", name), el("strong", "", cap));
-      const potential = el("div", "cr-pot");
-      potential.append(el("small", "", "když uspěje"), el("b", "", `až ×${nf({ maximumFractionDigits: 0 }).format(mult)}`));
-      r.append(logoImg(logo, "cr-logo"), text, potential);
+      r.append(logoImg(logo, "cr-logo"), text);
       real.append(r);
     }
-    real.append(el("small", "guide-note", "Zaokrouhleno, říjen 2026. Čím menší market cap, tím větší potenciál."));
+    real.append(el("p", "cd-text cr-risk", "Čím menší firma, tím větší riziko, ale zároveň větší potenciál na růst."));
     box.append(real);
     buildAgeGuide(box);
   }
@@ -1869,7 +1867,7 @@
       t.append(el("span", "invest-theme-ico", emoji), el("span", "", label));
       themes.append(t);
     }
-    risky.append(themes, el("p", "cd-text", "Mají velký potenciál, a když to vyjde, může se to vyplatit."));
+    risky.append(themes, el("p", "cd-text cr-risk", "Čím menší firma, tím větší riziko, ale zároveň větší potenciál na růst."));
     box.append(risky);
     box.append(discoverCta());
 
