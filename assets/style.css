@@ -5011,7 +5011,7 @@ body.has-lightbox {
 }
 
 .cr-row {
-  grid-template-columns: 48px minmax(0, 1fr);
+  grid-template-columns: 48px minmax(0, 1fr) auto;
 }
 
 .cr-risk {
