@@ -4915,3 +4915,97 @@ body.has-lightbox {
   line-height: 1;
   font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
 }
+
+.gd-bar.is-loss {
+  background: var(--loss-big, #d93a4a);
+}
+
+.gd-arrow b.is-loss {
+  color: var(--loss-big, #d93a4a);
+}
+
+.gd-bar {
+  transition: height 0.12s linear;
+}
+
+.growth-slider .gd-bars {
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.gd-arrow b {
+  opacity: 1;
+  transform: none;
+}
+
+.age-years {
+  font-weight: 800;
+  font-size: calc(var(--base-size) * 1.05);
+  color: var(--text);
+}
+
+.discover-cta {
+  text-align: center;
+  background: var(--panel);
+}
+
+.dc-emoji {
+  font-size: 3rem;
+  line-height: 1;
+  animation: gift-bob 2.4s ease-in-out infinite;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.dc-logos {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px 0 6px;
+}
+
+.dc-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.dc-title {
+  margin: 6px 0 4px;
+  font-family: var(--display);
+  font-size: calc(var(--base-size) * 1.3);
+  font-weight: 800;
+}
+
+.dc-text {
+  margin: 0 0 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.dc-btn {
+  appearance: none;
+  padding: 12px 22px;
+  font: inherit;
+  font-size: calc(var(--base-size) * 1.05);
+  font-weight: 800;
+  color: var(--btn-active-text);
+  background: var(--btn-active-bg);
+  border: var(--btn-border);
+  border-radius: var(--btn-radius);
+  box-shadow: var(--btn-shadow);
+  cursor: pointer;
+}
+
+.dc-btn:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dc-emoji {
+    animation: none;
+  }
+}
