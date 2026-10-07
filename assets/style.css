@@ -4842,3 +4842,76 @@ body.has-lightbox {
 .af-row:first-of-type .af-fill {
   background: var(--flat);
 }
+
+.sb-amount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sb-amount .sb-lbl {
+  color: var(--muted);
+  font-size: calc(var(--base-size) * 0.8);
+  font-weight: 700;
+}
+
+.sb-amount .sb-income {
+  color: var(--gain-big, #16a36a);
+  font-size: calc(var(--base-size) * 1.9);
+}
+
+.mix-bar {
+  display: flex;
+  height: 22px;
+  margin: 8px 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--pill-bg);
+}
+
+.mix-safe {
+  background: var(--a2, #5b7cff);
+  transition: width 0.15s ease;
+}
+
+.mix-risky {
+  background: var(--a3, #ff7ad9);
+  transition: width 0.15s ease;
+}
+
+.mix-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 8px;
+  font-weight: 800;
+}
+
+.invest-mix input {
+  width: 100%;
+  accent-color: var(--btn-active-bg);
+}
+
+.invest-themes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 8px 0 10px;
+}
+
+.invest-theme {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: min(var(--row-radius), 14px);
+  background: var(--pill-bg);
+  font-weight: 800;
+  font-size: calc(var(--base-size) * 0.9);
+}
+
+.invest-theme-ico {
+  font-size: 1.6rem;
+  line-height: 1;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}

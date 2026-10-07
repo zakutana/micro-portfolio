@@ -1204,18 +1204,19 @@
       note: "Bilion je tisíc miliard (anglicky „trillion“).",
     },
     {
-      amount: 100_000_000_000_000,
+      amount: 1_000_000_000_000,
+      unit: "$",
       word: "trilion",
-      zeros: 14,
+      zeros: 12,
       items: [
-        ["../assets/logos/discover/apple.png", "Apple, asi 105 bilionů"],
-        ["../assets/logos/discover/nvidia.png", "NVIDIA, asi 125 bilionů"],
-        ["../assets/logos/discover/microsoft.png", "Microsoft, asi 85 bilionů"],
-        ["../assets/logos/discover/google.png", "Google, asi 90 bilionů"],
-        ["../assets/logos/discover/amazon.png", "Amazon, asi 60 bilionů"],
-        ["../assets/logos/discover/meta.png", "Meta, asi 40 bilionů"],
+        ["../assets/logos/discover/nvidia.png", "NVIDIA, asi 6 trilionů"],
+        ["../assets/logos/discover/apple.png", "Apple, asi 5 trilionů"],
+        ["../assets/logos/discover/google.png", "Google, asi 4 triliony"],
+        ["../assets/logos/discover/microsoft.png", "Microsoft, asi 4 triliony"],
+        ["../assets/logos/discover/amazon.png", "Amazon, asi 3 triliony"],
+        ["../assets/logos/discover/meta.png", "Meta, asi 2 triliony"],
       ],
-      note: "Tolik stojí největší firmy světa (říjen 2026). Anglicky se jim říká „trillion“.",
+      note: "Hodnoty největších firem světa v dolarech (říjen 2026). Anglicky „trillion“.",
     },
   ];
 
@@ -1309,7 +1310,7 @@
       row.style.setProperty("--i", String(i));
       const head = el("div", "money-head");
       const big = el("strong", `money-amount${step.zeros >= 12 ? " is-long" : ""}`);
-      big.append(document.createTextNode(nf({ maximumFractionDigits: 0 }).format(step.amount).replace(/ /g, " ")), el("span", "cur", " Kč"));
+      big.append(document.createTextNode(nf({ maximumFractionDigits: 0 }).format(step.amount).replace(/ /g, " ")), el("span", "cur", ` ${step.unit ?? "Kč"}`));
       head.append(big, el("span", "money-word", step.word));
       const zeros = el("div", "money-zeros");
       zeros.append(el("span", "", `${step.zeros} ${step.zeros === 3 ? "nuly" : step.zeros < 5 ? "nuly" : "nul"}`));
@@ -1588,7 +1589,7 @@
     const card = el("section", "panel snowball");
     card.append(el("h3", "guide-h", "Sněhová koule"));
     card.append(
-      el("p", "pcalc-text", `Začínáš s ${formatCzk(START_AMOUNT)} a tvoje koule se nabaluje. Posuň posuvník a uvidíš, kolik musí mít, aby ti dávala víc.`),
+      el("p", "pcalc-text", `Začínáš s ${formatCzk(START_AMOUNT)}. Koule roste o ${PASSIVE_YIELD * 100} % ročně, jako S&P 500 nebo Nasdaq 100. Posuň posuvník a uvidíš, kolik ti dává měsíčně.`),
     );
 
     const stage = el("div", "sb-stage");
@@ -1636,7 +1637,12 @@
       ball.style.width = ball.style.height = `${size}px`;
       ballIcon.style.fontSize = `${size * 0.5}px`;
       const income = (value * PASSIVE_YIELD) / 12;
-      amount.replaceChildren(el("strong", "", formatCzk(Math.round(value / 10) * 10)), el("small", "", ` = ${formatCzk(Math.round(income / 10) * 10)} měsíčně`));
+      amount.replaceChildren(
+        el("small", "sb-lbl", "Koule má"),
+        el("strong", "", formatCzk(Math.round(value / 10) * 10)),
+        el("small", "sb-lbl", "a dává ti měsíčně"),
+        el("strong", "sb-income", formatCzk(Math.round(income / 10) * 10)),
+      );
       fill.style.width = `${ratio * 100}%`;
       const free = value >= goal - 0.5;
       banner.classList.toggle("is-free", free);
@@ -1683,7 +1689,7 @@
     pot.append(el("p", "cd-text", "Dáš 1 000 Kč. Velká věc už nemá kam moc růst, malá může vyrůst mnohonásobně."));
     for (const [pic, name, size, mult] of [
       [logoImg("../assets/logos/discover/bitcoin.png", "pot-logo"), "Bitcoin", "už je velký, asi 37 bilionů Kč", 5],
-      [el("span", "pot-logo pot-seed", "🌱"), "Malá firma", "je malá, asi 1 miliarda Kč", 100],
+      [el("span", "pot-logo pot-seed", "🤖"), "Malá robotická firma", "velký potenciál, market cap asi 1 miliarda Kč", 100],
     ]) {
       const row = el("div", "pot-row");
       const text = el("div", "pot-text");
@@ -1700,19 +1706,24 @@
     box.append(pot);
 
     const real = el("section", "panel cap-real");
-    real.append(el("h3", "guide-h", "Příklady"));
-    for (const [logo, name, calc, cap] of [
-      ["../assets/logos/discover/apple.png", "Apple", "asi 14,7 mld. akcií × asi 7 300 Kč", "≈ 107 bilionů Kč"],
-      ["../assets/logos/tesla.png", "Tesla", "asi 3,2 mld. akcií × asi 8 100 Kč", "≈ 26 bilionů Kč"],
-      ["../assets/logos/bot.png", "RoboStrategy", "24,4 mil. akcií × asi 630 Kč", "≈ 15 mld. Kč"],
+    real.append(el("h3", "guide-h", "Kolik má market cap"));
+    for (const [logo, name, cap] of [
+      ["../assets/logos/discover/apple.png", "Apple", "asi 105 bilionů Kč"],
+      ["../assets/logos/discover/bitcoin.png", "Bitcoin", "asi 37 bilionů Kč"],
+      ["../assets/logos/tesla.png", "Tesla", "asi 26 bilionů Kč"],
+      ["../assets/logos/discover/solana.png", "Solana", "asi 1,5 bilionu Kč"],
+      ["../assets/logos/sui.png", "Sui", "asi 100 miliard Kč"],
+      ["../assets/logos/bot.png", "RoboStrategy", "asi 15 miliard Kč"],
+      ["../assets/logos/cards.png", "Collector Crypt", "asi 5,5 miliardy Kč"],
+      ["../assets/logos/coti.png", "COTI", "asi 900 milionů Kč"],
     ]) {
       const r = el("div", "cr-row");
       const text = el("div", "cr-text");
-      text.append(el("b", "", name), el("small", "", calc), el("strong", "", cap));
+      text.append(el("b", "", name), el("strong", "", cap));
       r.append(logoImg(logo, "cr-logo"), text);
       real.append(r);
     }
-    real.append(el("small", "guide-note", "Zaokrouhleno, říjen 2026."));
+    real.append(el("small", "guide-note", "Zaokrouhleno, říjen 2026. Čím menší číslo, tím víc může věc ještě vyrůst."));
     box.append(real);
     buildAgeGuide(box);
   }
@@ -1723,18 +1734,17 @@
     box.append(el("h2", "section-title guide-sub", "Jsi mladá, můžeš riskovat"));
 
     const lose = el("section", "panel age-lose");
-    lose.append(el("h3", "guide-h", "Těch 10 % je u bezpečných investic"));
-    lose.append(el("p", "cd-text", "Ty si můžeš dovolit víc, protože nemáš o co přijít:"));
+    lose.append(el("h3", "guide-h", "Těch 10 % ročně dávají bezpečné investice"));
+    lose.append(el("p", "cd-text", "Jako S&P 500 nebo Nasdaq 100. Ty si ale můžeš dovolit víc:"));
     for (const [emoji, text] of [
-      ["🪙", `V nejhorším přijdeš o ${formatCzk(START_AMOUNT)}.`],
-      ["🏠", "Bydlíš u rodičů, nemáš nájem ani půjčky."],
+      ["🏠", "Bydlíš u rodičů, nemáš nájem ani půjčky a budeš dál investovat."],
       ["💼", "V nejhorším budeš ve 25 letech chodit do práce, kam bys šla stejně."],
     ]) {
       const row = el("div", "yg-lose");
       row.append(el("span", "pc-emoji", emoji), el("span", "", text));
       lose.append(row);
     }
-    lose.append(el("p", "cd-text", "Můžeš hledat věci, které nedají 10 %, ale třeba 100, 500, 1000 % a víc."));
+    lose.append(el("p", "cd-text", "Můžeš hledat věci, které nedají 10 %, ale třeba 100, 500, 1000 % a víc, například malé firmy a kryptoměny."));
     box.append(lose);
 
     const fast = el("section", "panel age-fast");
@@ -1761,21 +1771,22 @@
     box.append(fast);
 
     const early = el("section", "panel age-early");
-    early.append(el("h3", "guide-h", "Kdo je u toho brzo, vydělá nejvíc"));
+    early.append(el("h3", "guide-h", "Kdo byl u toho brzo, vydělal nejvíc"));
+    early.append(el("p", "cd-text", "Pět věcí, které za posledních 10 let vydělaly nejvíc:"));
     const rows = el("div", "yg-rows");
     early.append(rows);
-    guideData().then((d) => {
-      for (const [id, key, name, when, logo] of [
-        ["nvidia-xstock", "10y", "NVIDIA", "před 10 lety", "../assets/logos/discover/nvidia.png"],
-        ["bitcoin", "10y", "Bitcoin", "před 10 lety", "../assets/logos/discover/bitcoin.png"],
-        ["dogecoin", "1y", "Dogecoin", "před rokem", "../assets/logos/discover/dogecoin.png"],
-      ]) {
-        const ratio = histChange(d, id, key);
-        if (ratio === null) continue;
+    Promise.all([guideData(), fetch("../assets/discover.json", { cache: "no-cache" }).then((r) => r.json()).catch(() => null)]).then(([d, list]) => {
+      const info = Object.fromEntries((list?.items ?? []).map((i) => [i.id, i]));
+      const best = Object.keys(d?.items ?? {})
+        .filter((id) => info[id] && !info[id].cash && histChange(d, id, "10y") !== null)
+        .map((id) => [id, histChange(d, id, "10y")])
+        .sort((x, y) => y[1] - x[1])
+        .slice(0, 5);
+      for (const [id, ratio] of best) {
         const row = el("div", "live-row");
         const text = el("div", "live-text");
-        text.append(el("b", "", `${name}, ${when}`), el("span", "", `1 000 Kč → ${formatCzk(1000 * (1 + ratio))} (${formatPct(ratio)})`));
-        row.append(logoImg(logo), text);
+        text.append(el("b", "", info[id].name), el("span", "", `před 10 lety 1 000 Kč → ${formatCzk(1000 * (1 + ratio))} (${formatPct(ratio)})`));
+        row.append(logoImg(info[id].logo), text);
         rows.append(row);
       }
     });
@@ -1816,17 +1827,46 @@
       ["../assets/logos/discover/bitcoin.png", "Bitcoin", "nejstarší a největší kryptoměna", "bitcoin"],
     ]);
 
-    group("Riskantnější, větší potenciál: AI, roboti, vesmír", [
-      ["../assets/logos/discover/nvidia.png", "NVIDIA", "čipy pro umělou inteligenci", "nvidia-xstock"],
-      ["../assets/logos/tesla.png", "Tesla", "elektromobily a roboty", "tesla-xstock"],
-      ["../assets/logos/bot.png", "RoboStrategy", "fond na roboty a umělou inteligenci", "robostrategy"],
-      ["../assets/logos/spacex.png", "SpaceX", "rakety a vesmír", "spacex"],
-    ]);
+    const mix = el("section", "panel invest-mix");
+    mix.append(el("h3", "guide-h", "Kolik kam dáš, rozhoduješ ty"));
+    mix.append(el("p", "cd-text", "Sama si určíš, kolik z portfolia dáš do bezpečných a kolik do riskantnějších věcí. Třeba:"));
+    const mixInput = el("input");
+    mixInput.type = "range";
+    mixInput.min = "0";
+    mixInput.max = "100";
+    mixInput.step = "10";
+    mixInput.value = "20";
+    mixInput.setAttribute("aria-label", "Kolik procent dát do riskantnějších věcí");
+    const mixBar = el("div", "mix-bar");
+    const mixSafe = el("span", "mix-safe");
+    const mixRisky = el("span", "mix-risky");
+    mixBar.append(mixSafe, mixRisky);
+    const mixText = el("div", "mix-text");
+    const paintMix = () => {
+      const risky = Number(mixInput.value);
+      mixSafe.style.width = `${100 - risky}%`;
+      mixRisky.style.width = `${risky}%`;
+      mixText.replaceChildren(
+        el("span", "mix-s", `🛡️ bezpečné ${100 - risky} %: ${formatCzk((START_AMOUNT * (100 - risky)) / 100)}`),
+        el("span", "mix-r", `🚀 riskantní ${risky} %: ${formatCzk((START_AMOUNT * risky) / 100)}`),
+      );
+    };
+    mixInput.addEventListener("input", paintMix);
+    mix.append(mixBar, mixText, mixInput, el("small", "guide-note", `Příklad z ${formatCzk(START_AMOUNT)}.`));
+    paintMix();
+    box.append(mix);
 
-    const story = el("section", "panel invest-story");
-    story.append(el("h3", "guide-h", "Nejdřív umělá inteligence, teď roboti"));
-    story.append(el("p", "cd-text", "Nedávno byl boom kolem umělé inteligence a ChatGPT. Podle mnoha lidí to samé čeká roboty. Nikdo to ale neví jistě."));
-    box.append(story);
+    const risky = el("section", "panel invest-risky");
+    risky.append(el("h3", "guide-h", "Riskantnější, ale s velkým potenciálem"));
+    risky.append(el("p", "cd-text", "NVIDIA, Tesla nebo SpaceX jsou už giganti. V budoucnu nejvíc vyrostou malé firmy nebo kryptoměny zaměřené na:"));
+    const themes = el("div", "invest-themes");
+    for (const [emoji, label] of [["🧠", "umělá inteligence"], ["🤖", "roboti"], ["🚀", "vesmír"], ["🧬", "biotechnologie"]]) {
+      const t = el("div", "invest-theme");
+      t.append(el("span", "invest-theme-ico", emoji), el("span", "", label));
+      themes.append(t);
+    }
+    risky.append(themes, el("p", "cd-text", "Mají velký potenciál, a když to vyjde, může se to vyplatit. Najdeš je v záložce Objevuj."));
+    box.append(risky);
 
     guideData().then((d) => {
       for (const { id, chg } of slots) {
