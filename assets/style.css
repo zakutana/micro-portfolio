@@ -5009,3 +5009,30 @@ body.has-lightbox {
     animation: none;
   }
 }
+
+.cr-row {
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+}
+
+.cr-pot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: var(--gain-bg);
+  color: var(--gain-big, #16a36a);
+  line-height: 1.15;
+  text-align: right;
+}
+
+.cr-pot small {
+  font-size: calc(var(--base-size) * 0.66);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cr-pot b {
+  font-size: calc(var(--base-size) * 1.05);
+  white-space: nowrap;
+}

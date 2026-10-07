@@ -90,15 +90,6 @@
       "logo": "../assets/logos/discover/silver.png"
     },
     {
-      "id": "united-states-oil-fund-ondo-tokenized",
-      "name": "Ropa",
-      "symbol": "USO",
-      "note": "fond, který sleduje cenu ropy",
-      "group": "commodities",
-      "yahoo": "USO",
-      "logo": "../assets/logos/discover/oil.png"
-    },
-    {
       "id": "nvidia-xstock",
       "name": "NVIDIA",
       "symbol": "NVDAx",

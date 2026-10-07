@@ -554,7 +554,7 @@
     ["Akcie", "Malý kousek firmy. Když se firmě daří, hodnota její akcie může růst, a když ne, může klesat. U nás jsou to digitální kopie skutečných akcií, takže se s nimi dá obchodovat i o víkendu."],
     ["Indexy", "Balíček stovek firem najednou, třeba S&P 500 je 500 největších firem USA. Když koupíš index, rozložíš peníze do spousty firem a jedna špatná zpráva ti tolik neublíží. Většinou kolísá míň než jedna akcie."],
     ["Genesis blok", "Úplně první nákup, od kterého se počítá růst. Každý další nákup je další blok. Když v Objevuj zvolíš „Od genesis bloku“, uvidíš, o kolik se věc změnila od dne, kdy jste začali."],
-    ["Komodity", "Suroviny, které se těží nebo pěstují, třeba zlato, stříbro nebo ropa. Jejich cena se mění podle toho, kolik jich lidé potřebují a kolik se jich najde. Zlato a stříbro lidé odpradávna používají jako uchovatele hodnoty, ropa je spíš surovina pro průmysl a dopravu a její cena kolísá víc."],
+    ["Komodity", "Suroviny, které se těží, třeba zlato nebo stříbro. Jejich cena se mění podle toho, kolik jich lidé potřebují a kolik se jich najde. Lidé je odpradávna používají jako uchovatele hodnoty."],
     ["Měny", "Peníze, které používá nějaký stát, třeba koruna nebo dolar. Hodnotu jim nedává zlato ani žádný kov, ale důvěra v ně. Státy a banky je můžou tisknout skoro bez omezení, a proto všechny měny časem ztrácejí hodnotu. V Objevuj vidíš, o kolik za zvolenou dobu přišla koruna."],
     ["Collectibles", "Sběratelské věci, které mají cenu proto, že jich je málo a lidé je chtějí, třeba vzácné Pokémon karty. Cena závisí na tom, jak je karta vzácná, kolik jí zbylo a v jakém je stavu. Na rozdíl od akcií nic nevydělávají, hodnota je jen v tom, že za ně někdo jednou zaplatí víc."],
     ["PSA 10", "Nejvyšší známka, jakou může karta dostat od firmy PSA, která karty prověřuje a zapouzdří do plastu. 10 znamená skoro dokonalý stav. Karta v téhle známce stojí i několikanásobně víc než stejná karta s drobnými vadami."],
@@ -1204,19 +1204,18 @@
       note: "Bilion je tisíc miliard (anglicky „trillion“).",
     },
     {
-      amount: 1_000_000_000_000,
-      unit: "$",
-      word: "trilion",
-      zeros: 12,
+      amount: 100_000_000_000_000,
+      word: "sto bilionů",
+      zeros: 14,
       items: [
-        ["../assets/logos/discover/nvidia.png", "NVIDIA, asi 6 trilionů"],
-        ["../assets/logos/discover/apple.png", "Apple, asi 5 trilionů"],
-        ["../assets/logos/discover/google.png", "Google, asi 4 triliony"],
-        ["../assets/logos/discover/microsoft.png", "Microsoft, asi 4 triliony"],
-        ["../assets/logos/discover/amazon.png", "Amazon, asi 3 triliony"],
-        ["../assets/logos/discover/meta.png", "Meta, asi 2 triliony"],
+        ["../assets/logos/discover/nvidia.png", "NVIDIA, asi 125 bilionů Kč"],
+        ["../assets/logos/discover/apple.png", "Apple, asi 105 bilionů Kč"],
+        ["../assets/logos/discover/google.png", "Google, asi 90 bilionů Kč"],
+        ["../assets/logos/discover/microsoft.png", "Microsoft, asi 85 bilionů Kč"],
+        ["../assets/logos/discover/amazon.png", "Amazon, asi 60 bilionů Kč"],
+        ["../assets/logos/discover/meta.png", "Meta, asi 40 bilionů Kč"],
       ],
-      note: "Hodnoty největších firem světa v dolarech (říjen 2026). Anglicky „trillion“.",
+      note: "Tolik stojí největší firmy světa (říjen 2026). V dolarech by to byly triliony, anglicky „trillions“.",
     },
   ];
 
@@ -1309,7 +1308,7 @@
       row.style.setProperty("--i", String(i));
       const head = el("div", "money-head");
       const big = el("strong", `money-amount${step.zeros >= 12 ? " is-long" : ""}`);
-      big.append(document.createTextNode(nf({ maximumFractionDigits: 0 }).format(step.amount).replace(/ /g, " ")), el("span", "cur", ` ${step.unit ?? "Kč"}`));
+      big.append(document.createTextNode(nf({ maximumFractionDigits: 0 }).format(step.amount).replace(/ /g, " ")), el("span", "cur", " Kč"));
       head.append(big, el("span", "money-word", step.word));
       const zeros = el("div", "money-zeros");
       zeros.append(el("span", "", `${step.zeros} ${step.zeros === 3 ? "nuly" : step.zeros < 5 ? "nuly" : "nul"}`));
@@ -1389,7 +1388,7 @@
     const range = el("input");
     range.type = "range";
     range.min = "-90";
-    range.max = "1000";
+    range.max = "900";
     range.step = "10";
     range.value = String(guideState.sliderValue);
     range.setAttribute("aria-label", "O kolik procent cena vzrostla");
@@ -1398,10 +1397,9 @@
       const pct = Number(range.value);
       const mult = 1 + pct / 100;
       const sign = pct > 0 ? "+" : pct < 0 ? MINUS : "";
-      // the taller bar always fills the chart, the other one keeps the true ratio
-      const top = Math.max(1, mult);
-      before.bar.style.height = `${Math.max(6, (1 / top) * 100)}%`;
-      after.bar.style.height = `${Math.max(6, (mult / top) * 100)}%`;
+      // the yellow bar always stays the same (1 000 Kč = a tenth of the chart), the green one grows with the price
+      before.bar.style.height = "10%";
+      after.bar.style.height = `${Math.max(3, Math.min(100, mult * 10))}%`;
       after.bar.classList.toggle("is-loss", pct < 0);
       before.val.textContent = formatCzk(1000);
       after.val.textContent = formatCzk(1000 * mult);
@@ -1660,7 +1658,7 @@
   }
 
   function buildCapGuide(box) {
-    box.append(sectionIntro("Market cap říká, jak velká je firma nebo mince. Podle něj poznáš, kolik ještě může vyrůst."));
+    box.append(sectionIntro("Market cap říká, jak velká je firma nebo mince. Podle něj poznáš, jaký má potenciál vyrůst."));
 
     const formula = el("section", "panel cap-formula");
     formula.innerHTML =
@@ -1668,7 +1666,7 @@
     box.append(formula);
 
     const pot = el("section", "panel cap-potential");
-    pot.append(el("h3", "guide-h", "Kolik může ještě vyrůst"));
+    pot.append(el("h3", "guide-h", "Jaký má potenciál vyrůst"));
     pot.append(el("p", "cd-text", "Dáš 1 000 Kč. Velká věc už nemá kam moc růst, malá může vyrůst mnohonásobně."));
     for (const [pic, name, size, mult] of [
       [logoImg("../assets/logos/discover/bitcoin.png", "pot-logo"), "Bitcoin", "už je velký, market cap asi 1,7 trilionu $", 5],
@@ -1689,24 +1687,26 @@
     box.append(pot);
 
     const real = el("section", "panel cap-real");
-    real.append(el("h3", "guide-h", "Kolik má market cap"));
-    for (const [logo, name, cap] of [
-      ["../assets/logos/discover/apple.png", "Apple", "asi 5 trilionů $"],
-      ["../assets/logos/discover/bitcoin.png", "Bitcoin", "asi 1,7 trilionu $"],
-      ["../assets/logos/tesla.png", "Tesla", "asi 1,2 trilionu $"],
-      ["../assets/logos/discover/solana.png", "Solana", "asi 70 miliard $"],
-      ["../assets/logos/sui.png", "Sui", "asi 4,7 miliardy $"],
-      ["../assets/logos/bot.png", "RoboStrategy", "asi 700 milionů $"],
-      ["../assets/logos/cards.png", "Collector Crypt", "asi 250 milionů $"],
-      ["../assets/logos/cymetica.jpg", "Cymetica", "asi 1 milion $"],
+    real.append(el("h3", "guide-h", "Kolik má market cap a jaký potenciál"));
+    for (const [logo, name, cap, mult] of [
+      ["../assets/logos/discover/apple.png", "Apple", "asi 5 trilionů $", 2],
+      ["../assets/logos/discover/bitcoin.png", "Bitcoin", "asi 1,7 trilionu $", 5],
+      ["../assets/logos/tesla.png", "Tesla", "asi 1,2 trilionu $", 3],
+      ["../assets/logos/discover/solana.png", "Solana", "asi 70 miliard $", 20],
+      ["../assets/logos/sui.png", "Sui", "asi 4,7 miliardy $", 50],
+      ["../assets/logos/bot.png", "RoboStrategy", "asi 700 milionů $", 100],
+      ["../assets/logos/cards.png", "Collector Crypt", "asi 250 milionů $", 100],
+      ["../assets/logos/cymetica.jpg", "Cymetica", "asi 1 milion $", 1000],
     ]) {
       const r = el("div", "cr-row");
       const text = el("div", "cr-text");
       text.append(el("b", "", name), el("strong", "", cap));
-      r.append(logoImg(logo, "cr-logo"), text);
+      const potential = el("div", "cr-pot");
+      potential.append(el("small", "", "když uspěje"), el("b", "", `až ×${nf({ maximumFractionDigits: 0 }).format(mult)}`));
+      r.append(logoImg(logo, "cr-logo"), text, potential);
       real.append(r);
     }
-    real.append(el("small", "guide-note", "Zaokrouhleno, říjen 2026. Čím menší číslo, tím víc může věc ještě vyrůst."));
+    real.append(el("small", "guide-note", "Zaokrouhleno, říjen 2026. Čím menší market cap, tím větší potenciál."));
     box.append(real);
     buildAgeGuide(box);
   }
@@ -1774,7 +1774,6 @@
       }
     });
     box.append(early);
-    box.append(discoverCta());
   }
 
   /* the big finish: a push towards the Objevuj tab */
