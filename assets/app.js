@@ -1722,6 +1722,94 @@
     box.append(card);
   }
 
+  /* ---- 2d. the 15 year simulator: a monthly deposit and a yearly return, and what the portfolio becomes ---- */
+
+  const SIM_YEARS = 15;
+  const bigCzk = (v) => (v >= 1e9 ? formatBig(v) : formatCzk(v));
+
+  function buildSimulator(box) {
+    const card = el("section", "panel simulator");
+    card.append(el("h3", "guide-h", `Simulátor: tvých ${SIM_YEARS} let`));
+    card.append(el("p", "cd-text", `Nastav, kolik budeš měsíčně přidávat a o kolik % ročně ti portfolio vzroste. Začínáš s ${formatCzk(START_AMOUNT)}.`));
+
+    const slider = (title, min, max, step, value) => {
+      const wrap = el("label", "sim-slider");
+      const head = el("span", "sim-head");
+      const val = el("b", "");
+      head.append(el("span", "", title), val);
+      const input = el("input");
+      input.type = "range";
+      input.min = String(min);
+      input.max = String(max);
+      input.step = String(step);
+      input.value = String(value);
+      input.setAttribute("aria-label", title);
+      wrap.append(head, input);
+      return { wrap, input, val };
+    };
+    const monthly = slider("Měsíčně přidáš", 0, 10000, 100, 1000);
+    const rate = slider("Portfolio ročně vzroste o", 0, 100, 1, 10);
+
+    const chart = el("div", "cmp-chart sim-chart");
+    chart.setAttribute("aria-hidden", "true");
+    const axis = el("div", "sim-axis");
+    axis.append(el("span", "", "dnes"), el("span", "", `za ${SIM_YEARS} let`));
+    const out = el("div", "sim-out");
+    const legend = el("div", "cmp-legend");
+    for (const [cls, text] of [["is-base", "co jsi vložila"], ["is-extra", "co vydělala koule"]]) {
+      const item = el("span", "");
+      item.append(el("i", `cmp-dot ${cls}`), document.createTextNode(text));
+      legend.append(item);
+    }
+
+    const paint = () => {
+      const c = Number(monthly.input.value);
+      const r = Number(rate.input.value) / 100;
+      monthly.val.textContent = formatCzk(c);
+      rate.val.textContent = `${nf({ maximumFractionDigits: 0 }).format(r * 100)} %`;
+      const m = (1 + r) ** (1 / 12) - 1;
+      let bal = START_AMOUNT;
+      let put = START_AMOUNT;
+      const years = [];
+      let reached = null;
+      for (let month = 1; month <= SIM_YEARS * 12; month++) {
+        bal = bal * (1 + m) + c;
+        put += c;
+        if (month % 12 === 0) years.push([put, bal]);
+        if (reached === null && bal >= PASSIVE_GOAL) reached = month / 12;
+      }
+      const top = bal;
+      chart.replaceChildren();
+      for (const [dep, total] of years) {
+        const col = el("div", "cmp-col");
+        const gain = el("span", "cmp-seg is-extra");
+        gain.style.height = `${(Math.max(0, total - dep) / top) * 100}%`;
+        const base = el("span", "cmp-seg is-base");
+        base.style.height = `${(dep / top) * 100}%`;
+        col.append(gain, base);
+        chart.append(col);
+      }
+      const goalLine =
+        reached !== null
+          ? `🏖️ ${formatCzk(PASSIVE_GOAL)} překonáš asi v ${Math.ceil(reached)}. roce.`
+          : `Do ${formatCzk(PASSIVE_GOAL)} ti ještě chybí ${bigCzk(PASSIVE_GOAL - bal)}.`;
+      out.replaceChildren(
+        el(
+          "p",
+          "sim-sentence",
+          `Když měsíčně přispěješ ${formatCzk(c)} a ročně se ti portfolio zvedne o ${nf({ maximumFractionDigits: 0 }).format(r * 100)} %, za ${SIM_YEARS} let budeš mít`,
+        ),
+        el("strong", "sim-total", bigCzk(bal)),
+        el("small", "sb-lbl", `Sama vložíš ${bigCzk(put)}, zbytek ${bigCzk(Math.max(0, bal - put))} vydělá koule. ${goalLine}`),
+      );
+    };
+    monthly.input.addEventListener("input", paint);
+    rate.input.addEventListener("input", paint);
+    paint();
+    card.append(monthly.wrap, rate.wrap, legend, chart, axis, out);
+    box.append(card);
+  }
+
   /* ---- 3. market cap: short, with pictures ---- */
 
   function logoImg(src, cls = "") {
@@ -1850,6 +1938,7 @@
       }
     });
     box.append(early);
+    buildSimulator(box);
   }
 
   /* the big finish: a push towards the Objevuj tab */
@@ -1975,7 +2064,7 @@
       ["🏢", "Market cap", "cap", [
         "Market cap je hodnota celé firmy nebo kryptoměny: cena akcie × počet akcií.",
         "Čím menší firma, tím větší riziko, ale zároveň větší potenciál na růst.",
-        "Jsi mladá a máš asi 15 let na riskování.",
+        "Jsi mladá a máš asi 15 let na riskování. Simulátor ukáže, kolik za ně můžeš mít.",
       ]],
       ["🧭", "Do čeho investovat", "invest", [
         "Bezpečný základ: S&P 500, Nasdaq 100 a Bitcoin.",
