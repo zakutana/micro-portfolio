@@ -5160,32 +5160,6 @@ body.has-lightbox {
   font-size: calc(var(--base-size) * 0.9);
 }
 
-.cmp-rows {
-  margin-bottom: 6px;
-}
-
-.cmp-row {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 8px;
-  align-items: center;
-  padding: 6px 0;
-  border-top: 1px dashed var(--line);
-}
-
-.cmp-year {
-  font-weight: 800;
-}
-
-.cmp-from {
-  color: var(--muted);
-}
-
-.cmp-gain {
-  color: var(--gain-big, #16a36a);
-  white-space: nowrap;
-}
-
 .cmp-legend {
   display: flex;
   flex-wrap: wrap;
@@ -5246,7 +5220,6 @@ body.has-lightbox {
   border-radius: 3px 3px 0 0;
 }
 
-.cmp-out,
 .sim-out {
   display: flex;
   flex-direction: column;
@@ -5256,13 +5229,11 @@ body.has-lightbox {
   line-height: 1.35;
 }
 
-.cmp-out small,
 .sim-out small {
   color: var(--muted);
   font-weight: 700;
 }
 
-.cmp-total,
 .sim-total {
   font-family: var(--display);
   font-size: min(calc(var(--base-size) * 1.9), 8vw);

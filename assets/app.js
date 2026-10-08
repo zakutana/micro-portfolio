@@ -1554,7 +1554,6 @@
     box.append(earn);
 
     buildSnowball(box, monthly, goal);
-    buildCompoundGuide(box);
   }
 
   /* the snowball: one slider makes it bigger, up to the money that gives 100 000 Kč a month; when it reaches the goal the banner flips to
@@ -1641,85 +1640,6 @@
     card.append(stage, amount, track, marks, banner, wrap);
     box.append(card);
     paint();
-  }
-
-  /* ---- 2c. compounding: the gain is counted from the gain too ---- */
-
-  const COMPOUND_START = 1000;
-
-  function buildCompoundGuide(box) {
-    const pct = PASSIVE_YIELD * 100;
-    const card = el("section", "panel compound");
-    card.append(el("h3", "guide-h", "Proč se koule zrychluje"));
-    card.append(
-      el(
-        "p",
-        "pcalc-text",
-        `Začneš s ${formatCzk(COMPOUND_START)} a ročně vyděláš ${pct} %. Za rok máš ${formatCzk(COMPOUND_START * (1 + PASSIVE_YIELD))}. Další rok se ${pct} % počítá už z ${formatCzk(COMPOUND_START * (1 + PASSIVE_YIELD))}, takže vyděláš víc než ${formatCzk(COMPOUND_START * PASSIVE_YIELD)}. Výdělek vydělává další výdělek, proto se koule nabaluje čím dál rychleji.`,
-      ),
-    );
-
-    const rows = el("div", "cmp-rows");
-    let value = COMPOUND_START;
-    for (let year = 1; year <= 3; year++) {
-      const gain = value * PASSIVE_YIELD;
-      const row = el("div", "cmp-row");
-      row.append(
-        el("span", "cmp-year", `${year}. rok`),
-        el("span", "cmp-from", `${formatCzk(value)} → ${formatCzk(value + gain)}`),
-        el("b", "cmp-gain", `+${formatCzk(gain)}`),
-      );
-      rows.append(row);
-      value += gain;
-    }
-    card.append(rows);
-
-    const chart = el("div", "cmp-chart");
-    chart.setAttribute("aria-hidden", "true");
-    const legend = el("div", "cmp-legend");
-    for (const [cls, text] of [["is-base", `tvých ${formatCzk(COMPOUND_START)}`], ["is-simple", "výdělek z nich, každý rok stejný"], ["is-extra", "výdělek z výdělku"]]) {
-      const item = el("span", "");
-      item.append(el("i", `cmp-dot ${cls}`), document.createTextNode(text));
-      legend.append(item);
-    }
-    const input = el("input");
-    input.type = "range";
-    input.min = "1";
-    input.max = "30";
-    input.step = "1";
-    input.value = "10";
-    input.setAttribute("aria-label", "Kolik let");
-    const label = el("label", "sb-slider");
-    label.append(el("span", "", "Kolik let"), input);
-    const out = el("div", "cmp-out");
-    const paint = () => {
-      const years = Number(input.value);
-      const grown = (y) => COMPOUND_START * (1 + PASSIVE_YIELD) ** y;
-      const top = grown(years);
-      chart.replaceChildren();
-      for (let y = 1; y <= years; y++) {
-        const simple = COMPOUND_START * PASSIVE_YIELD * y;
-        const col = el("div", "cmp-col");
-        const seg = (cls, v) => {
-          const e = el("span", `cmp-seg ${cls}`);
-          e.style.height = `${(v / top) * 100}%`;
-          return e;
-        };
-        col.append(seg("is-extra", grown(y) - COMPOUND_START - simple), seg("is-simple", simple), seg("is-base", COMPOUND_START));
-        chart.append(col);
-      }
-      const last = grown(years) - grown(years - 1);
-      const plain = COMPOUND_START * (1 + PASSIVE_YIELD * years);
-      out.replaceChildren(
-        el("small", "sb-lbl", `Za ${years} ${years === 1 ? "rok" : years < 5 ? "roky" : "let"} máš`),
-        el("strong", "cmp-total", formatCzk(top)),
-        el("small", "sb-lbl", `Bez nabalování by to bylo jen ${formatCzk(plain)}. V posledním roce vyděláš ${formatCzk(last)}, v prvním jen ${formatCzk(COMPOUND_START * PASSIVE_YIELD)}.`),
-      );
-    };
-    input.addEventListener("input", paint);
-    paint();
-    card.append(label, legend, chart, out);
-    box.append(card);
   }
 
   /* ---- 2d. the 15 year simulator: a monthly deposit and a yearly return, and what the portfolio becomes ---- */
@@ -2059,7 +1979,6 @@
       ["🏖️", "Pasivní příjem", "passive", [
         `Abys nemusela pracovat, potřebuješ ${formatCzk(25000)} měsíčně, tedy ${formatCzk(300000)} ročně.`,
         `Tolik ti vydělá ${formatCzk(goal)} zainvestovaných při 10 % ročně. S&P 500 a Nasdaq 100 dávaly za 20 let 11 až 16 % ročně.`,
-        "Výdělek vydělává další výdělek, proto se koule nabaluje čím dál rychleji.",
       ]],
       ["🏢", "Market cap", "cap", [
         "Market cap je hodnota celé firmy nebo kryptoměny: cena akcie × počet akcií.",
