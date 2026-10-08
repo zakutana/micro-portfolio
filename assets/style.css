@@ -5246,8 +5246,7 @@ body.has-lightbox {
   border-radius: 3px 3px 0 0;
 }
 
-.cmp-out,
-.sim-out {
+.cmp-out {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -5256,53 +5255,15 @@ body.has-lightbox {
   line-height: 1.35;
 }
 
-.cmp-out small,
-.sim-out small {
+.cmp-out small {
   color: var(--muted);
   font-weight: 700;
 }
 
-.cmp-total,
-.sim-total {
+.cmp-total {
   font-family: var(--display);
   font-size: min(calc(var(--base-size) * 1.9), 8vw);
   color: var(--gain-big, #16a36a);
   overflow-wrap: anywhere;
 }
 
-.sim-sentence {
-  margin: 4px 0 0;
-  font-weight: 700;
-}
-
-.sim-slider {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 10px 0;
-}
-
-.sim-head {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  font-weight: 700;
-}
-
-.sim-head b {
-  color: var(--gain-big, #16a36a);
-  white-space: nowrap;
-}
-
-.sim-slider input[type="range"] {
-  width: 100%;
-  accent-color: var(--btn-active-bg);
-}
-
-.sim-axis {
-  display: flex;
-  justify-content: space-between;
-  color: var(--muted);
-  font-size: calc(var(--base-size) * 0.75);
-  font-weight: 700;
-}
