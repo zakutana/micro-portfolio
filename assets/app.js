@@ -1536,20 +1536,18 @@
     /* what has to be earned: said directly to her */
     const earn = el("section", "panel passive-earn");
     earn.append(el("h3", "guide-h", "Abys už nikdy nemusela pracovat"));
-    earn.append(
-      el("p", "pcalc-text", `Potřebuješ ${formatCzk(monthly)} měsíčně, to je ${formatCzk(yearly)} ročně. Tolik ti musí za rok vydělat tvoje investice.`),
-    );
+    const pct = PASSIVE_YIELD * 100;
+    earn.append(el("p", "pcalc-text", `Bezpečně se dá vydělávat ${pct} % ročně. Proto potřebuješ mít zainvestováno:`));
     const need = el("div", "pcalc-need");
-    need.append(el("small", "", `Aby ti ${PASSIVE_YIELD * 100} % ročně stačilo, musíš mít zainvestováno`), el("strong", "", formatCzk(goal)));
-    const formula = el("div", "pcalc-formula");
-    formula.append(
-      el("span", "cf-chip is-cap", formatCzk(goal)),
-      el("i", "", "×"),
-      el("span", "cf-chip is-count", `${PASSIVE_YIELD * 100} %`),
-      el("i", "", "="),
-      el("span", "cf-chip is-price", `${formatCzk(yearly)} ročně`),
-    );
-    earn.append(need, el("small", "pe-note", "Zkouška:"), formula, el("p", "pcalc-text", "To jsou třeba bezpečné investice:"));
+    need.append(el("strong", "", formatCzk(goal)));
+    const chip = (cls, text) => el("span", `cf-chip ${cls}`, text);
+    const sign = (text) => el("i", "", text);
+    const proof = el("div", "pcalc-formula");
+    proof.append(chip("is-cap", formatCzk(goal)), sign("×"), chip("is-count", `${pct} %`), sign("="), chip("is-price", `${formatCzk(yearly)} ročně`));
+    const perMonth = el("div", "pcalc-formula");
+    perMonth.append(chip("is-price", `${formatCzk(yearly)} ročně`), sign("÷"), chip("is-count", "12 měsíců"), sign("="), chip("is-cap", `${formatCzk(monthly)} měsíčně`));
+    earn.append(need, el("p", "pcalc-text", `${pct} % z toho je za rok ${formatCzk(yearly)}, a to děleno 12 měsíci je právě ${formatCzk(monthly)} měsíčně:`), proof, perMonth);
+    earn.append(el("p", "pcalc-text", "Bezpečné investice jsou třeba:"));
     earn.append(benchChips(), el("small", "pe-note", "za posledních 20 let, bez záruky"));
     box.append(earn);
 
@@ -1565,7 +1563,7 @@
     const card = el("section", "panel snowball");
     card.append(el("h3", "guide-h", "Sněhová koule"));
     card.append(
-      el("p", "pcalc-text", `Koule je velikost tvých investic. Začínáš s ${formatCzk(START_AMOUNT)} a koule roste o ${PASSIVE_YIELD * 100} % ročně, jako S&P 500 nebo Nasdaq 100. Posuň posuvník a uvidíš, kolik ti dává měsíčně.`),
+      el("p", "pcalc-text", `Koule je velikost tvých investic. Začínáš s ${formatCzk(START_AMOUNT)} a roste o zmíněných bezpečných ${PASSIVE_YIELD * 100}\u00a0%\u00a0ročně. Posuň posuvník a uvidíš, kolik ti dává měsíčně.`),
     );
 
     const stage = el("div", "sb-stage");
@@ -1605,6 +1603,13 @@
     input.setAttribute("aria-label", "Jak velká je koule");
     wrap.append(label, input);
 
+    /* "a při [10 % ročně] ti dává měsíčně" with the rate as a bright chip */
+    const labelWithRate = () => {
+      const l = el("small", "sb-lbl sb-ratebox");
+      l.append(document.createTextNode("a při "), el("span", "cf-chip is-count sb-rate", `${PASSIVE_YIELD * 100} % ročně`), document.createTextNode(" ti dává měsíčně"));
+      return l;
+    };
+
     let wasFree = false;
     const paint = () => {
       const value = valueAt(Number(input.value));
@@ -1616,7 +1621,7 @@
       amount.replaceChildren(
         el("small", "sb-lbl", "Tvoje investice (velikost koule)"),
         el("strong", "", formatCzk(Math.round(value / 10) * 10)),
-        el("small", "sb-lbl", `a při ${PASSIVE_YIELD * 100} % ročně ti dává měsíčně`),
+        labelWithRate(),
         el("strong", "sb-income", `${nf({ maximumFractionDigits: 0 }).format(Math.round(income))}\u00a0Kč`),
         el("small", "sb-lbl", `to je ${formatCzk(Math.round(income) * 12)} ročně`),
       );
@@ -1727,7 +1732,7 @@
     monthly.input.addEventListener("input", paint);
     rate.input.addEventListener("input", paint);
     paint();
-    card.append(monthly.wrap, rate.wrap, legend, chart, axis, out);
+    card.append(monthly.wrap, rate.wrap, legend, chart, axis, out, el("small", "pe-note sim-note", `Je to jen výpočet, nic není zaručené. S&P 500 dával za posledních 20 let asi ${wholePct(BENCH_FALLBACK.sp500.cagr)} ročně.`));
     box.append(card);
   }
 
@@ -1773,7 +1778,7 @@
     box.append(pot);
 
     const real = el("section", "panel cap-real");
-    real.append(el("h3", "guide-h", "Hodnota a potenciál růstu"));
+    real.append(el("h3", "guide-h", "Market capy a jejich potenciály růstu"));
     for (const [logo, name, cap, mult] of [
       ["../assets/logos/discover/apple.png", "Apple", "asi 5 bilionů $", 2],
       ["../assets/logos/discover/bitcoin.png", "Bitcoin", "asi 1,7 bilionu $", 5],
@@ -1803,7 +1808,7 @@
 
     const lose = el("section", "panel age-lose");
     lose.append(el("h3", "guide-h", "Těch 10 % ročně dávají bezpečné investice"));
-    lose.append(benchChips(), el("p", "cd-text age-more", "Ty si ale můžeš dovolit víc:"));
+    lose.append(benchChips(), el("small", "pe-note", "za posledních 20 let, bez záruky"), el("p", "cd-text age-more", "Ty si ale můžeš dovolit víc:"));
     for (const [emoji, text] of [
       ["🏠", "Bydlíš u rodičů, nemáš nájem ani půjčky a budeš dál investovat."],
       ["💼", "V nejhorším budeš ve 25 letech chodit do práce, kam bys šla stejně."],
@@ -1818,7 +1823,7 @@
 
     const fast = el("section", "panel age-fast");
     fast.append(el("h3", "guide-h", "Koule poroste mnohem rychleji"));
-    fast.append(el("p", "cd-text", `Za jak dlouho se z ${formatCzk(START_AMOUNT)} stane ${formatCzk(PASSIVE_GOAL)}, když věc roste ročně o:`));
+    fast.append(el("p", "cd-text", `Za jak dlouho se z ${formatCzk(START_AMOUNT)} stane ${formatCzk(PASSIVE_GOAL)}, když nepřidáváš další peníze a věc roste ročně o:`));
     const years = (r) => Math.log(PASSIVE_GOAL / START_AMOUNT) / Math.log(1 + r);
     const longest = years(0.1);
     for (const [r, label] of [[0.1, "10 % (bezpečné)"], [0.3, "30 %"], [1, "100 % (každý rok dvojnásobek)"]]) {
@@ -1979,7 +1984,8 @@
       ]],
       ["🏖️", "Pasivní příjem", "passive", [
         `Abys nemusela pracovat, potřebuješ ${formatCzk(25000)} měsíčně, tedy ${formatCzk(300000)} ročně.`,
-        `Tolik ti vydělá ${formatCzk(goal)} zainvestovaných při 10 % ročně. S&P 500 a Nasdaq 100 dávaly za 20 let 11 až 16 % ročně.`,
+        `Bezpečně se dá vydělávat 10 % ročně, proto potřebuješ ${formatCzk(goal)}: 10 % z nich je ${formatCzk(300000)} ročně, tedy ${formatCzk(25000)} měsíčně.`,
+        "S&P 500 a Nasdaq 100 dávaly za 20 let 11 až 16 % ročně.",
       ]],
       ["🏢", "Market cap", "cap", [
         "Market cap je hodnota celé firmy nebo kryptoměny: cena akcie × počet akcií.",

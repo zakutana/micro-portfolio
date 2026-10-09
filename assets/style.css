@@ -5281,3 +5281,23 @@ body.has-lightbox {
 .cap-potential .cr-risk {
   margin: 0 0 10px;
 }
+
+.sb-amount .sb-ratebox {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.sb-amount .sb-rate {
+  padding: 4px 14px;
+  font-size: calc(var(--base-size) * 1.15);
+  box-shadow: 0 0 0 3px var(--gain-bg);
+}
+
+.sim-note {
+  text-align: center;
+  margin-top: 10px;
+}
