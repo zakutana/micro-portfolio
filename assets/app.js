@@ -544,7 +544,7 @@
     ["pl", "Zisk / ztráta"],
     ["today", "Za 24 hodin"],
     ["share", "Podíl"],
-    ["cap", "Tržní kapitalizace"],
+    ["cap", "Market cap"],
   ];
 
   let rowRefs = [];

@@ -45,7 +45,7 @@ Zdroje živé ceny (obojí zdarma, bez API klíče):
 
 - `{ "type": "fixed", "priceUsd": 0.001 }` (nebo `"priceCzk"`) – pro něco, co se zatím neobchoduje: cena napsaná natvrdo, USD se přepočítá živým kurzem. U každé položky je `"group"` (`"crypto"` nebo `"stocks"`): v Portfoliu jsou nahoře Crypto a pod nimi Akcie. U každé položky může být `"note"` (krátký popisek, co to je), který se ukáže pod názvem vedle symbolu, třeba `"zatím se neobchoduje"`. Až se začne obchodovat, nahradí se zdroj za `coingecko` nebo `dexscreener`. S `"notTraded": true` se položka ukáže ztlumená, s popiskem „mimo součet“, a **nezapočítá se** do celkové hodnoty, růstu, podílů ani rozložení portfolia. Až se začne obchodovat, příznak odeber.
 
-**Tržní kapitalizace** (Pro režim): u kryptoměn ji vrací CoinGecko. U tokenizovaných akcií se počítá jako živá cena × počet akcií firmy, který je v položce jako `"sharesOutstanding"` (např. BOT 24,4 mil., Tesla 3,237 mld., SpaceX 13,57 mld.). Je to přibližný, ručně zapsaný údaj, občas ho tedy aktualizuj. Bez `sharesOutstanding` se ukáže pomlčka.
+**Market cap** (Pro režim): u kryptoměn ji vrací CoinGecko. U tokenizovaných akcií se počítá jako živá cena × počet akcií firmy, který je v položce jako `"sharesOutstanding"` (např. BOT 24,4 mil., Tesla 3,237 mld., SpaceX 13,57 mld.). Je to přibližný, ručně zapsaný údaj, občas ho tedy aktualizuj. Bez `sharesOutstanding` se ukáže pomlčka.
 
 Když se ceny nepodaří načíst, stránka ukáže poslední známé (uložené v telefonu) a upozorní na to.
 
