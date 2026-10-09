@@ -1676,7 +1676,7 @@
     axis.append(el("span", "", "dnes"), el("span", "", `za ${SIM_YEARS} let`));
     const out = el("div", "sim-out");
     const legend = el("div", "cmp-legend");
-    for (const [cls, text] of [["is-base", "co jsi vložila"], ["is-extra", "co vydělala koule"]]) {
+    for (const [cls, text] of [["is-base", "co jsi vložila"], ["is-extra", "co vydělaly peníze samy"]]) {
       const item = el("span", "");
       item.append(el("i", `cmp-dot ${cls}`), document.createTextNode(text));
       legend.append(item);
@@ -1720,7 +1720,8 @@
           `Když měsíčně přispěješ ${formatCzk(c)} a ročně se ti portfolio zvedne o ${nf({ maximumFractionDigits: 0 }).format(r * 100)} %, za ${SIM_YEARS} let budeš mít`,
         ),
         el("strong", "sim-total", bigCzk(bal)),
-        el("small", "sb-lbl", `Sama vložíš ${bigCzk(put)}, zbytek ${bigCzk(Math.max(0, bal - put))} vydělá koule. ${goalLine}`),
+        el("small", "sb-lbl", `Sama vložíš ${bigCzk(put)}. Zbylých ${bigCzk(Math.max(0, bal - put))} vydělají peníze samy: každý rok se výdělek počítá i z výdělků z minulých let, proto je to tolik.`),
+        el("small", "sb-lbl", goalLine),
       );
     };
     monthly.input.addEventListener("input", paint);
