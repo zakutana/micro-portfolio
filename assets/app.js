@@ -1947,14 +1947,16 @@
 
     const risky = el("section", "panel invest-risky");
     risky.append(el("h3", "guide-h", "Riskantnější, ale s velkým potenciálem"));
-    risky.append(el("p", "cd-text", "NVIDIA, Tesla nebo SpaceX jsou už giganti. V budoucnu nejvíc vyrostou malé firmy nebo kryptoměny zaměřené na:"));
+    risky.append(el("p", "cd-text", "Nejvíc mohou vyrůst malé firmy nebo kryptoměny zaměřené na:"));
     const themes = el("div", "invest-themes");
     for (const [emoji, label] of [["🧠", "umělá inteligence"], ["🤖", "roboti"], ["🚀", "vesmír"], ["🧬", "biotechnologie"]]) {
       const t = el("div", "invest-theme");
       t.append(el("span", "invest-theme-ico", emoji), el("span", "", label));
       themes.append(t);
     }
-    risky.append(themes, el("p", "cd-text cr-risk", "Čím menší firma, tím větší riziko, ale zároveň větší potenciál na růst."));
+    const note = el("div", "invest-note");
+    note.append(el("span", "invest-note-ico", "⚖️"), el("span", "", "Čím menší firma, tím větší riziko, ale zároveň větší potenciál na růst."));
+    risky.append(themes, note);
     box.append(risky);
     box.append(discoverCta());
 

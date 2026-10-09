@@ -5301,3 +5301,43 @@ body.has-lightbox {
   text-align: center;
   margin-top: 10px;
 }
+
+/* Příručka: the risky part, tidy tiles */
+.invest-themes {
+  gap: 10px;
+  margin: 10px 0 12px;
+}
+
+.invest-theme {
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  min-height: 96px;
+  padding: 12px 4px;
+  text-align: center;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  font-size: min(calc(var(--base-size) * 0.85), 3.4vw);
+}
+
+.invest-theme-ico {
+  font-size: 2.4rem;
+}
+
+.invest-note {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: min(var(--row-radius), 14px);
+  background: var(--gain-bg);
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.invest-note-ico {
+  font-size: 1.6rem;
+  line-height: 1;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
