@@ -213,7 +213,7 @@
     input.setAttribute("aria-label", "Heslo");
     input.placeholder = "•••••";
     const button = el("button", "pw-btn");
-    button.textContent = "Přihlásit se";
+    button.textContent = "Vstoupit";
     button.type = "submit";
     const message = el("p", "pw-message");
     message.setAttribute("aria-live", "polite");
