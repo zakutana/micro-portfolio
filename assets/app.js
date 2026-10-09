@@ -1750,7 +1750,7 @@
     box.append(formula);
 
     const pot = el("section", "panel cap-potential");
-    pot.append(el("h3", "guide-h", "Čím menší, tím větší šance na růst"));
+    pot.append(el("h3", "guide-h", "Velká firma proti malé"));
     pot.append(el("p", "cd-text cr-risk", "Čím menší market cap, tím větší šance na růst, ale také větší riziko."));
     pot.append(el("p", "cd-text", "Dáš 1 000 Kč. Velká věc už nemá kam moc růst, malá může vyrůst mnohonásobně."));
     for (const [pic, name, size, mult] of [
