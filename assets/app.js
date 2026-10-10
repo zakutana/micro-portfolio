@@ -1543,9 +1543,9 @@
     const chip = (cls, text) => el("span", `cf-chip ${cls}`, text);
     const sign = (text) => el("i", "", text);
     const proof = el("div", "pcalc-formula");
-    proof.append(chip("is-cap", formatCzk(goal)), sign("×"), chip("is-count", `${pct} %`), sign("="), chip("is-price", `${formatCzk(yearly)} ročně`));
+    proof.append(chip("is-cap", formatCzk(goal)), sign("×"), chip("is-rate", `${pct} %`), sign("="), chip("is-price", `${formatCzk(yearly)} ročně`));
     const perMonth = el("div", "pcalc-formula");
-    perMonth.append(chip("is-price", `${formatCzk(yearly)} ročně`), sign("÷"), chip("is-count", "12 měsíců"), sign("="), chip("is-cap", `${formatCzk(monthly)} měsíčně`));
+    perMonth.append(chip("is-price", `${formatCzk(yearly)} ročně`), sign("÷"), chip("is-rate", "12 měsíců"), sign("="), chip("is-cap", `${formatCzk(monthly)} měsíčně`));
     earn.append(need, el("p", "pcalc-text", `${pct} % z toho je za rok ${formatCzk(yearly)}, a to děleno 12 měsíci je právě ${formatCzk(monthly)} měsíčně:`), proof, perMonth);
     earn.append(el("p", "pcalc-text", "Bezpečné investice jsou třeba:"));
     earn.append(benchChips(), el("small", "pe-note", "za posledních 20 let, bez záruky"));
@@ -1606,7 +1606,7 @@
     /* "a při [10 % ročně] ti dává měsíčně" with the rate as a bright chip */
     const labelWithRate = () => {
       const l = el("small", "sb-lbl sb-ratebox");
-      l.append(document.createTextNode("a při "), el("span", "cf-chip is-count sb-rate", `${PASSIVE_YIELD * 100} % ročně`), document.createTextNode(" ti dává měsíčně"));
+      l.append(document.createTextNode("a při "), el("b", "sb-rate", `${PASSIVE_YIELD * 100}\u00a0%\u00a0ročně`), document.createTextNode(" ti dává měsíčně"));
       return l;
     };
 

@@ -5282,19 +5282,21 @@ body.has-lightbox {
   margin: 0 0 10px;
 }
 
-.sb-amount .sb-ratebox {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  margin-top: 4px;
+.sb-amount .sb-rate {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--pill-bg);
+  color: var(--text);
+  font-weight: 800;
+  white-space: nowrap;
 }
 
-.sb-amount .sb-rate {
-  padding: 4px 14px;
-  font-size: calc(var(--base-size) * 1.15);
-  box-shadow: 0 0 0 3px var(--gain-bg);
+.cf-chip.is-rate {
+  background: var(--pill-bg);
+  color: var(--text);
+  text-shadow: none;
+  font-size: calc(var(--base-size) * 0.85);
+  font-weight: 700;
 }
 
 .sim-note {
