@@ -1561,9 +1561,9 @@
     const valueAt = (pos) => START_AMOUNT * (MAX_VALUE / START_AMOUNT) ** (pos / 100); // a log scale: from the start to 100 000 Kč a month
 
     const card = el("section", "panel snowball");
-    card.append(el("h3", "guide-h", "Sněhová koule"));
+    card.append(el("h3", "guide-h", "Investiční koule"));
     card.append(
-      el("p", "pcalc-text", `Koule je velikost tvých investic. Začínáš s ${formatCzk(START_AMOUNT)} a roste o zmíněných bezpečných ${PASSIVE_YIELD * 100}\u00a0%\u00a0ročně. Posuň posuvník a uvidíš, kolik ti dává měsíčně.`),
+      el("p", "pcalc-text", `Investiční koule je velikost tvých investic. Začínáš s ${formatCzk(START_AMOUNT)} a roste o zmíněných bezpečných ${PASSIVE_YIELD * 100}\u00a0%\u00a0ročně. Posuň posuvník a uvidíš, kolik ti dává měsíčně.`),
     );
 
     const stage = el("div", "sb-stage");
@@ -1593,14 +1593,14 @@
     banner.setAttribute("aria-live", "polite");
 
     const wrap = el("label", "sb-slider");
-    const label = el("span", "", "Velikost koule");
+    const label = el("span", "", "Velikost investiční koule");
     const input = el("input");
     input.type = "range";
     input.min = "0";
     input.max = "100";
     input.step = "0.5";
     input.value = "0";
-    input.setAttribute("aria-label", "Jak velká je koule");
+    input.setAttribute("aria-label", "Jak velká je investiční koule");
     wrap.append(label, input);
 
     /* "a při [10 % ročně] ti dává měsíčně" with the rate as a bright chip */
@@ -1619,7 +1619,7 @@
       ballIcon.style.fontSize = `${size * 0.5}px`;
       const income = (value * PASSIVE_YIELD) / 12;
       amount.replaceChildren(
-        el("small", "sb-lbl", "Tvoje investice (velikost koule)"),
+        el("small", "sb-lbl", "Tvoje investiční koule"),
         el("strong", "", formatCzk(Math.round(value / 10) * 10)),
         labelWithRate(),
         el("strong", "sb-income", `${nf({ maximumFractionDigits: 0 }).format(Math.round(income))}\u00a0Kč`),
@@ -1822,7 +1822,7 @@
     box.append(lose);
 
     const fast = el("section", "panel age-fast");
-    fast.append(el("h3", "guide-h", "Koule poroste mnohem rychleji"));
+    fast.append(el("h3", "guide-h", "Investiční koule poroste mnohem rychleji"));
     fast.append(el("p", "cd-text", `Za jak dlouho se z ${formatCzk(START_AMOUNT)} stane ${formatCzk(PASSIVE_GOAL)}, když nepřidáváš další peníze a věc roste ročně o:`));
     const years = (r) => Math.log(PASSIVE_GOAL / START_AMOUNT) / Math.log(1 + r);
     const longest = years(0.1);
@@ -1845,7 +1845,7 @@
 
     const early = el("section", "panel age-early");
     early.append(el("h3", "guide-h", "Kdo byl u toho brzo, vydělal nejvíc"));
-    early.append(el("p", "cd-text", "Máš asi 15 let času. Koukni na top investice, které za posledních 10 let vyrostly o tolik. Tolik by dnes měla tvoje koule, kdybys před 10 lety dala 1 300 Kč:"));
+    early.append(el("p", "cd-text", "Máš asi 15 let času. Koukni na top investice, které za posledních 10 let vyrostly o tolik. Tolik by dnes měla tvoje investiční koule, kdybys před 10 lety dala 1 300 Kč:"));
     const rows = el("div", "yg-rows");
     early.append(rows);
     Promise.all([guideData(), fetch("../assets/discover.json", { cache: "no-cache" }).then((r) => r.json()).catch(() => null)]).then(([d, list]) => {
