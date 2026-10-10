@@ -1974,30 +1974,36 @@
 
   function buildCheatGuide(box) {
     box.append(sectionIntro("Celá příručka v kostce."));
-    const goal = (LIVING.reduce((a, r) => a + r[2], 0) * 12) / PASSIVE_YIELD;
+    const monthly = LIVING.reduce((a, r) => a + r[2], 0);
+    const yearly = monthly * 12;
+    const goal = yearly / PASSIVE_YIELD;
+    const pct = PASSIVE_YIELD * 100;
+    const yearsTo = (r) => Math.ceil(Math.log(PASSIVE_GOAL / START_AMOUNT) / Math.log(1 + r));
     const rows = [
       ["💰", "Peníze", "money", [
-        "1 000 Kč jsou 2 pizzy, milion je malé auto.",
-        "Bilion je tisíc miliard (anglicky „trillion“).",
+        "1 000 Kč jsou 4 pizzy, milion je malé auto, miliarda zámek.",
+        "Bilion je tisíc miliard (anglicky „trillion“). NVIDIA a Apple stojí každá přes 100 bilionů Kč.",
       ]],
       ["📈", "Růst o 100 %", "growth", [
         "K procentům přičti 100: +100 % je dvojnásobek, +200 % trojnásobek.",
-        "Když cena klesne o 50 %, musí pak vzrůst o 100 %.",
+        "Když cena klesne o 50 %, musí pak vzrůst o 100 %, aby byla zase stejná.",
       ]],
       ["🏖️", "Pasivní příjem", "passive", [
-        `Abys nemusela pracovat, potřebuješ ${formatCzk(25000)} měsíčně, tedy ${formatCzk(300000)} ročně.`,
-        `Bezpečně se dá vydělávat 10 % ročně, proto potřebuješ ${formatCzk(goal)}: 10 % z nich je ${formatCzk(300000)} ročně, tedy ${formatCzk(25000)} měsíčně.`,
-        "S&P 500 a Nasdaq 100 dávaly za 20 let 11 až 16 % ročně.",
+        `Abys nemusela pracovat, potřebuješ ${formatCzk(monthly)} měsíčně, tedy ${formatCzk(yearly)} ročně.`,
+        `Bezpečně se dá vydělávat ${pct} % ročně, proto potřebuješ ${formatCzk(goal)}: ${pct} % z nich je ${formatCzk(yearly)} ročně.`,
+        `S&P 500 a Nasdaq 100 dávaly za 20 let ${wholePct(BENCH_FALLBACK.sp500.cagr).replace(" %", "")} až ${wholePct(BENCH_FALLBACK.nasdaq.cagr)} ročně, bez záruky.`,
+        "Investiční koule je velikost tvých investic: čím je větší, tím víc ti dává měsíčně.",
       ]],
       ["🏢", "Market cap", "cap", [
         "Market cap je hodnota celé firmy nebo kryptoměny: cena akcie × počet akcií.",
-        "Čím menší firma, tím větší riziko, ale zároveň větší potenciál na růst.",
-        "Jsi mladá a máš asi 15 let na riskování. Simulátor ukáže, kolik za ně můžeš mít.",
+        "Čím menší market cap, tím větší šance na růst, ale i větší riziko. Bitcoin může vyrůst třeba ×5, malá firma až ×100.",
+        `Jsi mladá a máš asi 15 let na riskování. Z ${formatCzk(START_AMOUNT)} bez dalších vkladů vyroste ${formatCzk(PASSIVE_GOAL)} za ${yearsTo(PASSIVE_YIELD)} let při ${pct} % ročně, ale za ${yearsTo(1)} let při 100 % ročně.`,
+        "Simulátor 15 let ukáže, kolik budeš mít při měsíčním vkladu a ročním růstu, který si nastavíš.",
       ]],
       ["🧭", "Do čeho investovat", "invest", [
         "Bezpečný základ: S&P 500, Nasdaq 100 a Bitcoin.",
         "Riskantnější: malé firmy a krypto zaměřené na AI, roboty, vesmír a biotechnologie.",
-        "Kolik kam dáš, rozhoduješ ty.",
+        "Kolik kam dáš, rozhoduješ ty. Další tipy najdeš v záložce Objevuj.",
       ]],
     ];
     for (const [emoji, title, section, lines] of rows) {
