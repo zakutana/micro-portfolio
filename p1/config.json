@@ -39,12 +39,12 @@
           "price": 579.431558
         },
         {
-          "date": "2026-10-15T14:05:00.000Z",
-          "qty": 0.368631,
-          "price": 542.54816
+          "date": "2026-10-15T14:10:00.000Z",
+          "qty": 0.186104,
+          "price": 537.33344
         }
       ],
-      "qty": 0.713797,
+      "qty": 0.53127,
       "sharesOutstanding": 24400000,
       "note": "fond na roboty a umělou inteligenci",
       "group": "stocks"
@@ -63,9 +63,14 @@
           "date": "2026-10-01T12:00:00.000Z",
           "qty": 7.914599,
           "price": 25.269759
+        },
+        {
+          "date": "2026-10-15T14:10:00.000Z",
+          "qty": 4.691136,
+          "price": 21.316798
         }
       ],
-      "qty": 7.914599,
+      "qty": 12.605735,
       "note": "kryptoměna rychlé blockchainové sítě",
       "group": "crypto"
     },
@@ -138,7 +143,7 @@
       "symbol": "QQQx",
       "logo": "../assets/logos/discover/nasdaq.png",
       "url": "https://www.nasdaq.com",
-      "qty": 0.015944,
+      "qty": 0.015923,
       "source": {
         "type": "dexscreener",
         "chain": "solana",
@@ -146,9 +151,9 @@
       },
       "lots": [
         {
-          "date": "2026-10-15T14:05:00.000Z",
-          "qty": 0.015944,
-          "price": 15680.0112
+          "date": "2026-10-15T14:10:00.000Z",
+          "qty": 0.015923,
+          "price": 15700.6528
         }
       ],
       "note": "100 největších technologických firem USA",
@@ -172,7 +177,7 @@
           "price": 0.0217
         },
         {
-          "date": "2026-10-15T14:05:00.000Z",
+          "date": "2026-10-15T14:10:00.000Z",
           "qty": 2304.147465,
           "price": 0.0217
         }
