@@ -389,6 +389,7 @@
       } else if (isFixed(h)) {
         if (isPrice(h.source.priceCzk)) price = h.source.priceCzk;
         else if (isPrice(h.source.priceUsd) && isPrice(fx)) price = h.source.priceUsd * fx;
+        if (isPrice(price) && isPrice(h.sharesOutstanding)) marketCap = price * h.sharesOutstanding; // not traded yet: written price x all tokens
       } else {
         const hit = dexByKey.get(key);
         if (hit && isPrice(hit.usd) && isPrice(fx)) {
