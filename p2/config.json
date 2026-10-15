@@ -37,9 +37,14 @@
           "date": "2026-10-01T12:00:00.000Z",
           "qty": 0.345166,
           "price": 579.431558
+        },
+        {
+          "date": "2026-10-15T14:05:00.000Z",
+          "qty": 0.368631,
+          "price": 542.54816
         }
       ],
-      "qty": 0.345166,
+      "qty": 0.713797,
       "sharesOutstanding": 24400000,
       "note": "fond na roboty a umělou inteligenci",
       "group": "stocks"
@@ -129,12 +134,33 @@
       "group": "stocks"
     },
     {
+      "name": "Nasdaq 100",
+      "symbol": "QQQx",
+      "logo": "../assets/logos/discover/nasdaq.png",
+      "url": "https://www.nasdaq.com",
+      "qty": 0.015944,
+      "source": {
+        "type": "dexscreener",
+        "chain": "solana",
+        "address": "Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ"
+      },
+      "lots": [
+        {
+          "date": "2026-10-15T14:05:00.000Z",
+          "qty": 0.015944,
+          "price": 15680.0112
+        }
+      ],
+      "note": "100 největších technologických firem USA",
+      "group": "stocks"
+    },
+    {
       "name": "Cymetica",
       "symbol": "ET10",
       "note": "spící AI gigant, zatím se neobchoduje",
       "logo": "../assets/logos/cymetica.jpg",
       "url": "https://cymetica.com/",
-      "qty": 100000,
+      "qty": 102304.147465,
       "source": {
         "type": "fixed",
         "priceCzk": 0.0217
@@ -143,6 +169,11 @@
         {
           "date": "2026-10-01T12:00:00.000Z",
           "qty": 100000,
+          "price": 0.0217
+        },
+        {
+          "date": "2026-10-15T14:05:00.000Z",
+          "qty": 2304.147465,
           "price": 0.0217
         }
       ],
