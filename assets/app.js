@@ -663,12 +663,14 @@
         for (const l of items) {
           const amount = l.qty * l.price;
           const excluded = l.h.notTraded === true;
-          if (!excluded) sum += amount;
+          // the start block leaves out what is not traded (it was a gift); money paid later counts in "Dokoupeno za"
+          const left = excluded && no === 0;
+          if (!left) sum += amount;
           const line = el("li", excluded ? "is-excluded" : "");
           line.append(
             el("span", "sym", l.h.symbol),
             el("span", "q", `${formatQty(l.qty)} ks × ${formatUnitPrice(l.price)}`),
-            el("span", "amt", excluded ? `${formatCzk(amount)} · mimo součet` : formatCzk(amount)),
+            el("span", "amt", left ? `${formatCzk(amount)} · mimo součet` : formatCzk(amount)),
           );
           lines.append(line);
         }
