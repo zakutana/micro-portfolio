@@ -99,7 +99,7 @@
       "symbol": "TSLA",
       "logo": "../assets/logos/tesla.png",
       "url": "https://www.tesla.com",
-      "qty": 0.012867,
+      "qty": 0.075066,
       "source": {
         "type": "dexscreener",
         "chain": "solana",
@@ -111,6 +111,11 @@
           "date": "2026-10-01T12:00:00.000Z",
           "qty": 0.012867,
           "price": 7771.750116
+        },
+        {
+          "date": "2026-10-16T13:47:00.000Z",
+          "qty": 0.062199,
+          "price": 8038.70816
         }
       ],
       "note": "elektromobily, energie a roboty",
